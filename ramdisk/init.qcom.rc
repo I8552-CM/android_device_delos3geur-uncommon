@@ -268,9 +268,8 @@ service qcom-c_main-sh /system/bin/sh /init.qcom.class_main.sh
     class main
     user root
     oneshot
-    
+
 service ril-qmi /system/bin/sh /init.qcom.ril.path.sh
     class main
     user root
     oneshot
-  
