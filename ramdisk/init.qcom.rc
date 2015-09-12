@@ -264,6 +264,16 @@ service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1
     class late_start
     disabled
 
+service qmuxd /system/bin/qmuxd
+    class core
+    user radio
+    group radio audio bluetooth gps qcom_diag
+
+service qmiproxy /system/bin/qmiproxy
+    class core
+    user radio
+    group radio audio bluetooth gps qcom_diag
+
 service qcom-c_main-sh /system/bin/sh /init.qcom.class_main.sh
     class main
     user root
