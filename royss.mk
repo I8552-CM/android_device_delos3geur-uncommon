@@ -82,8 +82,8 @@ PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,device/samsung/royss/ramdisk,root)
 
 PRODUCT_COPY_FILES += \
-    vendor/samsung/royss/prebuilt/system/lib/liboncrpc.so:obj/lib/liboncrpc.so \
-    vendor/samsung/royss/prebuilt/system/lib/libnv.so:obj/lib/libnv.so
+    vendor/samsung/royss/proprietary/system/lib/liboncrpc.so:obj/lib/liboncrpc.so \
+    vendor/samsung/royss/proprietary/system/lib/libnv.so:obj/lib/libnv.so
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.bluetooth.remote.autoconnect=true \

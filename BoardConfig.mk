@@ -72,7 +72,7 @@ BOARD_EGL_NEEDS_FNW := true
 USE_OPENGL_RENDERER := true
 TARGET_DOESNT_USE_FENCE_SYNC := true
 BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
-BOARD_EGL_CFG := device/samsung/royss/prebuilt/system/lib/egl/egl.cfg
+BOARD_EGL_CFG := vendor/samsung/royss/prebuilt/system/lib/egl/egl.cfg
 
 ## Qualcomm BSP
 COMMON_GLOBAL_CFLAGS += -DQCOM_BSP
