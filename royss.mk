@@ -12,12 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 DEVICE_PACKAGE_OVERLAYS += device/samsung/royss/overlay
-
-## rild
-PRODUCT_PACKAGES := \
-    rild \
-    BasicSmsReceiver
 
 ## Video
 PRODUCT_PACKAGES += \
@@ -45,15 +41,16 @@ PRODUCT_PACKAGES += \
     audio.a2dp.default \
     audio.usb.default \
     audio_policy.conf \
-    libaudioutils \
-    libdashplayer 
+    libaudioutils
 
 ## Other HALs
 PRODUCT_PACKAGES += \
     camera.msm7x27a \
     lights.msm7x27a \
     gps.msm7x27a \
-    power.msm7x27a
+    power.msm7x27a \
+    healthd.msm7x27a \
+    libdashplayer
 
 ## FM radio
 PRODUCT_PACKAGES += \
@@ -61,17 +58,9 @@ PRODUCT_PACKAGES += \
     libqcomfm_jni \
     FM2
 
-## Bluetooth
-PRODUCT_PACKAGES += \
-    haltest \
-    hciattach \
-    hciconfig \
-    hcitool \
-    bccmd
-
-## Device-specific packages
-PRODUCT_PACKAGES += \
-    SamsungServiceMode \
+## Recovery
+PRODUCT_COPY_FILES += \
+    device/samsung/royss/recovery/sbin/rmt_storage_recovery:recovery/root/sbin/rmt_storage_recovery 
 
 ## Permissions
 PRODUCT_COPY_FILES += \
@@ -82,36 +71,19 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
     frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
+    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
-    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
-    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
-
-ADDITIONAL_DEFAULT_PROPERTIES += \
-    ro.secure=0 \
-    ro.adb.secure=0 \
-    persist.sys.usb.config=adb,mtp \
+    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml
 
 ## Ramdisk
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,device/samsung/royss/ramdisk,root)
 
-## Prebuilt libraries that are needed to build open-source libraries
 PRODUCT_COPY_FILES += \
-   vendor/samsung/royss/proprietary/system/lib/libcamera.so:obj/lib/libcamera.so
-
-## RIL
-PRODUCT_COPY_FILES += \
-   vendor/samsung/royss/proprietary/system/lib/libril.so:obj/lib/libril.so \
-   vendor/samsung/royss/proprietary/system/lib/libsecril-client.so:obj/lib/libsecril-client.so
-
-## Properties
-PRODUCT_PROPERTY_OVERRIDES += \
-    rild.libpath=/system/lib/libril-qc-qmi-1.so
-    rild.libargs=-d /dev/smd0
-    ro.telephony.ril.v3=datacall,icccardstatus,facilitylock \
-    ro.telephony.call_ring.multiple=false
+    vendor/samsung/royss/prebuilt/system/lib/liboncrpc.so:obj/lib/liboncrpc.so \
+    vendor/samsung/royss/prebuilt/system/lib/libnv.so:obj/lib/libnv.so
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.bluetooth.remote.autoconnect=true \
@@ -132,7 +104,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-data-only=1 \
-    dalvik.vm.jit.codecachesize=1 
+    dalvik.vm.jit.codecachesize=1 \
+    ro.config.low_ram=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
     lpa.decode=true
@@ -146,7 +119,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp,adb \
     ro.vold.umsdirtyratio=50 
-  persist.sys.vold.switchablepair=sdcard0,sdcard1 \
+
+#PRODUCT_PROPERTY_OVERRIDES += \
+# persist.webview.provider=classic
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.cwm.enable_key_repeat=true

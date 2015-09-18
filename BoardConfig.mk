@@ -21,7 +21,7 @@ TARGET_NO_RADIOIMAGE := true
 TARGET_KERNEL_SOURCE := kernel/samsung/msm7x27a
 TARGET_KERNEL_CONFIG := cyanogenmod_royss_defconfig
 
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom loglevel=1 vmalloc=200M
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01300000
 BOARD_KERNEL_PAGESIZE := 4096
@@ -40,16 +40,13 @@ TARGET_BOOTLOADER_BOARD_NAME := MSM8225
 
 TARGET_SPECIFIC_HEADER_PATH := device/samsung/royss/include
 
-TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
-
 ARCH_ARM_HAVE_TLS_REGISTER := true
 
-TARGET_GLOBAL_CFLAGS += -mtune=cortex-a5 -mfpu=neon-vfpv4 -mfloat-abi=softfp
-TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a5 -mfpu=neon-vfpv4 -mfloat-abi=softfp
+TARGET_GLOBAL_CFLAGS += -mtune=cortex-a5 -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a5 -mfpu=neon -mfloat-abi=softfp
 
 ## FM Radio
 BOARD_HAVE_QCOM_FM := true
-COMMON_GLOBAL_CFLAGS += -DQCOM_FM_ENABLED
 
 ## Memory
 TARGET_USES_ION := true
@@ -61,20 +58,21 @@ TARGET_DISABLE_ARM_PIE := true
 COMMON_GLOBAL_CFLAGS += -DBINDER_COMPAT -DNEEDS_VECTORIMPL_SYMBOLS -DSAMSUNG_CAMERA_LEGACY
 
 ## Qualcomm hardware
+BOARD_USES_QCOM_HARDWARE := true
+COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DNO_TUNNEL_RECORDING
 TARGET_QCOM_DISPLAY_VARIANT := legacy
 TARGET_QCOM_MEDIA_VARIANT := caf
 COMMON_GLOBAL_CFLAGS += -DQCOM_LEGACY_MMPARSE
 TARGET_QCOM_AUDIO_VARIANT := caf
 BOARD_USES_LEGACY_ALSA_AUDIO := true
 COMMON_GLOBAL_CFLAGS += -DNO_TUNNELED_SOURCE
-BOARD_USES_QCOM_HARDWARE := true
-COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DNO_TUNNEL_RECORDING
 
 ## EGL, graphics
 BOARD_EGL_NEEDS_FNW := true
 USE_OPENGL_RENDERER := true
 TARGET_DOESNT_USE_FENCE_SYNC := true
 BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
+BOARD_EGL_CFG := device/samsung/royss/prebuilt/system/lib/egl/egl.cfg
 
 ## Qualcomm BSP
 COMMON_GLOBAL_CFLAGS += -DQCOM_BSP
@@ -89,9 +87,10 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
 PRODUCT_PREBUILT_WEBVIEWCHROMIUM := yes
 #TARGET_FORCE_CPU_UPLOAD := true
 #ENABLE_WEBGL := true
-
 ## Bluetooth
+# We use CSR chip so is incompatible with bluedroid
 BOARD_HAVE_BLUETOOTH := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/samsung/royss/bluetooth
 
 ## Wi-Fi
 BOARD_WLAN_DEVICE := ath6kl
@@ -113,6 +112,7 @@ BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
 BOARD_RIL_CLASS := ../../../device/samsung/royss/ril/
 
 ## Vold
+BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
 BOARD_VOLD_MAX_PARTITIONS := 24
 
 ## UMS
@@ -123,7 +123,6 @@ BOARD_UMS_LUNFILE := "/sys/devices/platform/msm_hsusb/gadget/lun%d/file"
 TARGET_NO_INITLOGO := true
 
 ## Use device specific modules
-TARGET_PROVIDES_LIBLIGHT := true
 TARGET_PROVIDES_LIBAUDIO := true
 
 ## Power

@@ -11,4 +11,3 @@
 
 # vold managed volumes
 /devices/platform/msm_sdcc.1/mmc_host/mmc1  auto     auto     defaults         voldmanaged=sdcard1:auto,noemulatedsd
-
