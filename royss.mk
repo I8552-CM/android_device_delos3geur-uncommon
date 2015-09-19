@@ -88,7 +88,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.bluetooth.remote.autoconnect=true \
     ro.bluetooth.request.master=true \
-    ro.bt.bdaddr_path=/data/misc/bluedroid/bdaddr \
     ro.qualcomm.bluetooth.dun=true \
     ro.qualcomm.bluetooth.ftp=true
 
