@@ -119,9 +119,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp,adb \
     ro.vold.umsdirtyratio=50 
 
-#PRODUCT_PROPERTY_OVERRIDES += \
-# persist.webview.provider=classic
-
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.cwm.enable_key_repeat=true
 
