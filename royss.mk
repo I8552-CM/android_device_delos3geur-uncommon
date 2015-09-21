@@ -41,7 +41,9 @@ PRODUCT_PACKAGES += \
     audio.a2dp.default \
     audio.usb.default \
     audio_policy.conf \
-    libaudioutils
+    libaudioutils \
+    libdashplayer \
+    libtinyalsa
 
 ## Other HALs
 PRODUCT_PACKAGES += \
@@ -49,14 +51,32 @@ PRODUCT_PACKAGES += \
     lights.msm7x27a \
     gps.msm7x27a \
     power.msm7x27a \
-    healthd.msm7x27a \
-    libdashplayer
+    healthd.msm7x27a 
 
 ## FM radio
 PRODUCT_PACKAGES += \
     qcom.fmradio \
     libqcomfm_jni \
     FM2
+
+# Bluetooth
+PRODUCT_PACKAGES += \
+    bluetooth-headers \
+    hciconfig \
+    hciattach \
+    btmon \
+    btproxy \
+    bluetoothd-snoop \
+    btmgmt \
+    hcitool \
+    l2ping \
+    libsbc \
+    avinfo \
+    bccmd \
+    haltest \
+    libdbus \
+    audio.sco.default \
+    bluetoothd
 
 ## Recovery
 PRODUCT_COPY_FILES += \
@@ -85,11 +105,12 @@ PRODUCT_COPY_FILES += \
     vendor/samsung/royss/proprietary/system/lib/liboncrpc.so:obj/lib/liboncrpc.so \
     vendor/samsung/royss/proprietary/system/lib/libnv.so:obj/lib/libnv.so
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.bluetooth.remote.autoconnect=true \
-    ro.bluetooth.request.master=true \
-    ro.qualcomm.bluetooth.dun=true \
-    ro.qualcomm.bluetooth.ftp=true
+# Voip		
+PRODUCT_PROPERTY_OVERRIDES += \		
+    lpa.decode=false		
+    tunnel.decode=false		
+    lpa.use-stagefright=false		
+    lpa.releaselock=false
 
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.gr.numframebuffers=3 \

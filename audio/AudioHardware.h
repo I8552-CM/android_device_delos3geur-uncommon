@@ -411,7 +411,7 @@ public:
 
     virtual status_t    getNextWriteTimestamp(int64_t *timestamp);
     virtual status_t    setObserver(void *observer);
-    virtual status_t    getBufferInfo(buf_info **buf);
+    //virtual status_t    getBufferInfo(buf_info **buf);
     virtual status_t    isBufferAvailable(int *isAvail);
 
 	void* memBufferAlloc(int nSize, int32_t *ion_fd);
@@ -434,7 +434,7 @@ private:
     bool                mEosEventReceived;
     uint32_t    mDevices;
     AudioHardware* mHardware;
-    AudioEventObserver *mObserver;
+    //AudioEventObserver *mObserver;
 
     void                createEventThread();
     void                bufferAlloc();
