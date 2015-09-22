@@ -105,12 +105,11 @@ PRODUCT_COPY_FILES += \
     vendor/samsung/royss/proprietary/system/lib/liboncrpc.so:obj/lib/liboncrpc.so \
     vendor/samsung/royss/proprietary/system/lib/libnv.so:obj/lib/libnv.so
 
-# Voip		
-PRODUCT_PROPERTY_OVERRIDES += \		
-    lpa.decode=false		
-    tunnel.decode=false		
-    lpa.use-stagefright=false		
-    lpa.releaselock=false
+# Voip		    
+PRODUCT_PROPERTY_OVERRIDES += \
+    lpa.decode=false \
+    lpa.use-stagefright=false \
+    lpa.releaselock=false 
 
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.gr.numframebuffers=3 \

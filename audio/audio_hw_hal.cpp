@@ -257,14 +257,14 @@ static int out_set_observer(const struct audio_stream_out *stream,
     return out->qcom_out->setObserver(observer);
 }
 
-/*static int out_get_buffer_info(const struct audio_stream_out *stream,
-                                   //buf_info ** buf)
+static int out_get_buffer_info(const struct audio_stream_out *stream,
+                                   buf_info ** buf)
 {
     const struct qcom_stream_out *out =
         reinterpret_cast<const struct qcom_stream_out *>(stream);
     return out->qcom_out->getBufferInfo(buf);
 }
-*/
+
 static int out_is_buffer_available(const struct audio_stream_out *stream,
                                    int *isAvail)
 {
@@ -487,13 +487,6 @@ static int adev_get_master_volume(struct audio_hw_device *dev, float *volume) {
     struct qcom_audio_device *qadev = to_ladev(dev);
     return qadev->hwif->getMasterVolume(volume);
 }
-#ifdef QCOM_FM_ENABLED
-static int adev_set_fm_volume(struct audio_hw_device *dev, float volume)
-{
-    struct qcom_audio_device *qadev = to_ladev(dev);
-    return qadev->hwif->setFmVolume(volume);
-}
-#endif
 
 static int adev_set_mode(struct audio_hw_device *dev, audio_mode_t mode)
 {
@@ -583,13 +576,13 @@ static int adev_open_output_stream(struct audio_hw_device *dev,
     out->stream.write = out_write;
     out->stream.get_render_position = out_get_render_position;
     out->stream.get_next_write_timestamp = out_get_next_write_timestamp;
-    //out->stream.start = out_start;
+    out->stream.start = out_start;
     out->stream.pause = out_pause;
     out->stream.flush = out_flush;
-    //out->stream.stop = out_stop;
-    //out->stream.set_observer = out_set_observer;
-    //out->stream.get_buffer_info = out_get_buffer_info;
-    //out->stream.is_buffer_available = out_is_buffer_available;
+    out->stream.stop = out_stop;
+    out->stream.set_observer = out_set_observer;
+    out->stream.get_buffer_info = out_get_buffer_info;
+    out->stream.is_buffer_available = out_is_buffer_available;
 
     *stream_out = &out->stream;
     return 0;
@@ -719,9 +712,6 @@ static int qcom_adev_open(const hw_module_t* module, const char* name,
     qadev->device.set_voice_volume = adev_set_voice_volume;
     qadev->device.set_master_volume = adev_set_master_volume;
     qadev->device.get_master_volume = adev_get_master_volume;
-#ifdef QCOM_FM_ENABLED
-    qadev->device.set_fm_volume = adev_set_fm_volume;
-#endif
     qadev->device.set_mode = adev_set_mode;
     qadev->device.set_mic_mute = adev_set_mic_mute;
     qadev->device.get_mic_mute = adev_get_mic_mute;
