@@ -78,6 +78,10 @@ PRODUCT_PACKAGES += \
     audio.sco.default \
     bluetoothd
 
+# Product specific Packages
+PRODUCT_PACKAGES += \
+    SamsungServiceMode
+
 ## Recovery
 PRODUCT_COPY_FILES += \
     device/samsung/royss/recovery/sbin/rmt_storage_recovery:recovery/root/sbin/rmt_storage_recovery 
