@@ -21,7 +21,7 @@ TARGET_NO_RADIOIMAGE := true
 TARGET_KERNEL_SOURCE := kernel/samsung/msm7x27a
 TARGET_KERNEL_CONFIG := cyanogenmod_royss_defconfig
 
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom loglevel=1 vmalloc=200M
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01300000
 BOARD_KERNEL_PAGESIZE := 4096
@@ -36,7 +36,7 @@ TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := cortex-a5
 
-TARGET_BOOTLOADER_BOARD_NAME := MSM8225
+TARGET_BOOTLOADER_BOARD_NAME := MSM8625
 
 TARGET_SPECIFIC_HEADER_PATH := device/samsung/royss/include
 
@@ -85,6 +85,15 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
 
 ## Webkit
 PRODUCT_PREBUILT_WEBVIEWCHROMIUM := yes
+
+# Add h/w acceleration in browser
+ENABLE_WEBGL := true
+WITH_JIT := true
+ENABLE_JSC_JIT := true
+JS_ENGINE := v8
+HTTP := chrome
+
+# Use Cpu Upload path and enable webgl (webkit)
 TARGET_FORCE_CPU_UPLOAD := true
 ENABLE_WEBGL := true
 
@@ -109,6 +118,9 @@ WIFI_DRIVER_MODULE_ARG := "suspend_mode=3 wow_mode=2 ath6kl_p2p=1 recovery_enabl
 ## RIL
 BOARD_USES_LEGACY_RIL := true
 BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
+
+# CMHW
+BOARD_HARDWARE_CLASS := hardware/samsung/cmhw/ device/samsung/royss/cmhw/
 
 ## Vold
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
