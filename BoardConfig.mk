@@ -136,8 +136,8 @@ TARGET_NO_INITLOGO := true
 ## Use device specific modules
 TARGET_PROVIDES_LIBAUDIO := true
 
-## Power
-TARGET_USES_CM_POWERHAL := true
+## Override healthd HAL
+BOARD_HAL_STATIC_LIBRARIES := libhealthd.msm7x27a
 
 ## Recovery
 TARGET_RECOVERY_FSTAB := device/samsung/royss/ramdisk/fstab.qcom
