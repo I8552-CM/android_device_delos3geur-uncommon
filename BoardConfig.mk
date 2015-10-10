@@ -98,8 +98,8 @@ TARGET_FORCE_CPU_UPLOAD := true
 ENABLE_WEBGL := true
 
 ## Bluetooth
-# We use CSR chip so is incompatible with bluedroid
 BOARD_HAVE_BLUETOOTH := true
+BLUEZ_NEEDS_SAP_CHANGES := true
 
 ## Wi-Fi
 BOARD_WLAN_DEVICE := ath6kl

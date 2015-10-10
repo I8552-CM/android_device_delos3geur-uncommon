@@ -248,10 +248,11 @@ service qmuxd /system/bin/qmuxd
     user radio
     group radio audio bluetooth gps qcom_diag
 
+# start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
-    user camera
-    group camera system inet audio
+    user media
+    group system camera inet input graphics
 
 # create virtual SD card at /storage/sdcard, based on the /data/media directory
 # daemon will drop to user/group system/media_rw after initializing
