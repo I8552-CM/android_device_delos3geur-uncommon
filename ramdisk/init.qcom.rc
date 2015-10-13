@@ -121,6 +121,10 @@ on boot
     # zRAM
     write /proc/sys/vm/page-cluster 0
 
+    # PCC
+    chown system system /sys/devices/virtual/graphics/fb0/rgb
+    chmod 0660 /sys/devices/virtual/graphics/fb0/rgb
+
     # Chown polling nodes as needed from UI running on system server
     chown system system /sys/devices/platform/msm_sdcc.1/polling
     chown system system /sys/devices/platform/msm_sdcc.2/polling
