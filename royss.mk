@@ -123,13 +123,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.bq.gpu_to_cpu_unsupported=1 \
     ro.max.fling_velocity=4000 \
     ro.opengles.version=131072 \
-    ro.sf.lcd_density=160
+    ro.sf.lcd_density=140
 
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-data-only=1 \
-    dalvik.vm.jit.codecachesize=1 \
-    ro.config.low_ram=true
-
+    dalvik.vm.jit.codecachesize=1
 PRODUCT_PROPERTY_OVERRIDES += \
     lpa.decode=true
 
