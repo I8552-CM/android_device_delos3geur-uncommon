@@ -124,6 +124,8 @@ enum cp_mem_usage {
 
 #define ION_IS_CACHED(__flags)	((__flags) & (1 << ION_CACHE_SHIFT))
 
+#define ION_FLAG_CACHED 1
+
 /*
  * This flag allows clients when mapping into the IOMMU to specify to
  * defer un-mapping from the IOMMU until the buffer memory is freed.
