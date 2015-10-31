@@ -112,7 +112,7 @@ BOARD_USES_LEGACY_RIL := true
 BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
 
 # CMHW
-BOARD_HARDWARE_CLASS := hardware/samsung/cmhw/ device/samsung/royss/cmhw/
+BOARD_HARDWARE_CLASS := device/samsung/royss/cmhw/
 
 ## Vold
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true

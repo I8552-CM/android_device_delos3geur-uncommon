@@ -16,8 +16,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/samsung/royss/overlay
 
-LOCAL_PATH := $(call my-dir)
-
 ## Video
 PRODUCT_PACKAGES += \
     libstagefrighthw \
@@ -106,8 +104,8 @@ PRODUCT_COPY_FILES += \
 
 ## Media
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml \
+    device/samsung/royss/configs/media_codecs.xml:system/etc/media_codecs.xml \
+    device/samsung/royss/configs/media_profiles.xml:system/etc/media_profiles.xml \
 
 ## Ramdisk
 PRODUCT_COPY_FILES += \
