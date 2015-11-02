@@ -21,7 +21,7 @@ TARGET_NO_RADIOIMAGE := true
 TARGET_KERNEL_SOURCE := kernel/samsung/msm7x27a
 TARGET_KERNEL_CONFIG := cyanogenmod_royss_defconfig
 
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01300000
 BOARD_KERNEL_PAGESIZE := 4096
