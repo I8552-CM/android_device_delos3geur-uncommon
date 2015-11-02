@@ -120,6 +120,7 @@ on boot
 
     # zRAM
     write /proc/sys/vm/page-cluster 0
+    write /proc/sys/vm/swappiness 70
 
     # PCC
     chown system system /sys/devices/virtual/graphics/fb0/rgb
