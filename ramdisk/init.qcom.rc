@@ -282,3 +282,8 @@ service lpmkey /system/bin/charging_mode
     class charger
     user root
     oneshot
+
+service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
+    class late_start
+    user system
+    group system

@@ -102,8 +102,13 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml
 
+## Qosmgr
+PRODUCT_COPY_FILES += \
+    device/samsung/royss/configs/qosmgr_rules.xml:system/etc/qosmgr_rules.xml
+
 ## Media
 PRODUCT_COPY_FILES += \
+    device/samsung/royss/configs/audio_policy.conf:system/etc/audio_policy.conf \
     device/samsung/royss/configs/media_codecs.xml:system/etc/media_codecs.xml \
     device/samsung/royss/configs/media_profiles.xml:system/etc/media_profiles.xml \
 
