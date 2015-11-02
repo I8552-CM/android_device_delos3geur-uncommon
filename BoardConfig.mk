@@ -41,6 +41,7 @@ TARGET_BOOTLOADER_BOARD_NAME := MSM8625
 TARGET_SPECIFIC_HEADER_PATH := device/samsung/royss/include
 
 ARCH_ARM_HAVE_TLS_REGISTER := true
+TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
 
 TARGET_GLOBAL_CFLAGS += -mtune=cortex-a5 -mfpu=neon -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a5 -mfpu=neon -mfloat-abi=softfp
