@@ -124,7 +124,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     lpa.decode=false \
     lpa.use-stagefright=false \
-    lpa.releaselock=false 
+    lpa.releaselock=false
+
+## Charger
+PRODUCT_PACKAGES += \
+    charger \
+    charger_res_images 
 
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.gr.numframebuffers=3 \

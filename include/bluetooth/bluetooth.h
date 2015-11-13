@@ -77,6 +77,13 @@ struct bt_security {
 #define BT_FLUSHABLE_OFF	0
 #define BT_FLUSHABLE_ON		1
 
+#define BT_POWER		9
+struct bt_power {
+	uint8_t force_active;
+};
+#define BT_POWER_FORCE_ACTIVE_OFF 0
+#define BT_POWER_FORCE_ACTIVE_ON  1
+
 #define BT_CHANNEL_POLICY	10
 
 /* BR/EDR only (default policy)
@@ -103,6 +110,17 @@ struct bt_security {
  *     than BR/EDR.
  */
 #define BT_CHANNEL_POLICY_AMP_PREFERRED		2
+
+#define BT_VOICE		11
+struct bt_voice {
+	uint16_t setting;
+};
+
+#define BT_SNDMTU		12
+#define BT_RCVMTU		13
+
+#define BT_VOICE_TRANSPARENT			0x0003
+#define BT_VOICE_CVSD_16BIT			0x0060
 
 /* Connection and socket states */
 enum {
@@ -138,7 +156,7 @@ enum {
 
 /* Bluetooth unaligned access */
 #define bt_get_unaligned(ptr)			\
-({						\
+__extension__ ({				\
 	struct __attribute__((packed)) {	\
 		__typeof__(*(ptr)) __v;		\
 	} *__p = (__typeof__(__p)) (ptr);	\
@@ -183,6 +201,37 @@ static inline uint16_t bt_get_be16(const void *ptr)
 {
 	return bswap_16(bt_get_unaligned((const uint16_t *) ptr));
 }
+
+static inline void bt_put_le64(uint64_t val, const void *ptr)
+{
+	bt_put_unaligned(val, (uint64_t *) ptr);
+}
+
+static inline void bt_put_be64(uint64_t val, const void *ptr)
+{
+	bt_put_unaligned(bswap_64(val), (uint64_t *) ptr);
+}
+
+static inline void bt_put_le32(uint32_t val, const void *ptr)
+{
+	bt_put_unaligned(val, (uint32_t *) ptr);
+}
+
+static inline void bt_put_be32(uint32_t val, const void *ptr)
+{
+	bt_put_unaligned(bswap_32(val), (uint32_t *) ptr);
+}
+
+static inline void bt_put_le16(uint16_t val, const void *ptr)
+{
+	bt_put_unaligned(val, (uint16_t *) ptr);
+}
+
+static inline void bt_put_be16(uint16_t val, const void *ptr)
+{
+	bt_put_unaligned(bswap_16(val), (uint16_t *) ptr);
+}
+
 #elif __BYTE_ORDER == __BIG_ENDIAN
 static inline uint64_t bt_get_le64(const void *ptr)
 {
@@ -212,6 +261,36 @@ static inline uint16_t bt_get_le16(const void *ptr)
 static inline uint16_t bt_get_be16(const void *ptr)
 {
 	return bt_get_unaligned((const uint16_t *) ptr);
+}
+
+static inline void bt_put_le64(uint64_t val, const void *ptr)
+{
+	bt_put_unaligned(bswap_64(val), (uint64_t *) ptr);
+}
+
+static inline void bt_put_be64(uint64_t val, const void *ptr)
+{
+	bt_put_unaligned(val, (uint64_t *) ptr);
+}
+
+static inline void bt_put_le32(uint32_t val, const void *ptr)
+{
+	bt_put_unaligned(bswap_32(val), (uint32_t *) ptr);
+}
+
+static inline void bt_put_be32(uint32_t val, const void *ptr)
+{
+	bt_put_unaligned(val, (uint32_t *) ptr);
+}
+
+static inline void bt_put_le16(uint16_t val, const void *ptr)
+{
+	bt_put_unaligned(bswap_16(val), (uint16_t *) ptr);
+}
+
+static inline void bt_put_be16(uint16_t val, const void *ptr)
+{
+	bt_put_unaligned(val, (uint16_t *) ptr);
 }
 #else
 #error "Unknown byte order"
@@ -258,11 +337,21 @@ void *bt_malloc(size_t size);
 void bt_free(void *ptr);
 
 int bt_error(uint16_t code);
-char *bt_compidtostr(int id);
+const char *bt_compidtostr(int id);
 
 typedef struct {
 	uint8_t data[16];
 } uint128_t;
+
+static inline void bswap_128(const void *src, void *dst)
+{
+	const uint8_t *s = (const uint8_t *) src;
+	uint8_t *d = (uint8_t *) dst;
+	int i;
+
+	for (i = 0; i < 16; i++)
+		d[15 - i] = s[i];
+}
 
 #if __BYTE_ORDER == __BIG_ENDIAN
 
@@ -275,10 +364,7 @@ static inline void ntoh128(const uint128_t *src, uint128_t *dst)
 
 static inline void btoh128(const uint128_t *src, uint128_t *dst)
 {
-	int i;
-
-	for (i = 0; i < 16; i++)
-		dst->data[15 - i] = src->data[i];
+	bswap_128(src, dst);
 }
 
 #else
@@ -296,10 +382,7 @@ static inline uint64_t ntoh64(uint64_t n)
 
 static inline void ntoh128(const uint128_t *src, uint128_t *dst)
 {
-	int i;
-
-	for (i = 0; i < 16; i++)
-		dst->data[15 - i] = src->data[i];
+	bswap_128(src, dst);
 }
 
 static inline void btoh128(const uint128_t *src, uint128_t *dst)
