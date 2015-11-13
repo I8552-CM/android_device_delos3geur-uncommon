@@ -109,6 +109,9 @@ WIFI_DRIVER_MODULE_ARG := "suspend_mode=3 wow_mode=2 ath6kl_p2p=1 recovery_enabl
 BOARD_USES_LEGACY_RIL := true
 BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
 
+# Charging mode
+BOARD_CHARGING_MODE_BOOTING_LPM := /sys/devices/virtual/power_supply/battery/lpm_mode
+
 # CMHW
 BOARD_HARDWARE_CLASS := device/samsung/royss/cmhw/
 
