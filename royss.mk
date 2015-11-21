@@ -108,9 +108,12 @@ PRODUCT_COPY_FILES += \
 
 ## Media
 PRODUCT_COPY_FILES += \
-    device/samsung/royss/configs/audio_policy.conf:system/etc/audio_policy.conf \
     device/samsung/royss/configs/media_codecs.xml:system/etc/media_codecs.xml \
-    device/samsung/royss/configs/media_profiles.xml:system/etc/media_profiles.xml \
+    device/samsung/royss/configs/media_profiles.xml:system/etc/media_profiles.xml 
+
+## Audio
+PRODUCT_COPY_FILES += \
+    device/samsung/royss/configs/audio_policy.conf:system/etc/audio_policy.conf
 
 ## Ramdisk
 PRODUCT_COPY_FILES += \
@@ -120,11 +123,11 @@ PRODUCT_COPY_FILES += \
     vendor/samsung/royss/proprietary/system/lib/liboncrpc.so:obj/lib/liboncrpc.so \
     vendor/samsung/royss/proprietary/system/lib/libnv.so:obj/lib/libnv.so
 
-# Voip		    
-PRODUCT_PROPERTY_OVERRIDES += \
-    lpa.decode=false \
-    lpa.use-stagefright=false \
-    lpa.releaselock=false
+## Voip		    
+#PRODUCT_PROPERTY_OVERRIDES += \
+#    lpa.decode=false \
+#    lpa.use-stagefright=false \
+#    lpa.releaselock=false
 
 ## Charger
 PRODUCT_PACKAGES += \
