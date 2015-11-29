@@ -113,7 +113,9 @@ PRODUCT_COPY_FILES += \
 
 ## Audio
 PRODUCT_COPY_FILES += \
-    device/samsung/royss/configs/audio_policy.conf:system/etc/audio_policy.conf
+    device/samsung/royss/configs/audio_policy.conf:system/etc/audio_policy.conf \
+    device/samsung/royss/configs/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
+    device/samsung/royss/configs/AudioFilter.csv:system/etc/AudioFilter.csv
 
 ## Ramdisk
 PRODUCT_COPY_FILES += \
@@ -122,12 +124,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     vendor/samsung/royss/proprietary/system/lib/liboncrpc.so:obj/lib/liboncrpc.so \
     vendor/samsung/royss/proprietary/system/lib/libnv.so:obj/lib/libnv.so
-
-## Voip		    
-#PRODUCT_PROPERTY_OVERRIDES += \
-#    lpa.decode=false \
-#    lpa.use-stagefright=false \
-#    lpa.releaselock=false
 
 ## Charger
 PRODUCT_PACKAGES += \
@@ -147,6 +143,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-data-only=1 \
     dalvik.vm.jit.codecachesize=1
+
 PRODUCT_PROPERTY_OVERRIDES += \
     lpa.decode=true
 
