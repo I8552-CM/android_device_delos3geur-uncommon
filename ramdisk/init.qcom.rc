@@ -47,6 +47,8 @@ on fs
     mount ext4 /dev/block/mmcblk0p16 /efs nosuid nodev barrier=1
 
 on boot
+    setenforce 0
+
     # Bluetooth
     exec system/bin/btnvtool -O
     setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
