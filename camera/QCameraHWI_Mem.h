@@ -26,7 +26,7 @@
 
 extern "C" {
 #include <linux/android_pmem.h>
-#include <linux/msm_ion.h>
+#include "msm_ion.h"
 }
 
 
