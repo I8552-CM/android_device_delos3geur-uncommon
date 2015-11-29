@@ -66,8 +66,9 @@ COMMON_GLOBAL_CFLAGS += -DQCOM_LEGACY_MMPARSE
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
 ## Audio
-TARGET_QCOM_AUDIO_VARIANT := caf
+TARGET_PROVIDES_LIBAUDIO := true
 BOARD_USES_LEGACY_ALSA_AUDIO := true
+TARGET_QCOM_AUDIO_VARIANT := caf
 
 ## EGL, graphics
 BOARD_EGL_NEEDS_FNW := true
@@ -126,9 +127,6 @@ BOARD_UMS_LUNFILE := "/sys/devices/platform/msm_hsusb/gadget/lun%d/file"
 
 ## Samsung has weird framebuffer
 TARGET_NO_INITLOGO := true
-
-## Use device specific modules
-TARGET_PROVIDES_LIBAUDIO := true
 
 ## Override healthd HAL
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.msm7x27a
