@@ -79,6 +79,11 @@ PRODUCT_PACKAGES += \
     audio.sco.default \
     bluetoothd
 
+# Other
+PRODUCT_PACKAGES += \
+    libnetcmdiface \
+    libqservice
+
 # Product specific Packages
 PRODUCT_PACKAGES += \
     SamsungServiceMode
@@ -143,9 +148,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-data-only=1 \
     dalvik.vm.jit.codecachesize=1
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    lpa.decode=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true \
