@@ -30,8 +30,8 @@
 
 extern "C" {
 #include <linux/msm_audio.h>
-#include <linux/ion.h>
 #include <linux/msm_audio_voicememo.h>
+#include <linux/msm_ion.h>
 #ifdef QCOM_VOIP_ENABLED
 #include <linux/msm_audio_mvs.h>
 #endif
@@ -69,12 +69,18 @@ using android::Condition;
 #define MBADRC_DISABLE 0xFFEF
 #define SRS_ENABLE 0x0020
 #define SRS_DISABLE 0xFFDF
-#define LPA_BUFFER_SIZE 480*1024
+#ifndef LPA_DEFAULT_BUFFER_SIZE
+#define LPA_DEFAULT_BUFFER_SIZE 512
+#endif
+#define LPA_BUFFER_SIZE LPA_DEFAULT_BUFFER_SIZE*1024
 #define BUFFER_COUNT 2
 
 #define AGC_ENABLE     0x0001
 #define NS_ENABLE      0x0002
 #define TX_IIR_ENABLE  0x0004
+
+
+#define AUDIO_PARAMETER_KEY_FLUENCE_TYPE "fluence"
 
 struct eq_filter_type {
     int16_t gain;
@@ -163,9 +169,9 @@ enum tty_modes {
 #define AUDIO_HW_OUT_LATENCY_MS 0  // Additionnal latency introduced by audio DSP and hardware in ms
 
 #define AUDIO_HW_IN_SAMPLERATE 8000                 // Default audio input sample rate
-#define AUDIO_HW_IN_CHANNELS (AudioSystem::CHANNEL_IN_MONO) // Default audio input channel mask
+#define AUDIO_HW_IN_CHANNELS (AUDIO_CHANNEL_IN_MONO) // Default audio input channel mask
 #define AUDIO_HW_IN_BUFFERSIZE 2048                 // Default audio input buffer size
-#define AUDIO_HW_IN_FORMAT (AudioSystem::PCM_16_BIT)  // Default audio input sample format
+#define AUDIO_HW_IN_FORMAT (AUDIO_FORMAT_PCM_16_BIT)  // Default audio input sample format
 #ifdef QCOM_VOIP_ENABLED
 #define AUDIO_HW_VOIP_BUFFERSIZE_8K 320
 #define AUDIO_HW_VOIP_BUFFERSIZE_16K 640
@@ -250,7 +256,7 @@ private:
     status_t    dumpInternals(int fd, const Vector<String16>& args);
     uint32_t    getInputSampleRate(uint32_t sampleRate);
     bool        checkOutputStandby();
-    status_t    doRouting(AudioStreamInMSM72xx *input, int outputDevice = 0);
+    status_t    doRouting(AudioStreamInMSM72xx *input, uint32_t outputDevices = 0);
 #ifdef QCOM_FM_ENABLED
     status_t    enableFM();
     status_t    disableFM();
@@ -272,27 +278,27 @@ private:
         virtual uint32_t sampleRate() const {
             char af_quality[PROPERTY_VALUE_MAX];
             property_get("af.resampler.quality",af_quality,"0");
-            if(strcmp("255",af_quality) == 0) {
-                ALOGD("SampleRate 48k");
+            if(strcmp("4",af_quality) == 0) {
+                ALOGV("SampleRate 48k");
                 return 48000;
             } else {
-                ALOGD("SampleRate 44.1k");
+                ALOGV("SampleRate 44.1k");
                 return 44100;
             }
         }
         virtual size_t bufferSize() const {
             char af_quality[PROPERTY_VALUE_MAX];
             property_get("af.resampler.quality",af_quality,"0");
-            if(strcmp("255",af_quality) == 0) {
-                ALOGD("Bufsize 5248");
+            if(strcmp("4",af_quality) == 0) {
+                ALOGV("Bufsize 5248");
                 return 5248;
             } else {
-                ALOGD("Bufsize 4800");
+                ALOGV("Bufsize 4800");
                 return 4800;
             }
         }
-        virtual uint32_t    channels() const { return AudioSystem::CHANNEL_OUT_STEREO; }
-        virtual int         format() const { return AudioSystem::PCM_16_BIT; }
+        virtual uint32_t    channels() const { return AUDIO_CHANNEL_OUT_STEREO; }
+        virtual int         format() const { return AUDIO_FORMAT_PCM_16_BIT; }
         virtual uint32_t    latency() const { return (1000*AUDIO_HW_NUM_OUT_BUF*(bufferSize()/frameSize()))/sampleRate()+AUDIO_HW_OUT_LATENCY_MS; }
         virtual status_t    setVolume(float left, float right) { return INVALID_OPERATION; }
         virtual ssize_t     write(const void* buffer, size_t bytes);
@@ -351,6 +357,7 @@ private:
                 int         mFormat;
     };
 #endif
+
 // ----------------------------------------------------------------------------
 
 class AudioSessionOutLPA : public AudioStreamOut
@@ -411,7 +418,7 @@ public:
 
     virtual status_t    getNextWriteTimestamp(int64_t *timestamp);
     virtual status_t    setObserver(void *observer);
-    //virtual status_t    getBufferInfo(buf_info **buf);
+    virtual status_t    getBufferInfo(buf_info **buf);
     virtual status_t    isBufferAvailable(int *isAvail);
 
 	void* memBufferAlloc(int nSize, int32_t *ion_fd);
@@ -434,7 +441,7 @@ private:
     bool                mEosEventReceived;
     uint32_t    mDevices;
     AudioHardware* mHardware;
-    //AudioEventObserver *mObserver;
+    AudioEventObserver *mObserver;
 
     void                createEventThread();
     void                bufferAlloc();
@@ -613,6 +620,9 @@ private:
             uint32_t mVoipBitRate;
             msm_snd_endpoint *mSndEndpoints;
             int mNumSndEndpoints;
+
+            msm_cad_endpoint *mCadEndpoints;
+            int mNumCadEndpoints;
 
             int mCurSndDevice;
             int m7xsnddriverfd;
