@@ -90,7 +90,8 @@ PRODUCT_PACKAGES += \
 
 ## Recovery
 PRODUCT_COPY_FILES += \
-    device/samsung/royss/recovery/sbin/rmt_storage_recovery:recovery/root/sbin/rmt_storage_recovery 
+    device/samsung/royss/recovery/sbin/rmt_storage_recovery:recovery/root/sbin/rmt_storage_recovery \
+    device/samsung/royss/recovery/postrecoveryboot.sh:recovery/root/sbin/postrecoveryboot.sh
 
 ## Permissions
 PRODUCT_COPY_FILES += \
@@ -143,7 +144,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.bq.gpu_to_cpu_unsupported=1 \
     ro.max.fling_velocity=4000 \
     ro.opengles.version=131072 \
-    ro.sf.lcd_density=140
+    ro.sf.lcd_density=160
 
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-data-only=1 \

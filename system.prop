@@ -2,9 +2,6 @@
 # system.prop for royss
 #
 
-# Audio
-lpa.min_duration=60000000
-
 # Call Recording
 persist.call_recording.enabled=1
 

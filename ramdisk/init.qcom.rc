@@ -154,6 +154,10 @@ on boot
     # TelephonyManager.java requires this
     chmod 0644 /proc/cmdline
 
+    mkdir /data/audio/ 0770 media audio
+    # Enable the setgid bit on the directory
+    chmod 2770 /data/audio
+
     #Camera daemon
     start qcamerasvr
     start gpu_dcvsd
@@ -167,11 +171,17 @@ on post-fs-data
 
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
 
+    # Create directory used by audio subsystem
+    mkdir /data/misc/audio 0770 audio audio
+
     # we will remap this as /storage/sdcard with the sdcard fuse tool
     mkdir /data/media 0770 media_rw media_rw
     chown media_rw media_rw /data/media
 
     setprop vold.post_fs_data_done 1
+
+    # Create the directories used by the Wireless subsystem
+    mkdir /efs/bluetooth 0775 radio system
 
 service rmt_storage /system/bin/rmt_storage /dev/block/mmcblk0p10 /dev/block/mmcblk0p11
     user root
@@ -293,6 +303,12 @@ service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
     class late_start
     user system
     group system
+
+service charger /charger
+    class charger
+    user root
+    group root
+    oneshot
 
 # CM Performance Profiles
 # Powersave
