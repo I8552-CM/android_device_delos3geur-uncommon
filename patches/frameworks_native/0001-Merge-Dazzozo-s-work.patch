@@ -1,34 +1,24 @@
-From da453f7ca845d0785c69f13a241e79573dde86f0 Mon Sep 17 00:00:00 2001
-From: Neti Ravi Kumar <ravineti@codeaurora.org>
-Date: Tue, 14 Feb 2012 19:07:28 +0530
-Subject: [PATCH 2/2] Select texture target based on pixel format
+From 640375cff8a4252b08bf6b07c51701cefb169c55 Mon Sep 17 00:00:00 2001
+From: dianlujitao <dianlujitao@gmail.com>
+Date: Mon, 31 Mar 2014 13:57:05 +0800
+Subject: [PATCH] Merge Dazzozo's work
 
-Adreno is not optimized for GL_TEXTURE_EXTERNAL_OES, making GPU
-utilization (and power), high with GL_TEXTURE_EXTERNAL_OES for
-RGB formats.
-
-Change texture target from GL_EXTERNAL_TEXTURE_OES to dynamically
-select between GL_EXTERNAL_TEXTURE_OES, and GL_TEXTURE_2D based
-on the pixel format.
-
-This change is done to reduce the composition time for 8x55
-
-Change-Id: I89ab1d60b23eef55442a9fd338b2a05b3304ce61
+Change-Id: Ic9a60007d548f492b5ad1b5487e1ecd0914b301c
 ---
- include/gui/GLConsumer.h                           |  6 ++++
- libs/gui/Android.mk                                |  4 +++
- services/surfaceflinger/Android.mk                 |  4 +++
- services/surfaceflinger/Layer.cpp                  |  4 +++
- .../RenderEngine/GLES11RenderEngine.cpp            |  6 ++++
- services/surfaceflinger/SurfaceFlingerConsumer.cpp | 32 ++++++++++++++++++++++
- services/surfaceflinger/SurfaceFlingerConsumer.h   |  7 +++++
- 7 files changed, 63 insertions(+)
+ include/gui/GLConsumer.h                           |    6 ++++
+ libs/gui/Android.mk                                |    7 +++++
+ services/surfaceflinger/Android.mk                 |    4 +++
+ services/surfaceflinger/Layer.cpp                  |    4 +++
+ .../RenderEngine/GLES11RenderEngine.cpp            |    6 ++++
+ services/surfaceflinger/SurfaceFlingerConsumer.cpp |   32 ++++++++++++++++++++
+ services/surfaceflinger/SurfaceFlingerConsumer.h   |    7 +++++
+ 7 files changed, 66 insertions(+)
 
 diff --git a/include/gui/GLConsumer.h b/include/gui/GLConsumer.h
-index a5fdfb9..40fa436 100644
+index d5d9c5b..2aea54a 100644
 --- a/include/gui/GLConsumer.h
 +++ b/include/gui/GLConsumer.h
-@@ -373,7 +373,13 @@ private:
+@@ -375,7 +375,13 @@ private:
      // glCopyTexSubImage to read from the texture.  This is a hack to work
      // around a GL driver limitation on the number of FBO attachments, which the
      // browser's tile cache exceeds.
@@ -43,11 +33,18 @@ index a5fdfb9..40fa436 100644
      // EGLSlot contains the information and object references that
      // GLConsumer maintains about a BufferQueue buffer slot.
 diff --git a/libs/gui/Android.mk b/libs/gui/Android.mk
-index 1ef60e0..e575fa4 100644
+index 80746e4..466fb90 100644
 --- a/libs/gui/Android.mk
 +++ b/libs/gui/Android.mk
-@@ -55,6 +55,10 @@ ifeq ($(SENSORS_NEED_SETRATE_ON_ENABLE), true)
-         LOCAL_CFLAGS += -DSENSORS_SETRATE_ON_ENABLE
+@@ -67,10 +67,17 @@ endif
+ ifeq ($(TARGET_BOARD_PLATFORM), tegra3)
+ 	LOCAL_CFLAGS += -DDONT_USE_FENCE_SYNC
+ endif
++ifeq ($(TARGET_DOESNT_USE_FENCE_SYNC), true)
++	LOCAL_CFLAGS += -DDONT_USE_FENCE_SYNC
++endif
+ ifeq ($(TARGET_TOROPLUS_RADIO), true)
+ 	LOCAL_CFLAGS += -DTOROPLUS_RADIO
  endif
  
 +ifeq ($(BOARD_ADRENO_DECIDE_TEXTURE_TARGET),true)
@@ -58,10 +55,10 @@ index 1ef60e0..e575fa4 100644
  
  ifeq (,$(ONE_SHOT_MAKEFILE))
 diff --git a/services/surfaceflinger/Android.mk b/services/surfaceflinger/Android.mk
-index 0422e4d..c96822d 100644
+index a38ef7a..7fc8a62 100644
 --- a/services/surfaceflinger/Android.mk
 +++ b/services/surfaceflinger/Android.mk
-@@ -87,6 +87,10 @@ else
+@@ -84,6 +84,10 @@ else
      LOCAL_CFLAGS += -DPRESENT_TIME_OFFSET_FROM_VSYNC_NS=0
  endif
  
@@ -73,10 +70,10 @@ index 0422e4d..c96822d 100644
  
  LOCAL_SHARED_LIBRARIES := \
 diff --git a/services/surfaceflinger/Layer.cpp b/services/surfaceflinger/Layer.cpp
-index 61af51f..9752fbd 100644
+index 56b1b1d..3c2b39d 100644
 --- a/services/surfaceflinger/Layer.cpp
 +++ b/services/surfaceflinger/Layer.cpp
-@@ -1064,7 +1064,11 @@ Region Layer::latchBuffer(bool& recomputeVisibleRegions)
+@@ -1102,7 +1102,11 @@ Region Layer::latchBuffer(bool& recomputeVisibleRegions)
  
          Reject r(mDrawingState, getCurrentState(), recomputeVisibleRegions);
  
@@ -190,5 +187,5 @@ index 688ad32..a7ce475 100644
      // See GLConsumer::bindTextureImageLocked().
      status_t bindTextureImage();
 -- 
-1.8.3.2
+1.7.9.5
 
