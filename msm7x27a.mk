@@ -14,7 +14,14 @@
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
-DEVICE_PACKAGE_OVERLAYS += device/samsung/royss/overlay
+DEVICE_PACKAGE_OVERLAYS += device/samsung/msm7x27a-common/overlay
+
+PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=2
+
+PRODUCT_TAGS += dalvik.gc.type-precise
+
+PRODUCT_AAPT_CONFIG := normal mdpi
+PRODUCT_AAPT_PREF_CONFIG := mdpi
 
 ## Video
 PRODUCT_PACKAGES += \
@@ -90,8 +97,8 @@ PRODUCT_PACKAGES += \
 
 ## Recovery
 PRODUCT_COPY_FILES += \
-    device/samsung/royss/recovery/sbin/rmt_storage_recovery:recovery/root/sbin/rmt_storage_recovery \
-    device/samsung/royss/recovery/postrecoveryboot.sh:recovery/root/sbin/postrecoveryboot.sh
+    device/samsung/msm7x27a-common/recovery/sbin/rmt_storage_recovery:recovery/root/sbin/rmt_storage_recovery \
+    device/samsung/msm7x27a-common/recovery/postrecoveryboot.sh:recovery/root/sbin/postrecoveryboot.sh
 
 ## Permissions
 PRODUCT_COPY_FILES += \
@@ -110,32 +117,70 @@ PRODUCT_COPY_FILES += \
 
 ## Qosmgr
 PRODUCT_COPY_FILES += \
-    device/samsung/royss/configs/qosmgr_rules.xml:system/etc/qosmgr_rules.xml
+    device/samsung/msm7x27a-common/prebuilt/qosmgr_rules.xml:system/etc/qosmgr_rules.xml
 
 ## Media
 PRODUCT_COPY_FILES += \
-    device/samsung/royss/configs/media_codecs.xml:system/etc/media_codecs.xml \
-    device/samsung/royss/configs/media_profiles.xml:system/etc/media_profiles.xml 
+    device/samsung/msm7x27a-common/prebuilt/media_codecs.xml:system/etc/media_codecs.xml \
+    device/samsung/msm7x27a-common/prebuilt/media_profiles.xml:system/etc/media_profiles.xml 
 
 ## Audio
 PRODUCT_COPY_FILES += \
-    device/samsung/royss/configs/audio_policy.conf:system/etc/audio_policy.conf \
-    device/samsung/royss/configs/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
-    device/samsung/royss/configs/AudioFilter.csv:system/etc/AudioFilter.csv
+    device/samsung/msm7x27a-common/prebuilt/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    device/samsung/msm7x27a-common/prebuilt/audio/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
+    device/samsung/msm7x27a-common/prebuilt/audio/AudioFilter.csv:system/etc/AudioFilter.csv
 
-## Ramdisk
+## Init files
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,device/samsung/royss/ramdisk,root)
+    device/samsung/msm7x27a-common/ramdisk/fstab.qcom:root/fstab.qcom \
+    device/samsung/msm7x27a-common/ramdisk/init.qcom.bt.rc:root/init.qcom.bt.rc \
+    device/samsung/msm7x27a-common/ramdisk/init.qcom.class_main.sh:root/init.qcom.class_main.sh \
+    device/samsung/msm7x27a-common/ramdisk/init.qcom.rc:root/init.qcom.rc \
+    device/samsung/msm7x27a-common/ramdisk/init.qcom.ril.path.sh:root/init.qcom.ril.path.sh \
+    device/samsung/msm7x27a-common/ramdisk/init.qcom.usb.rc:root/init.qcom.usb.rc \
+    device/samsung/msm7x27a-common/ramdisk/initlogo.rle:root/initlogo.rle \
+    device/samsung/msm7x27a-common/ramdisk/lpm.rc:root/lpm.rc \
+    device/samsung/msm7x27a-common/ramdisk/ueventd.qcom.rc:root/ueventd.qcom.rc
 
+## Bluetooth init file
 PRODUCT_COPY_FILES += \
-    vendor/samsung/royss/proprietary/system/lib/liboncrpc.so:obj/lib/liboncrpc.so \
-    vendor/samsung/royss/proprietary/system/lib/libnv.so:obj/lib/libnv.so
+    device/samsung/msm7x27a-common/prebuilt/init.bt.sh:system/etc/init.bt.sh 
+
+## Misc files
+PRODUCT_COPY_FILES += \
+    vendor/samsung/msm7x27a-common/proprietary/system/lib/liboncrpc.so:obj/lib/liboncrpc.so \
+    vendor/samsung/msm7x27a-common/proprietary/system/lib/libnv.so:obj/lib/libnv.so
+
+## Keychars
+PRODUCT_COPY_FILES += \
+    device/samsung/msm7x27a-common/prebuilt/usr/keychars/7x27a_kp.kcm:system/usr/keychars/7x27a_kp.kcm 
+
+## Keylayout
+PRODUCT_COPY_FILES += \
+    device/samsung/msm7x27a-common/prebuilt/usr/keylayout/7x27a_kp.kl:system/usr/keylayout/7x27a_kp.kl \
+    device/samsung/msm7x27a-common/prebuilt/usr/keylayout/7k_handset.kl:system/usr/keylayout/7k_handset.kl \
+    device/samsung/msm7x27a-common/prebuilt/usr/keylayout/atmel_mxt_ts.kl:system/usr/keylayout/atmel_mxt_ts.kl \
+    device/samsung/msm7x27a-common/prebuilt/usr/keylayout/ft5x06_ts.kl:system/usr/keylayout/ft5x06_ts.kl \
+    device/samsung/msm7x27a-common/prebuilt/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
+    device/samsung/msm7x27a-common/prebuilt/usr/keylayout/surf_keypad.kl:system/usr/keylayout/surf_keypad.kl \
+    device/samsung/msm7x27a-common/prebuilt/usr/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl 
+
+## Touchscreen
+PRODUCT_COPY_FILES += \
+    device/samsung/msm7x27a-common/prebuilt/usr/idc/sec_touchscreen.idc:system/usr/idc/sec_touchscreen.idc
+
+## Network
+PRODUCT_COPY_FILES += \
+    device/samsung/msm7x27a-common/prebuilt/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+    device/samsung/msm7x27a-common/prebuilt/etc/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    device/samsung/msm7x27a-common/prebuilt/etc/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf 
 
 ## Charger
 PRODUCT_PACKAGES += \
     charger \
     charger_res_images 
 
+## Properties
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.gr.numframebuffers=3 \
     debug.egl.recordable.rgba8888=1 \
@@ -161,24 +206,19 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vold.umsdirtyratio=50 
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.cwm.enable_key_repeat=true
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.fm.analogpath.supported=true \
-    ro.fm.transmitter=false \
-    ro.fm.mulinst.recording.support=false
-
-PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=60
 
-## Other
-PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=2
-PRODUCT_TAGS += dalvik.gc.type-precise
-PRODUCT_AAPT_CONFIG := normal mdpi
-PRODUCT_AAPT_PREF_CONFIG := mdpi
+PRODUCT_PROPERTY_OVERRIDES += \
+    rild.libargs=-d /dev/smd0 \
+    rild.libpath=/system/lib/libril-qc-qmi-1.so v
+    ril.subscription.types=NV,RUIM \
+    ro.telephony.ril.v3=skippinpukcount,qcomdsds \
+    ro.telephony.ril_class=SamsungQualcommRIL \
+    ro.telephony.call_ring.multiple=0
+
 
 $(call inherit-product, build/target/product/full.mk)
 $(call inherit-product, device/common/gps/gps_eu_supl.mk)
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
-$(call inherit-product, vendor/samsung/royss/royss-vendor.mk)
+$(call inherit-product, vendor/samsung/msm7x27a-common/samsung-common-vendor.mk)

@@ -1,1 +1,1 @@
-CyanogenMod CM-11.0 Device Tree for Galaxy Young Plus GT-S6310 (royss)
+CyanogenMod 11 common device configuration for Samsung MSM7x27A devices

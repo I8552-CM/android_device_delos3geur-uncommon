@@ -19,7 +19,6 @@
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
 TARGET_KERNEL_SOURCE := kernel/samsung/msm7x27a
-TARGET_KERNEL_CONFIG := cyanogenmod_royss_defconfig
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01300000
@@ -35,9 +34,7 @@ TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := cortex-a5
 
-TARGET_BOOTLOADER_BOARD_NAME := MSM8625
-
-TARGET_SPECIFIC_HEADER_PATH := device/samsung/royss/include
+TARGET_SPECIFIC_HEADER_PATH := device/samsung/msm7x27a-common/include
 
 ARCH_ARM_HAVE_TLS_REGISTER := true
 TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
@@ -52,7 +49,8 @@ BOARD_USE_MHEAP_SCREENSHOT := true
 
 ## Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
-#COMMON_GLOBAL_CFLAGS += -DMR0_CAMERA_BLOB -DNEEDS_VECTORIMPL_SYMBOLS
+TARGET_DISABLE_ARM_PIE := true
+COMMON_GLOBAL_CFLAGS += -DMR0_CAMERA_BLOB -DNEEDS_VECTORIMPL_SYMBOLS
 
 ## Qualcomm hardware
 BOARD_USES_QCOM_HARDWARE := true
@@ -87,7 +85,7 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := msm7x27a
 BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
 
 # Charger
-BOARD_CHARGER_RES := device/samsung/royss/charger
+BOARD_CHARGER_RES := device/samsung/msm7x27a-common/charger
 BOARD_CHARGING_MODE_BOOTING_LPM := "/sys/class/power_supply/ac/online"
 BOARD_BATTERY_DEVICE_NAME := "battery"
 BOARD_CHARGER_ENABLE_SUSPEND := true
@@ -121,7 +119,7 @@ BOARD_USES_LEGACY_RIL := true
 BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
 
 # CMHW
-BOARD_HARDWARE_CLASS := device/samsung/royss/cmhw/
+BOARD_HARDWARE_CLASS := device/samsung/msm7x27a-common/cmhw/
 
 ## Vold
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
@@ -138,7 +136,7 @@ TARGET_NO_INITLOGO := true
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.msm7x27a
 
 ## Recovery
-TARGET_RECOVERY_FSTAB := device/samsung/royss/ramdisk/fstab.qcom
+TARGET_RECOVERY_FSTAB := device/samsung/msm7x27a-common/ramdisk/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 RECOVERY_FSTAB_VERSION := 2
 
