@@ -211,6 +211,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=60
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.webview.provider=classic
+
 $(call inherit-product, build/target/product/full.mk)
 $(call inherit-product, device/common/gps/gps_eu_supl.mk)
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
