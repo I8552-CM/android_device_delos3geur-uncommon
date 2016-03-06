@@ -7,9 +7,6 @@ system/lib/libaudiopolicy_sec.so
 #Bluetooth
 system/bin/btnvtool
 system/bin/hci_qcomm_init
-system/lib/libbt-aptx.so
-system/lib/libbt-codec.so
-system/lib/libbt-codec_aptx.so
 system/lib/libdbus.so
 system/etc/PSConfig_7820.psr
 
@@ -68,8 +65,6 @@ system/lib/egl/libq3dtools_adreno200.so
 system/lib/libOpenVG.so
 system/lib/libgsl.so
 system/lib/libsc-a2xx.so
-system/lib/libc2d2_z180.so
-system/lib/libC2D2.so
 
 #Firmware
 system/etc/firmware/yamato_pfp.fw
@@ -147,12 +142,10 @@ system/lib/libqdi.so
 system/lib/libqdp.so
 system/lib/libQmageDecoder.so
 system/lib/libqmi.so
-system/lib/libqmi_client_griffon.so
 system/lib/libqmi_client_qmux.so
 system/lib/libqmi_csvt_srvc.so
 system/lib/libqmiservices.so
 system/lib/libqueue.so
-system/lib/libsec.so
 system/lib/libsecnativefeature.so
 system/lib/libwms.so
 system/lib/libwvm.so

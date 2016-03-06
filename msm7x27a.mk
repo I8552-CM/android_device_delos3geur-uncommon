@@ -138,13 +138,15 @@ PRODUCT_COPY_FILES += \
     device/samsung/msm7x27a-common/ramdisk/init.qcom.rc:root/init.qcom.rc \
     device/samsung/msm7x27a-common/ramdisk/init.qcom.ril.path.sh:root/init.qcom.ril.path.sh \
     device/samsung/msm7x27a-common/ramdisk/init.qcom.usb.rc:root/init.qcom.usb.rc \
-    device/samsung/msm7x27a-common/ramdisk/initlogo.rle:root/initlogo.rle \
     device/samsung/msm7x27a-common/ramdisk/lpm.rc:root/lpm.rc \
     device/samsung/msm7x27a-common/ramdisk/ueventd.qcom.rc:root/ueventd.qcom.rc
 
-## Bluetooth init file
+## Bluetooth files
 PRODUCT_COPY_FILES += \
-    device/samsung/msm7x27a-common/prebuilt/init.bt.sh:system/etc/init.bt.sh 
+    device/samsung/msm7x27a-common/prebuilt/bluetooth/init.bt.sh:system/etc/init.bt.sh \
+    device/samsung/msm7x27a-common/prebuilt/bluetooth/libbt-aptx.so:system/lib/libbt-aptx.so \
+    device/samsung/msm7x27a-common/prebuilt/bluetooth/libbt-codec.so:system/lib/libbt-codec.so \
+    device/samsung/msm7x27a-common/prebuilt/bluetooth/libbt-codec_aptx.so:system/lib/libbt-codec_aptx.so
 
 ## Misc files
 PRODUCT_COPY_FILES += \
@@ -171,9 +173,9 @@ PRODUCT_COPY_FILES += \
 
 ## Network
 PRODUCT_COPY_FILES += \
-    device/samsung/msm7x27a-common/prebuilt/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-    device/samsung/msm7x27a-common/prebuilt/etc/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-    device/samsung/msm7x27a-common/prebuilt/etc/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf 
+    device/samsung/msm7x27a-common/prebuilt/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+    device/samsung/msm7x27a-common/prebuilt/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    device/samsung/msm7x27a-common/prebuilt/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf 
 
 ## Charger
 PRODUCT_PACKAGES += \
@@ -208,15 +210,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=60
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    rild.libargs=-d /dev/smd0 \
-    rild.libpath=/system/lib/libril-qc-qmi-1.so v
-    ril.subscription.types=NV,RUIM \
-    ro.telephony.ril.v3=skippinpukcount,qcomdsds \
-    ro.telephony.ril_class=SamsungQualcommRIL \
-    ro.telephony.call_ring.multiple=0
-
 
 $(call inherit-product, build/target/product/full.mk)
 $(call inherit-product, device/common/gps/gps_eu_supl.mk)
