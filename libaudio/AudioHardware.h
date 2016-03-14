@@ -100,7 +100,9 @@ struct adrc_filter {
 
 struct msm_audio_stats {
     uint32_t out_bytes;
-    uint32_t unused[3];
+    uint32_t byte_count;
+    uint32_t sample_count;
+    uint32_t unused[1];
 };
 
 struct tx_iir {
@@ -165,7 +167,7 @@ enum tty_modes {
 #define AUDIO_HW_IN_SAMPLERATE 8000                 // Default audio input sample rate
 #define AUDIO_HW_IN_CHANNELS (AUDIO_CHANNEL_IN_MONO) // Default audio input channel mask
 #define AUDIO_HW_IN_BUFFERSIZE 2048                 // Default audio input buffer size
-#define AUDIO_HW_IN_FORMAT (AUDIO_PCM_16_BIT)  // Default audio input sample format
+#define AUDIO_HW_IN_FORMAT (AUDIO_FORMAT_PCM_16_BIT)  // Default audio input sample format
 #ifdef QCOM_VOIP_ENABLED
 #define AUDIO_HW_VOIP_BUFFERSIZE_8K 320
 #define AUDIO_HW_VOIP_BUFFERSIZE_16K 640
@@ -280,7 +282,7 @@ private:
         // must be 32-bit aligned - driver only seems to like 4800
         virtual size_t      bufferSize() const { return 4800; }
         virtual uint32_t    channels() const { return AUDIO_CHANNEL_OUT_STEREO; }
-        virtual int         format() const { return AUDIO_PCM_16_BIT; }
+        virtual int         format() const { return AUDIO_FORMAT_PCM_16_BIT; }
         virtual uint32_t    latency() const { return (1000*AUDIO_HW_NUM_OUT_BUF*(bufferSize()/frameSize()))/sampleRate()+AUDIO_HW_OUT_LATENCY_MS; }
         virtual status_t    setVolume(float left, float right) { return INVALID_OPERATION; }
         virtual ssize_t     write(const void* buffer, size_t bytes);
@@ -424,7 +426,7 @@ private:
     bool                mEosEventReceived;
     uint32_t    mDevices;
     AudioHardware* mHardware;
-    //AudioEventObserver *mObserver;
+    AudioEventObserver *mObserver;
 
     void                createEventThread();
     void                bufferAlloc();

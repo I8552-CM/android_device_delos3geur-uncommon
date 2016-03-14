@@ -15,6 +15,9 @@
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
+#ifndef QCOM_TUNNEL_LPA_ENABLED
+#define QCOM_TUNNEL_LPA_ENABLED
+#endif
 
 #include <math.h>
 
@@ -3244,7 +3247,7 @@ status_t AudioHardware::AudioSessionOutLPA::setParameters(const String8& keyValu
     if (param.getInt(key, device) == NO_ERROR) {
         mDevices = device;
         ALOGV("set output routing %x", mDevices);
-        status = mHardware->doRouting(NULL, device);
+        status = mHardware->doRouting(NULL);
         param.remove(key);
     }
 
