@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
  * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2016, Lesley van der Lee and Jacob Payag. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -478,21 +479,21 @@ static int qcom_ap_dev_open(const hw_module_t* module, const char* name,
 }
 
 static struct hw_module_methods_t qcom_ap_module_methods = {
-        open: qcom_ap_dev_open
+        .open = qcom_ap_dev_open
 };
 
 struct qcom_ap_module HAL_MODULE_INFO_SYM = {
-    module: {
-        common: {
-            tag: HARDWARE_MODULE_TAG,
-            version_major: 1,
-            version_minor: 0,
-            id: AUDIO_POLICY_HARDWARE_MODULE_ID,
-            name: "QCOM Audio Policy HAL",
-            author: "Code Aurora Forum",
-            methods: &qcom_ap_module_methods,
-            dso : NULL,
-            reserved : {0},
+    .module = {
+        .common = {
+            .tag = HARDWARE_MODULE_TAG,
+            .version_major = 1,
+            .version_minor = 0,
+            .id = AUDIO_POLICY_HARDWARE_MODULE_ID,
+            .name = "QCOM Audio Policy HAL",
+            .author = "Code Aurora Forum",
+            .methods = &qcom_ap_module_methods,
+            .dso = NULL,
+            .reserved = {0},
         },
     },
 };

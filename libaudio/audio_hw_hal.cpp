@@ -664,21 +664,21 @@ err_create_audio_hw:
 }
 
 static struct hw_module_methods_t qcom_audio_module_methods = {
-        open: qcom_adev_open
+        .open = qcom_adev_open
 };
 
 struct qcom_audio_module HAL_MODULE_INFO_SYM = {
-    module: {
-        common: {
-            tag: HARDWARE_MODULE_TAG,
-            version_major: 1,
-            version_minor: 0,
-            id: AUDIO_HARDWARE_MODULE_ID,
-            name: "QCOM Audio HW HAL",
-            author: "Code Aurora Forum",
-            methods: &qcom_audio_module_methods,
-            dso : NULL,
-            reserved : {0},
+    .module = {
+        .common = {
+            .tag = HARDWARE_MODULE_TAG,
+            .version_major = 1,
+            .version_minor = 0,
+            .id = AUDIO_HARDWARE_MODULE_ID,
+            .name = "QCOM Audio HW HAL",
+            .author = "Code Aurora Forum",
+            .methods = &qcom_audio_module_methods,
+            .dso = NULL,
+            .reserved = {0},
         },
     },
 };
