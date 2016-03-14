@@ -283,13 +283,13 @@ AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, u
 
 #ifdef QCOM_VOIP_ENABLED
         // only one output stream allowed
-        if (mOutput && (devices != AudioSystem::DEVICE_OUT_DIRECTOUTPUT)) {
+        if (mOutput && (devices != AUDIO_DEVICE_OUT_DIRECTOUTPUT)) {
             if (status) {
                 *status = INVALID_OPERATION;
             }
             ALOGE(" AudioHardware::openOutputStream Only one output stream allowed \n");
         }
-        if(devices == AudioSystem::DEVICE_OUT_DIRECTOUTPUT) {
+        if(devices == AUDIO_DEVICE_OUT_DIRECTOUTPUT) {
 
             if(mDirectOutput == 0) {
                 // open direct output stream
@@ -608,11 +608,11 @@ status_t AudioHardware::setParameters(const String8& keyValuePairs)
         } else {
             mTtyMode = TTY_OFF;
         }
-        if(mMode != AudioSystem::MODE_IN_CALL){
+        if(mMode != AUDIO_MODE_IN_CALL){
            return NO_ERROR;
         }
         ALOGI("Changed TTY Mode=%s", value.string());
-        if((mMode == AudioSystem::MODE_IN_CALL) &&
+        if((mMode == AUDIO_MODE_IN_CALL) &&
            (mCurSndDevice == SND_DEVICE_HEADSET))
            doRouting(NULL);
     }
@@ -641,7 +641,7 @@ String8 AudioHardware::getParameters(const String8& keys)
     key = String8("tunneled-input-formats");
     if ( param.get(key,value) == NO_ERROR ) {
         param.addInt(String8("AMR"), true );
-        if (mMode == AudioSystem::MODE_IN_CALL) {
+        if (mMode == AUDIO_MODE_IN_CALL) {
             param.addInt(String8("QCELP"), true );
             param.addInt(String8("EVRC"), true );
         }
@@ -1426,7 +1426,7 @@ status_t AudioHardware::setVoiceVolume(float v)
 }
 
 #ifdef QCOM_FM_ENABLED
-status_t AudioHardware::setFmVolume(float v)
+status_t sHardware::setFmVolume(float v)
 {
     if (v < 0.0) {
         ALOGW("setFmVolume(%f) under 0.0, assuming 0.0\n", v);
@@ -1535,10 +1535,10 @@ status_t AudioHardware::doAudioRouteOrMute(uint32_t device)
         mMicMute = false;
     } else
 #endif
-    if (mMode == AudioSystem::MODE_IN_CALL)
+    if (mMode == AUDIO_MODE_IN_CALL)
         nEarmute = false;
 #ifdef QCOM_VOIP_ENABLED
-    else if(mMode == AudioSystem::MODE_IN_COMMUNICATION){
+    else if(mMode == AUDIO_MODE_IN_COMMUNICATION){
         nEarmute = false;
         ALOGW("VoipCall in MODE_IN_COMMUNICATION");
     }
@@ -1601,26 +1601,26 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
         // ignore routing device information when we start a recording in voice
         // call
         // Recording will happen through currently active tx device
-        if(inputDevice == AudioSystem::DEVICE_IN_VOICE_CALL)
+        if(inputDevice == AUDIO_DEVICE_IN_VOICE_CALL)
             return NO_ERROR;
         if (inputDevice != 0) {
-            if (inputDevice & AudioSystem::DEVICE_IN_BLUETOOTH_SCO_HEADSET) {
+            if (inputDevice & AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET) {
                 ALOGI("Routing audio to Bluetooth PCM\n");
                 new_snd_device = SND_DEVICE_BT;
-            } else if (inputDevice & AudioSystem::DEVICE_IN_WIRED_HEADSET) {
+            } else if (inputDevice & AUDIO_DEVICE_IN_WIRED_HEADSET) {
                     ALOGI("Routing audio to Wired Headset\n");
                     new_snd_device = SND_DEVICE_HEADSET;
 #ifdef QCOM_FM_ENABLED
-            } else if (inputDevice & AudioSystem::DEVICE_IN_FM_RX_A2DP) {
+            } else if (inputDevice & AUDIO_DEVICE_IN_FM_RX_A2DP) {
                     ALOGI("Routing audio from FM to Bluetooth A2DP\n");
                     new_snd_device = SND_DEVICE_FM_DIGITAL_BT_A2DP_HEADSET;
                     FmA2dpStatus=true;
-            } else if (inputDevice & AudioSystem::DEVICE_IN_FM_RX) {
+            } else if (inputDevice & AUDIO_DEVICE_IN_FM_RX) {
                     ALOGI("Routing audio to FM\n");
                     enableDgtlFmDriver = true;
 #endif
             } else {
-                if (outputDevices & AudioSystem::DEVICE_OUT_SPEAKER) {
+                if (outputDevices & AUDIO_DEVICE_OUT_SPEAKER) {
                     ALOGI("Routing audio to Speakerphone\n");
                     new_snd_device = SND_DEVICE_SPEAKER;
                     new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
@@ -1635,14 +1635,14 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
     // if inputDevice == 0, restore output routing
     if (new_snd_device == -1) {
         if (outputDevices & (outputDevices - 1)) {
-            if ((outputDevices & AudioSystem::DEVICE_OUT_SPEAKER) == 0) {
+            if ((outputDevices & AUDIO_DEVICE_OUT_SPEAKER) == 0) {
                 ALOGV("Hardware does not support requested route combination (%#X),"
                      " picking closest possible route...", outputDevices);
             }
         }
 
-        if ((mTtyMode != TTY_OFF) && (mMode == AudioSystem::MODE_IN_CALL) &&
-                (outputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADSET)) {
+        if ((mTtyMode != TTY_OFF) && (mMode == AUDIO_MODE_IN_CALL) &&
+                (outputDevices & AUDIO_DEVICE_OUT_WIRED_HEADSET)) {
             if (mTtyMode == TTY_FULL) {
                 ALOGI("Routing audio to TTY FULL Mode\n");
                 new_snd_device = SND_DEVICE_TTY_HEADSET;
@@ -1654,20 +1654,20 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
                 new_snd_device = SND_DEVICE_TTY_HCO;
             }
 #ifdef COMBO_DEVICE_SUPPORTED
-        } else if ((outputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADSET) &&
-                   (outputDevices & AudioSystem::DEVICE_OUT_SPEAKER)) {
+        } else if ((outputDevices & AUDIO_DEVICE_OUT_WIRED_HEADSET) &&
+                   (outputDevices & AUDIO_DEVICE_OUT_SPEAKER)) {
             ALOGI("Routing audio to Wired Headset and Speaker\n");
             new_snd_device = SND_DEVICE_STEREO_HEADSET_AND_SPEAKER;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
-        } else if ((outputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADPHONE) &&
-                   (outputDevices & AudioSystem::DEVICE_OUT_SPEAKER)) {
+        } else if ((outputDevices & AUDIO_DEVICE_OUT_WIRED_HEADPHONE) &&
+                   (outputDevices & AUDIO_DEVICE_OUT_SPEAKER)) {
             ALOGI("Routing audio to No microphone Wired Headset and Speaker (%d,%x)\n", mMode, outputDevices);
             new_snd_device = SND_DEVICE_STEREO_HEADSET_AND_SPEAKER;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
 #endif
 #ifdef QCOM_FM_ENABLED
-        } else if ((outputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADSET) &&
-                   (outputDevices & AudioSystem::DEVICE_OUT_FM)) {
+        } else if ((outputDevices & AUDIO_DEVICE_OUT_WIRED_HEADSET) &&
+                   (outputDevices & AUDIO_DEVICE_OUT_FM)) {
             if( !isFMAnalog() ){
                 ALOGI("Routing FM to Wired Headset\n");
                 new_snd_device = SND_DEVICE_FM_DIGITAL_STEREO_HEADSET;
@@ -1678,40 +1678,40 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
                 new_snd_device = SND_DEVICE_FM_ANALOG_STEREO_HEADSET_CODEC;
                 enableDgtlFmDriver = false;
             }
-        } else if ((outputDevices & AudioSystem::DEVICE_OUT_SPEAKER) &&
-                   (outputDevices & AudioSystem::DEVICE_OUT_FM)) {
+        } else if ((outputDevices & AUDIO_DEVICE_OUT_SPEAKER) &&
+                   (outputDevices & AUDIO_DEVICE_OUT_FM)) {
             ALOGI("Routing FM to Speakerphone\n");
             new_snd_device = SND_DEVICE_FM_DIGITAL_SPEAKER_PHONE;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
             enableDgtlFmDriver = true;
-        } else if ( (outputDevices & AudioSystem::DEVICE_OUT_FM) && isFMAnalog()) {
+        } else if ( (outputDevices & AUDIO_DEVICE_OUT_FM) && isFMAnalog()) {
             ALOGW("Enabling Anlg FM on wired headset\n");
             new_snd_device = SND_DEVICE_FM_ANALOG_STEREO_HEADSET;
             enableDgtlFmDriver = false;
 #endif
         } else if (outputDevices &
-                   (AudioSystem::DEVICE_OUT_BLUETOOTH_SCO | AudioSystem::DEVICE_OUT_BLUETOOTH_SCO_HEADSET)) {
+                   (AUDIO_DEVICE_OUT_BLUETOOTH_SCO | AUDIO_DEVICE_OUT_BLUETOOTH_SCO_HEADSET)) {
             ALOGI("Routing audio to Bluetooth PCM\n");
             new_snd_device = SND_DEVICE_BT;
-        } else if (outputDevices & AudioSystem::DEVICE_OUT_BLUETOOTH_SCO_CARKIT) {
+        } else if (outputDevices & AUDIO_DEVICE_OUT_BLUETOOTH_SCO_CARKIT) {
             ALOGI("Routing audio to Bluetooth PCM\n");
             new_snd_device = SND_DEVICE_CARKIT;
-        } else if (outputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADSET) {
+        } else if (outputDevices & AUDIO_DEVICE_OUT_WIRED_HEADSET) {
             ALOGI("Routing audio to Wired Headset\n");
             new_snd_device = SND_DEVICE_HEADSET;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
-        } else if (outputDevices & AudioSystem::DEVICE_OUT_SPEAKER) {
+        } else if (outputDevices & AUDIO_DEVICE_OUT_SPEAKER) {
             ALOGI("Routing audio to Speakerphone\n");
             new_snd_device = SND_DEVICE_SPEAKER;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
-        } else if (outputDevices & AudioSystem::DEVICE_OUT_EARPIECE) {
+        } else if (outputDevices & AUDIO_DEVICE_OUT_EARPIECE) {
             ALOGI("Routing audio to Handset\n");
             new_snd_device = SND_DEVICE_HANDSET;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
         }
     }
 
-    if (mDualMicEnabled && mMode == AudioSystem::MODE_IN_CALL) {
+    if (mDualMicEnabled && mMode == AUDIO_MODE_IN_CALL) {
         if (new_snd_device == SND_DEVICE_HANDSET) {
             ALOGI("Routing audio to handset with DualMike enabled\n");
             new_snd_device = SND_DEVICE_IN_S_SADC_OUT_HANDSET;
@@ -1815,7 +1815,7 @@ status_t AudioHardware::disableFM()
 status_t AudioHardware::checkMicMute()
 {
     Mutex::Autolock lock(mLock);
-    if (mMode != AudioSystem::MODE_IN_CALL) {
+    if (mMode != AUDIO_MODE_IN_CALL) {
         setMicMute_nosync(true);
     }
 
@@ -1919,7 +1919,7 @@ status_t AudioHardware::AudioStreamInVoip::set(
         return BAD_VALUE;
     }
 
-    if (pChannels == 0 || (*pChannels & (AudioSystem::CHANNEL_IN_MONO)) == 0) {
+    if (pChannels == 0 || (*pChannels & (AUDIO_CHANNEL_IN_MONO)) == 0) {
         *pChannels = AUDIO_HW_IN_CHANNELS;
         ALOGE(" Channle count does not match\n");
         return BAD_VALUE;
@@ -2421,7 +2421,7 @@ status_t AudioHardware::AudioStreamOutMSM72xx::getRenderPosition(uint32_t *dspFr
 
 #ifdef QCOM_VOIP_ENABLED
 AudioHardware::AudioStreamOutDirect::AudioStreamOutDirect() :
-    mHardware(0), mFd(-1), mStartCount(0), mRetryCount(0), mStandby(true), mDevices(0),mChannels(AudioSystem::CHANNEL_OUT_MONO),
+    mHardware(0), mFd(-1), mStartCount(0), mRetryCount(0), mStandby(true), mDevices(0),mChannels(AUDIO_CHANNEL_OUT_MONO),
     mSampleRate(AUDIO_HW_VOIP_SAMPLERATE_8K), mBufferSize(AUDIO_HW_VOIP_BUFFERSIZE_8K)
 {
 }
@@ -2838,7 +2838,7 @@ status_t AudioHardware::AudioStreamInMSM72xx::set(
         return BAD_VALUE;
     }
 
-    if (pChannels == 0 || (*pChannels & (AudioSystem::CHANNEL_IN_MONO | AudioSystem::CHANNEL_IN_STEREO)) == 0)
+    if (pChannels == 0 || (*pChannels & (AUDIO_CHANNEL_IN_MONO | AUDIO_CHANNEL_IN_STEREO)) == 0)
     {
         *pChannels = AUDIO_HW_IN_CHANNELS;
         ALOGE(" Channel count does not match\n");
@@ -2885,9 +2885,9 @@ status_t AudioHardware::AudioStreamInMSM72xx::set(
         ALOGE("Cannot set config");
         if (ioctl(mFd, AUDIO_GET_CONFIG, &config) == 0) {
             if (config.channel_count == 1) {
-                *pChannels = AudioSystem::CHANNEL_IN_MONO;
+                *pChannels = AUDIO_CHANNEL_IN_MONO;
             } else {
-                *pChannels = AudioSystem::CHANNEL_IN_STEREO;
+                *pChannels = AUDIO_CHANNEL_IN_STEREO;
             }
             *pRate = config.sample_rate;
         }
@@ -2940,16 +2940,16 @@ status_t AudioHardware::AudioStreamInMSM72xx::set(
       mChannels = *pChannels;
       mSampleRate = config.sample_rate;
 
-      if (mDevices == AudioSystem::DEVICE_IN_VOICE_CALL)
+      if (mDevices == AUDIO_DEVICE_IN_VOICE_CALL)
       {
-        if ((mChannels & AudioSystem::CHANNEL_IN_VOICE_DNLINK) &&
-            (mChannels & AudioSystem::CHANNEL_IN_VOICE_UPLINK)) {
+        if ((mChannels & AUDIO_CHANNEL_IN_VOICE_DNLINK) &&
+            (mChannels & AUDIO_CHANNEL_IN_VOICE_UPLINK)) {
           ALOGI("Recording Source: Voice Call Both Uplink and Downlink");
           gcfg.rec_type = RPC_VOC_REC_BOTH;
-        } else if (mChannels & AudioSystem::CHANNEL_IN_VOICE_DNLINK) {
+        } else if (mChannels & AUDIO_CHANNEL_IN_VOICE_DNLINK) {
           ALOGI("Recording Source: Voice Call DownLink");
           gcfg.rec_type = RPC_VOC_REC_FORWARD;
-        } else if (mChannels & AudioSystem::CHANNEL_IN_VOICE_UPLINK) {
+        } else if (mChannels & AUDIO_CHANNEL_IN_VOICE_UPLINK) {
           ALOGI("Recording Source: Voice Call UpLink");
           gcfg.rec_type = RPC_VOC_REC_REVERSE;
         }
@@ -3960,7 +3960,7 @@ ssize_t AudioHardware::AudioStreamInMSM72xx::read( void* buffer, ssize_t bytes)
         mState = AUDIO_INPUT_STARTED;
         // force routing to input device
 #ifdef QCOM_FM_ENABLED
-        if (mDevices != AudioSystem::DEVICE_IN_FM_RX) {
+        if (mDevices != AUDIO_DEVICE_IN_FM_RX) {
             mHardware->clearCurDevice();
             mHardware->doRouting(this);
         }
