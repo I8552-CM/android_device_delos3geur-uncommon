@@ -126,7 +126,6 @@ PRODUCT_COPY_FILES += \
 
 ## Audio
 PRODUCT_COPY_FILES += \
-    device/samsung/msm7x27a-common/prebuilt/audio/audio_policy.conf:system/etc/audio_policy.conf \
     device/samsung/msm7x27a-common/prebuilt/audio/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
     device/samsung/msm7x27a-common/prebuilt/audio/AudioFilter.csv:system/etc/AudioFilter.csv
 
