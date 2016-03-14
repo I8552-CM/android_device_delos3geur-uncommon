@@ -1,6 +1,7 @@
 /*
 ** Copyright 2008, The Android Open-Source Project
 ** Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+** Copyright (c) 2016, Lesley van der Lee and Jacob Payag. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@
 extern "C" {
 #include <linux/msm_audio.h>
 #include <linux/msm_audio_voicememo.h>
+#include <linux/msm_ion.h>
 #ifdef QCOM_VOIP_ENABLED
 #include <linux/msm_audio_mvs.h>
 #endif
@@ -202,7 +204,8 @@ public:
     // create I/O streams
     virtual AudioStreamOut* openOutputStream(
                                 uint32_t devices,
-                                audio_output_flags_t flags,
+				//Incompatible with 4.2+
+                                //audio_output_flags_t flags,
                                 int *format=0,
                                 uint32_t *channels=0,
                                 uint32_t *sampleRate=0,

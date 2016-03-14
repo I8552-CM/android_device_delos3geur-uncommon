@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
  * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2016, Lesley van der Lee and Jacob Payag. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
  */
 
 #define LOG_TAG "audio.primary.msm7627a"
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 
 #include <stdint.h>
 
@@ -471,8 +472,9 @@ static int adev_open_output_stream(struct audio_hw_device *dev,
     if (!out)
         return -ENOMEM;
 
+    status = static_cast<audio_output_flags_t> (flags);
+
     out->qcom_out = qadev->hwif->openOutputStream(devices,
-                                                    flags,
                                                     (int *)&config->format,
                                                     &config->channel_mask,
                                                     &config->sample_rate,

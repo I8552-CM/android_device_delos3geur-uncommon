@@ -1,6 +1,7 @@
 /*
 ** Copyright 2008, The Android Open-Source Project
 ** Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+** Copyright (c) 2016, Lesley van der Lee and Jacob Payag. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -17,8 +18,8 @@
 
 #include <math.h>
 
-//#define LOG_NDEBUG 0
-#define LOG_TAG "AudioHardwareMSM76XXA"
+#define LOG_NDEBUG 0
+#define LOG_TAG "AudioHardwareMSM7627A"
 #include <utils/Log.h>
 #include <utils/String8.h>
 #include <stdio.h>
@@ -125,6 +126,7 @@ static int snd_device = -1;
 static uint32_t SND_DEVICE_CURRENT=-1;
 static uint32_t SND_DEVICE_HANDSET=-1;
 static uint32_t SND_DEVICE_SPEAKER=-1;
+static uint32_t SND_DEVICE_SPEAKER_IN_CALL=-1;
 static uint32_t SND_DEVICE_BT=-1;
 static uint32_t SND_DEVICE_BT_EC_OFF=-1;
 static uint32_t SND_DEVICE_HEADSET=-1;
@@ -175,6 +177,7 @@ AudioHardware::AudioHardware() :
                 CHECK_FOR(CURRENT);
                 CHECK_FOR(HANDSET);
                 CHECK_FOR(SPEAKER);
+                CHECK_FOR(SPEAKER_IN_CALL);
                 CHECK_FOR(BT);
                 CHECK_FOR(BT_EC_OFF);
                 CHECK_FOR(HEADSET);
@@ -270,9 +273,11 @@ status_t AudioHardware::initCheck()
     return mInit ? NO_ERROR : NO_INIT;
 }
 
-AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, audio_output_flags_t flags, int *format, uint32_t *channels,
-        uint32_t *sampleRate, status_t *status)
+AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, uint32_t *channels, uint32_t *sampleRate, status_t *status)
 {
+
+    audio_output_flags_t flags = static_cast<audio_output_flags_t> (*status);
+
     { // scope for the lock
         Mutex::Autolock lock(mLock);
 
@@ -1191,6 +1196,11 @@ static int msm72xx_enable_postproc(bool state)
         device_id = 2;
         ALOGI("set device to SND_DEVICE_HEADSET device_id=2");
     }
+    if(snd_device == SND_DEVICE_SPEAKER_IN_CALL)
+    {
+        device_id = 7;
+        ALOGI("set device to SND_DEVICE_SPEAKER_IN_CALL device_id=7");
+    }
 
     fd = open(PCM_CTL_DEVICE, O_RDWR);
     if (fd < 0) {
@@ -1443,6 +1453,7 @@ status_t AudioHardware::setMasterVolume(float v)
     ALOGI("Set master volume to %d.\n", vol);
     set_volume_rpc(SND_DEVICE_HANDSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_SPEAKER, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_SPEAKER_IN_CALL, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_BT,      SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_HEADSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_IN_S_SADC_OUT_HANDSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
