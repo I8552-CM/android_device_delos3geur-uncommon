@@ -48,7 +48,6 @@ PRODUCT_PACKAGES += \
     audio_policy.msm7x27a \
     audio.a2dp.default \
     audio.usb.default \
-    audio_policy.conf \
     libaudioutils \
     libdashplayer \
     libtinyalsa
