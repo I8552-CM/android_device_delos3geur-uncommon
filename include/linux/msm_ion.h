@@ -711,6 +711,14 @@ struct ion_allocation_data {
 	struct ion_handle *handle;
 };
 
+struct ion_allocation_data_compat {
+	size_t len;
+	size_t align;
+	unsigned int heap_mask;
+	unsigned int flags;
+	struct ion_handle *handle;
+};
+
 /**
  * struct ion_fd_data - metadata passed to/from userspace for a handle/fd pair
  * @handle:	a handle

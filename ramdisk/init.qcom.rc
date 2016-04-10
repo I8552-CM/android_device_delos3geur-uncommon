@@ -149,6 +149,12 @@ on boot
     write /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor 4
     write /sys/devices/system/cpu/cpufreq/ondemand/down_differential 10
 
+    # Camera
+    chown system radio /sys/class/camera/rear/rear_camfw
+    chown system radio /sys/class/camera/rear/rear_camtype
+    chown system radio /sys/class/camera/front/front_camfw
+    chown system radio /sys/class/camera/front/front_camtype
+
     # Don't disable dmesg access for apps
     write /proc/sys/kernel/dmesg_restrict 0
 	
@@ -156,6 +162,7 @@ on boot
     chmod 0644 /proc/cmdline
 
     mkdir /data/audio/ 0770 media audio
+    mkdir /data/misc/audio 0770 audio audio
     # Enable the setgid bit on the directory
     chmod 2770 /data/audio
 
@@ -296,16 +303,6 @@ service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1
 service netmgrd /system/bin/netmgrd
     class main
 
-service playlpm /system/bin/playlpm
-    class charger
-    user root
-    oneshot
-
-service lpmkey /system/bin/charging_mode
-    class charger
-    user root
-    oneshot
-
 service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
     class late_start
     user system
@@ -316,6 +313,17 @@ service charger /charger
     user root
     group root
     oneshot
+
+service ril-daemon1 /system/bin/rild -c 1
+    class main
+    socket rild1 stream 660 root radio
+    socket rild-debug1 stream 660 radio system
+    user root
+    disabled
+    group radio cache inet misc audio sdcard_r sdcard_rw qcom_oncrpc diag qcom_diag log
+
+on property:ro.multi.rild=true
+    start ril-daemon1
 
 # CM Performance Profiles
 # Powersave

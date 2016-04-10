@@ -1,10 +1,11 @@
 #!/system/bin/sh
-#daniel_hk
+# modified by lesleyxxx15
+# originally by daniel
 
-LOG_TAG="qcom-bluetooth"
+LOG_TAG="CSR7820"
 BTUART_PORT=/dev/ttyHS0
 BTSTATE=/sys/class/rfkill/rfkill0/state
-PSCONFIG=/system/etc/PSConfig_7820.psr
+PSCONFIG=/etc/PSConfig_7820.psr
 
 logi ()
 {

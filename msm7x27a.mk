@@ -23,6 +23,10 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_AAPT_CONFIG := normal mdpi
 PRODUCT_AAPT_PREF_CONFIG := mdpi
 
+## CMAccount
+PRODUCT_PACKAGES += \
+    CMAccount
+
 ## Video
 PRODUCT_PACKAGES += \
     libstagefrighthw \
@@ -48,17 +52,19 @@ PRODUCT_PACKAGES += \
     audio_policy.msm7x27a \
     audio.a2dp.default \
     audio.usb.default \
+    audio.r_submix.default \
     libaudioutils \
     libdashplayer \
-    libtinyalsa
+    libtinyalsa \
+    libaudio-resampler
 
 ## Other HALs
 PRODUCT_PACKAGES += \
-    camera.msm7x27a \
     lights.msm7x27a \
+    camera.msm7x27a \
     gps.msm7x27a \
     power.msm7x27a \
-    libhealthd.msm7x27a 
+    libhealthd.msm7x27a
 
 ## FM radio
 PRODUCT_PACKAGES += \
@@ -102,6 +108,7 @@ PRODUCT_COPY_FILES += \
 ## Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/native/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
@@ -130,10 +137,11 @@ PRODUCT_COPY_FILES += \
 
 ## Init files
 PRODUCT_COPY_FILES += \
+    device/samsung/msm7x27a-common/ramdisk/charger:root/charger \
     device/samsung/msm7x27a-common/ramdisk/fstab.qcom:root/fstab.qcom \
+    device/samsung/msm7x27a-common/ramdisk/init.qcom.rc:root/init.qcom.rc \
     device/samsung/msm7x27a-common/ramdisk/init.qcom.bt.rc:root/init.qcom.bt.rc \
     device/samsung/msm7x27a-common/ramdisk/init.qcom.class_main.sh:root/init.qcom.class_main.sh \
-    device/samsung/msm7x27a-common/ramdisk/init.qcom.rc:root/init.qcom.rc \
     device/samsung/msm7x27a-common/ramdisk/init.qcom.ril.path.sh:root/init.qcom.ril.path.sh \
     device/samsung/msm7x27a-common/ramdisk/init.qcom.usb.rc:root/init.qcom.usb.rc \
     device/samsung/msm7x27a-common/ramdisk/lpm.rc:root/lpm.rc \
@@ -142,9 +150,6 @@ PRODUCT_COPY_FILES += \
 ## Bluetooth files
 PRODUCT_COPY_FILES += \
     device/samsung/msm7x27a-common/prebuilt/bluetooth/init.bt.sh:system/etc/init.bt.sh \
-    device/samsung/msm7x27a-common/prebuilt/bluetooth/libbt-aptx.so:system/lib/libbt-aptx.so \
-    device/samsung/msm7x27a-common/prebuilt/bluetooth/libbt-codec.so:system/lib/libbt-codec.so \
-    device/samsung/msm7x27a-common/prebuilt/bluetooth/libbt-codec_aptx.so:system/lib/libbt-codec_aptx.so
 
 ## Misc files
 PRODUCT_COPY_FILES += \
@@ -173,11 +178,14 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/samsung/msm7x27a-common/prebuilt/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
     device/samsung/msm7x27a-common/prebuilt/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-    device/samsung/msm7x27a-common/prebuilt/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf 
+    device/samsung/msm7x27a-common/prebuilt/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf
+
+## Audio
+PRODUCT_COPY_FILES += \
+    device/samsung/msm7x27a-common/prebuilt/audio/audio_policy.conf:system/etc/audio_policy.conf
 
 ## Charger
 PRODUCT_PACKAGES += \
-    charger \
     charger_res_images 
 
 ## Properties
@@ -189,7 +197,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.bq.gpu_to_cpu_unsupported=1 \
     ro.max.fling_velocity=4000 \
     ro.opengles.version=131072 \
-    ro.sf.lcd_density=160
+    ro.sf.lcd_density=160 \
+    debug.gralloc.map_fb_memory=1 \
+    debug.hwc.fakevsync=1
 
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-data-only=1 \
@@ -199,7 +209,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true \
     dev.pm.dyn_sample_period=700000 \
     dev.pm.dyn_samplingrate=1 \
-    ro.vendor.extension_library=/system/lib/libqc-opt.so
+    ro.vendor.extension_library=/system/lib/libqc-opt.so \
+    debug.composition.type=dyn \
+    persist.hwc.mdpcomp.enable=false
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp,adb \
