@@ -3816,7 +3816,7 @@ void  AudioHardware::AudioSessionOutLPA::eventThreadEntry()
                         mEmptyQueueMutex.unlock();
                         ALOGV("mEmptyQueueMutex unlocked: %d", __LINE__);
                         if (mFilledQueue.empty() && mReachedEOS && mGenerateEOS) {
-                            ALOGV("Posting the EOS to the observer player %p", mObserver);
+                            //ALOGV("Posting the EOS to the observer player %p", mObserver);
                             mEosEventReceived = true;
                             //if (mObserver != NULL) {
                                // mLock.unlock();
