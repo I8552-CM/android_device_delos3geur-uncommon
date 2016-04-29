@@ -36,11 +36,12 @@ PRODUCT_PACKAGES += \
 ## Graphics
 PRODUCT_PACKAGES += \
     libgenlock \
-    gralloc.msm7x27a \
     copybit.msm7x27a \
+    gralloc.msm7x27a \
     libqdMetaData \
     memtrack.msm7x27a \
-    hwcomposer.msm7x27a
+    hwcomposer.msm7x27a \
+    libtilerenderer
 
 ## Misc.
 PRODUCT_PACKAGES += \
@@ -192,12 +193,7 @@ PRODUCT_PACKAGES += \
 
 ## Properties
 PRODUCT_PROPERTY_OVERRIDES += \
-    debug.gr.numframebuffers=3 \
-    debug.egl.recordable.rgba8888=1 \
     debug.composition.type=dyn \
-    debug.hwc.dynThreshold=1.9 \
-    ro.bq.gpu_to_cpu_unsupported=1 \
-    ro.max.fling_velocity=4000 \
     ro.opengles.version=131072 \
     ro.sf.lcd_density=160 \
     debug.gralloc.map_fb_memory=1 \
