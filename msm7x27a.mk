@@ -103,6 +103,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     SamsungServiceMode
 
+#FM
+PRODUCT_COPY_FILES += \
+    device/samsung/msm7x27a-common/prebuilt/fm/init.qcom.fm.sh:/system/etc/init.qcom.fm.sh
+
 ## Recovery
 PRODUCT_COPY_FILES += \
     device/samsung/msm7x27a-common/recovery/sbin/rmt_storage_recovery:recovery/root/sbin/rmt_storage_recovery \
@@ -202,6 +206,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-data-only=1 \
     dalvik.vm.jit.codecachesize=1
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.fm.analogpath.supported=true \
+    ro.fm.transmitter=false \
+    ro.fm.mulinst.recording.support=false
 
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true \

@@ -236,6 +236,13 @@ service hostapd /system/bin/hostapd -dddd /data/misc/wifi/hostapd.conf
     oneshot
     disabled
 
+service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
+    class main
+    user root
+    group system qcom_oncrpc
+    disabled
+    oneshot
+
 service dhcpcd_wlan0 /system/bin/dhcpcd -aABDKL
     class main
     disabled

@@ -1766,6 +1766,7 @@ status_t AudioHardware::doAudioRouteOrMute(uint32_t device)
 #ifdef QCOM_FM_ENABLED
 bool AudioHardware::isFMAnalog()
 {
+    char value[PROPERTY_VALUE_MAX];
     bool isAfm = false;
 
     if (property_get("hw.fm.isAnalog", value, NULL)
