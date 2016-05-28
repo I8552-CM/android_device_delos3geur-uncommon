@@ -1797,7 +1797,7 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input, uint32_t outputDe
                 ALOGI("Routing audio to Bluetooth PCM\n");
                 new_snd_device = SND_DEVICE_BT;
                 rx_device = CAD_HW_DEVICE_ID_BT_CALL_RX;
-                tx_device = CAD_HW_DEVICE_ID_NONE;
+                tx_device = CAD_HW_DEVICE_ID_BT_CALL_TX;
             } else if (inputDevice & AudioSystem::DEVICE_IN_WIRED_HEADSET) {
                     ALOGI("Routing audio to Wired Headset\n");
                     new_snd_device = SND_DEVICE_HEADSET;
@@ -1813,17 +1813,17 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input, uint32_t outputDe
                     enableDgtlFmDriver = true;
 #endif
             } else {
-                if (outputDevices & AudioSystem::DEVICE_OUT_SPEAKER) {
+                if (outputDevices & AudioSystem::DEVICE_OUT_EARPIECE) {
+                    ALOGI("Routing audio to Handset\n");
+                    new_snd_device = SND_DEVICE_HANDSET;
+                    rx_device = CAD_HW_DEVICE_ID_HANDSET_RX;
+                    tx_device = CAD_HW_DEVICE_ID_HANDSET_TX;
+                } else {
                     ALOGI("Routing audio to Speakerphone\n");
                     new_snd_device = SND_DEVICE_SPEAKER;
                     new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
                     rx_device = CAD_HW_DEVICE_ID_SPEAKER_CALL_RX;
                     tx_device = CAD_HW_DEVICE_ID_SPEAKER_CALL_TX;
-                } else {
-                    ALOGI("Routing audio to Handset\n");
-                    new_snd_device = SND_DEVICE_HANDSET;
-                    rx_device = CAD_HW_DEVICE_ID_HANDSET_RX;
-                    tx_device = CAD_HW_DEVICE_ID_HANDSET_TX;
                 }
             }
         }
@@ -1899,7 +1899,7 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input, uint32_t outputDe
             ALOGI("Routing audio to Bluetooth PCM\n");
             new_snd_device = SND_DEVICE_BT;
             rx_device = CAD_HW_DEVICE_ID_BT_CALL_RX;
-            tx_device = CAD_HW_DEVICE_ID_NONE;/*
+            tx_device = CAD_HW_DEVICE_ID_BT_CALL_TX;/*
         } else if (outputDevices & AudioSystem::DEVICE_OUT_BLUETOOTH_SCO_CARKIT) {
             ALOGI("Routing audio to Bluetooth PCM\n");
             new_snd_device = SND_DEVICE_CARKIT;*/
@@ -1913,8 +1913,8 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input, uint32_t outputDe
             ALOGI("Routing audio to Wired Headphone\n");
             new_snd_device = SND_DEVICE_HEADSET;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
-            rx_device = CAD_HW_DEVICE_ID_HEADSET_CALL_RX;
-            tx_device = CAD_HW_DEVICE_ID_NONE;
+            rx_device = CAD_HW_DEVICE_ID_MP3_HEADSET_RX;
+            tx_device = CAD_HW_DEVICE_ID_MP3_HEADSET_TX;
         } else if (outputDevices & AudioSystem::DEVICE_OUT_SPEAKER) {
             ALOGI("Routing audio to Speakerphone\n");
             new_snd_device = SND_DEVICE_SPEAKER;
