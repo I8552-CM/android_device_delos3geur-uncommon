@@ -15,6 +15,9 @@
 # BoardConfig.mk
 #
 
+## Build
+BUILD_EMULATOR := false
+
 ## Kernel, bootloader etc.
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
