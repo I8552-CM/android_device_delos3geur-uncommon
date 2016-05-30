@@ -98,6 +98,9 @@ COMMON_GLOBAL_CFLAGS += -DNO_TUNNELED_SOURCE
 #BOARD_USES_SRS_TRUEMEDIA := true
 TARGET_HAS_QACT := true
 
+## RIL
+#BOARD_RIL_CLASS += ../../../device/lge/msm7x27a-common/ril
+
 ## EGL, graphics
 USE_OPENGL_RENDERER := true
 TARGET_DISPLAY_USE_RETIRE_FENCE := true
