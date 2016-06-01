@@ -196,6 +196,20 @@ PRODUCT_PACKAGES += \
     charger_res_images 
 
 ## Properties
+## RIL
+PRODUCT_PROPERTY_OVERRIDES += \
+    mobiledata.interfaces=pdp0 \
+    ro.vendor.extension_library=/system/lib/libqc-opt.so \
+    ro.telephony.ril_class=SamsungQualcommRIL \
+    ro.telephony.call_ring.multiple=0 \
+    ro.telephony.call_ring=0 \
+    ro.telephony.ril.v3=skippinpukcount,qcomdsds \
+    ril.subscription.types=NV,RUIM \
+    rild.libpath=/system/lib/libril-qc-qmi-1.so \
+    rild.libargs=-d /dev/smd0 \
+    persist.call_recording.enabled=1
+
+## SF
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.composition.type=dyn \
     ro.opengles.version=131072 \
@@ -203,33 +217,44 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.gralloc.map_fb_memory=1 \
     debug.hwc.fakevsync=1
 
+## Media
+PRODUCT_PROPERTY_OVERRIDES += \
+    media.stagefright.enable-player=true \
+    media.stagefright.enable-meta=false \
+    media.stagefright.enable-scan=true \
+    media.stagefright.enable-http=true \
+    media.stagefright.enable-fma2dp=true \
+    media.stagefright.enable-aac=true \
+    media.stagefright.enable-qcp=true
+
+## DALVIK
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-data-only=1 \
     dalvik.vm.jit.codecachesize=1
 
+## FM
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.fm.analogpath.supported=true \
     ro.fm.transmitter=false \
     ro.fm.mulinst.recording.support=false
 
+## QCom HW
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true \
     dev.pm.dyn_sample_period=700000 \
     dev.pm.dyn_samplingrate=1 \
-    ro.vendor.extension_library=/system/lib/libqc-opt.so \
     debug.composition.type=dyn \
     persist.hwc.mdpcomp.enable=false
 
+## MTP
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp,adb \
     ro.vold.umsdirtyratio=50 
 
+## WiFi
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=60
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.webview.provider=classic
 
 $(call inherit-product, build/target/product/full.mk)
 $(call inherit-product, device/common/gps/gps_eu_supl.mk)
