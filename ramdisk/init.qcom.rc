@@ -76,6 +76,11 @@ on boot
     chmod 0771 /efs
     chown 755 /persist
 
+    ## NFC
+    setprop ro.nfc.port "I2C"
+    chmod 0660 /dev/pn547
+    chown nfc nfc /dev/pn547
+
     ## Setup Wi-Fi
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
@@ -191,6 +196,10 @@ on post-fs-data
 
     # Create the directories used by the Wireless subsystem
     mkdir /efs/bluetooth 0775 radio system
+
+    # NFC
+    mkdir /data/nfc
+    mkdir /etc/param
 
 service rmt_storage /system/bin/rmt_storage /dev/block/mmcblk0p10 /dev/block/mmcblk0p11
     user root
