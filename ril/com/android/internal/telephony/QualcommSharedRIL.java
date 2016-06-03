@@ -62,7 +62,7 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
     private final int RIL_INT_RADIO_ON = 2;
     private final int RIL_INT_RADIO_ON_NG = 10;
     private final int RIL_INT_RADIO_ON_HTC = 13;
-    private int mSetPreferredNetworkType = -1;
+    public int mSetPreferredNetworkType = -1;
 
 
     public QualcommSharedRIL(Context context, int networkMode, int cdmaSubscription) {

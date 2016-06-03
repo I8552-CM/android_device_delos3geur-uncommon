@@ -205,9 +205,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.call_ring=0 \
     ro.telephony.ril.v3=skippinpukcount,qcomdsds \
     ril.subscription.types=NV,RUIM \
-    rild.libpath=/system/lib/libril-qc-qmi-1.so \
-    rild.libargs=-d /dev/smd0 \
-    persist.call_recording.enabled=1
+    rild.libpath=/system/lib/libril-qc-qmi-1.so
 
 ## SF
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -216,16 +214,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
     debug.gralloc.map_fb_memory=1 \
     debug.hwc.fakevsync=1
-
-## Media
-PRODUCT_PROPERTY_OVERRIDES += \
-    media.stagefright.enable-player=true \
-    media.stagefright.enable-meta=false \
-    media.stagefright.enable-scan=true \
-    media.stagefright.enable-http=true \
-    media.stagefright.enable-fma2dp=true \
-    media.stagefright.enable-aac=true \
-    media.stagefright.enable-qcp=true
 
 ## DALVIK
 PRODUCT_PROPERTY_OVERRIDES += \
