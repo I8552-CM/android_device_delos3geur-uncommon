@@ -1950,7 +1950,7 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input, uint32_t outputDe
        new_snd_device = SND_DEVICE_FM_DIGITAL_BT_A2DP_HEADSET;
 #endif
 
-    if (new_snd_device != -1 && new_snd_device != mCurSndDevice && (rx_device == -1 || tx_device == -1)) {
+    if (new_snd_device != -1 && new_snd_device != mCurSndDevice) {
         ret = doAudioRouteOrMute(new_snd_device, rx_device, tx_device, path_type);
 
         //disable post proc first for previous session
