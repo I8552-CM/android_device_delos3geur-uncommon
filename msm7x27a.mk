@@ -196,6 +196,10 @@ PRODUCT_PACKAGES += \
     charger_res_images 
 
 ## Properties
+## Media
+PRODUCT_PROPERTY_OVERRIDES += \
+    mm.enable.smoothstreaming=true
+
 ## RIL
 PRODUCT_PROPERTY_OVERRIDES += \
     mobiledata.interfaces=pdp0 \
