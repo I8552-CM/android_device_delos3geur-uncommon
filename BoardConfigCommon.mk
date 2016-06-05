@@ -17,6 +17,7 @@
 
 ## Build
 BUILD_EMULATOR := false
+PRODUCT_PREBUILT_WEBVIEWCHROMIUM := yes
 
 ## Kernel, bootloader etc.
 TARGET_NO_BOOTLOADER := true
