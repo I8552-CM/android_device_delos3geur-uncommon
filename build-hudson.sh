@@ -1,5 +1,5 @@
 #!/bin/bash
-PATH=~/python/bin:$PATH
+export PATH="/opt/android-build:/opt/android-sdk/tools:/opt/android-sdk/platform-tools:~/android/system:$PATH"
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
