@@ -1603,7 +1603,7 @@ status_t AudioHardware::setVoiceVolume(float v)
     }
 
     Mutex::Autolock lock(mLock);
-    set_volume_rpc(CAD_HW_DEVICE_ID_CURRENT_RX, CAD_HW_DEVICE_ID_CURRENT_TX, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+    set_volume_rpc(CAD_HW_DEVICE_ID_CURRENT_RX, CAD_HW_DEVICE_ID_CURRENT_TX, SND_METHOD_VOICE, 7, m7xsnddriverfd);
     return NO_ERROR;
 }
 
