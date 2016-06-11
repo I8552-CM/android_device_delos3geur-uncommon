@@ -172,7 +172,7 @@ on boot
     chmod 2770 /data/audio
 
     #Camera daemon
-    #start qcamerasvr
+    start qcamerasvr
     start gpu_dcvsd
 
 on post-fs-data
