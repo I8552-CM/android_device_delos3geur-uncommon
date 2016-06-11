@@ -43,6 +43,11 @@ PRODUCT_PACKAGES += \
     hwcomposer.msm7x27a \
     libtilerenderer
 
+## Camera
+PRODUCT_PACKAGES += \
+    libimage-jpeg-enc-omx-comp \
+    camera.msm7x27a
+
 ## Misc.
 PRODUCT_PACKAGES += \
     make_ext4fs \
@@ -64,7 +69,6 @@ PRODUCT_PACKAGES += \
 ## Other HALs
 PRODUCT_PACKAGES += \
     lights.msm7x27a \
-    camera.msm7x27a \
     gps.msm7x27a \
     power.msm7x27a \
     libhealthd.msm7x27a
