@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2011 The Linux Foundation. All rights reserved.
+** Copyright (c) 2011 Code Aurora Forum. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -15,9 +15,10 @@
 */
 
 /*#error uncomment this for compiler test!*/
+
 //#define ALOG_NDEBUG 0
 #define ALOG_NIDEBUG 0
-#define LOG_TAG "QCameraHAL"
+#define ALOG_TAG "QCameraHAL"
 #include <utils/Log.h>
 #include <utils/threads.h>
 #include <fcntl.h>
@@ -28,7 +29,7 @@
 #include "QCameraHAL.h"
 
 int HAL_numOfCameras = 0;
-qcamera_info_t HAL_cameraInfo[MSM_MAX_CAMERA_SENSORS];
+camera_info_t HAL_cameraInfo[MSM_MAX_CAMERA_SENSORS];
 mm_camera_t * HAL_camerahandle[MSM_MAX_CAMERA_SENSORS];
 int HAL_currentCameraMode;
 
@@ -55,8 +56,9 @@ extern "C" int HAL_getNumberOfCameras()
     }
     else
     {
-        qcamera_info_t* p_camera_info = 0;
+        camera_info_t* p_camera_info = 0;
         HAL_numOfCameras=num_camera;
+
         ALOGI("Handle base =0x%p",handle_base);
         ALOGI("getCameraInfo: numOfCameras = %d", HAL_numOfCameras);
         for(int i = 0; i < HAL_numOfCameras; i++) {
@@ -69,7 +71,7 @@ extern "C" int HAL_getNumberOfCameras()
                 ALOGI("modes_supported: %x", p_camera_info->modes_supported);
                 ALOGI("position: %d", p_camera_info->position);
                 ALOGI("sensor_mount_angle: %d", p_camera_info->sensor_mount_angle);
-          }
+            }
         }
     }
 
@@ -86,7 +88,7 @@ extern "C" int HAL_isIn3DMode()
 extern "C" void HAL_getCameraInfo(int cameraId, struct CameraInfo* cameraInfo)
 {
     mm_camera_t *mm_camer_obj = 0;
-    ALOGD("%s: E", __func__);
+    ALOGV("%s: E", __func__);
 
     if (!HAL_numOfCameras || HAL_numOfCameras < cameraId || !cameraInfo)
         return;

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
+Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -10,7 +10,7 @@ met:
       copyright notice, this list of conditions and the following
       disclaimer in the documentation and/or other materials provided
       with the distribution.
-    * Neither the name of The Linux Foundation nor the names of its
+    * Neither the name of Code Aurora Forum, Inc. nor the names of its
       contributors may be used to endorse or promote products derived
       from this software without specific prior written permission.
 
@@ -154,43 +154,16 @@ void mm_camera_stream_frame_refill_q(mm_camera_frame_queue_t *q, mm_camera_frame
 
 void mm_camera_stream_deinit_frame(mm_camera_stream_frame_t *frame)
 {
-    int i;
-
-    for(i=0; i < MM_CAMERA_MAX_NUM_FRAMES; i++) {
-        if(frame->frame[i].mobicat_info){
-            free (frame->frame[i].mobicat_info);
-            frame->frame[i].mobicat_info = NULL;
-        }
-    }
     pthread_mutex_destroy(&frame->mutex);
     mm_camera_stream_deinit_q(&frame->readyq);
     memset(frame, 0, sizeof(mm_camera_stream_frame_t));
 }
 
-int mm_camera_stream_init_frame(mm_camera_stream_frame_t *frame)
+void mm_camera_stream_init_frame(mm_camera_stream_frame_t *frame)
 {
-    int rc = 0;
-    int i;
     memset(frame, 0, sizeof(mm_camera_stream_frame_t));
-    for(i= 0; i < MM_CAMERA_MAX_NUM_FRAMES; i++) {
-        frame->frame[i].mobicat_info = malloc (sizeof(cam_exif_tags_t ));
-        if(frame->frame[i].mobicat_info == NULL) {
-            rc = -1;
-            break;
-        }
-    }
-    if(rc == 0) {
-        pthread_mutex_init(&frame->mutex, NULL);
-        mm_camera_stream_init_q(&frame->readyq);
-    } else {
-        for(i=0; i < MM_CAMERA_MAX_NUM_FRAMES; i++) {
-            if(frame->frame[i].mobicat_info){
-                free (frame->frame[i].mobicat_info);
-                frame->frame[i].mobicat_info = NULL;
-            }
-        }
-    }
-    return rc;
+    pthread_mutex_init(&frame->mutex, NULL);
+    mm_camera_stream_init_q(&frame->readyq);
 }
 
 void mm_camera_stream_release(mm_camera_stream_t *stream)
@@ -286,6 +259,28 @@ int32_t mm_camera_util_s_ctrl( int32_t fd,  uint32_t id, int32_t value)
     return rc;
 }
 
+int32_t mm_camera_util_private_s_ctrl(int32_t fd,  uint32_t id, void __user *value )
+{
+    int rc = MM_CAMERA_OK;
+    struct msm_camera_v4l2_ioctl_t v4l2_ioctl;
+
+    if (!value) {
+        return MM_CAMERA_E_INVALID_INPUT;
+    }
+
+    memset(&v4l2_ioctl, 0, sizeof(v4l2_ioctl));
+    v4l2_ioctl.id = id;
+    v4l2_ioctl.ioctl_ptr = value;
+    rc = ioctl (fd, MSM_CAM_V4L2_IOCTL_PRIVATE_S_CTRL, &v4l2_ioctl);
+
+    if(rc) {
+        CDBG_ERROR("%s: fd=%d, S_CTRL, id=0x%x, value = 0x%x, rc = %d\n",
+                 __func__, fd, id, (uint32_t)value, rc);
+        rc = MM_CAMERA_E_GENERAL;
+    }
+    return rc;
+}
+
 int32_t mm_camera_util_g_ctrl( int32_t fd, uint32_t id, int32_t *value)
 {
     int rc = MM_CAMERA_OK;
@@ -317,7 +312,6 @@ static uint32_t mm_camera_util_get_v4l2_fmt(cam_format_t fmt,
         *num_planes = 2;
         break;
     case CAMERA_BAYER_SBGGR10:
-    case CAMERA_RDI:
         val= V4L2_PIX_FMT_SBGGR10;
         *num_planes = 1;
         break;
@@ -325,17 +319,11 @@ static uint32_t mm_camera_util_get_v4l2_fmt(cam_format_t fmt,
         val= V4L2_PIX_FMT_NV61;
         *num_planes = 2;
         break;
-    case CAMERA_YUV_420_YV12:
-        val= V4L2_PIX_FMT_NV12;
-        *num_planes = 3;
-        break;
     default:
         val = 0;
         *num_planes = 0;
-        CDBG_ERROR("%s: Unknown fmt=%d", __func__, fmt);
         break;
     }
-    CDBG("%s: fmt=%d, val =%d, num_planes=%d", __func__, fmt, val , *num_planes);
     return val;
 }
 
@@ -347,9 +335,6 @@ static int mm_camera_stream_util_set_ext_mode(mm_camera_stream_t *stream)
         switch(stream->stream_type) {
         case MM_CAMERA_STREAM_PREVIEW:
             s_parm.parm.capture.extendedmode = MSM_V4L2_EXT_CAPTURE_MODE_PREVIEW;
-            break;
-        case MM_CAMERA_STREAM_RDI0:
-            s_parm.parm.capture.extendedmode = MSM_V4L2_EXT_CAPTURE_MODE_RDI;
             break;
         case MM_CAMERA_STREAM_SNAPSHOT:
             s_parm.parm.capture.extendedmode = MSM_V4L2_EXT_CAPTURE_MODE_MAIN;
@@ -374,7 +359,7 @@ static int mm_camera_stream_util_set_ext_mode(mm_camera_stream_t *stream)
                  s_parm.parm.capture.extendedmode);
     return rc;
 }
-
+#if 0
 static int mm_camera_util_set_op_mode(int fd, int opmode)
 {
     int rc = 0;
@@ -388,12 +373,11 @@ static int mm_camera_util_set_op_mode(int fd, int opmode)
                          __func__, rc);
     return rc;
 }
-
+#endif
 int mm_camera_stream_qbuf(mm_camera_obj_t * my_obj, mm_camera_stream_t *stream,
   int idx)
 {
-  uint32_t i;
-  int32_t  rc = MM_CAMERA_OK;
+  int32_t i, rc = MM_CAMERA_OK;
   int *ret;
   struct v4l2_buffer buffer;
 
@@ -404,13 +388,11 @@ int mm_camera_stream_qbuf(mm_camera_obj_t * my_obj, mm_camera_stream_t *stream,
   buffer.m.planes = &(stream->frame.frame[idx].planes[0]);
   buffer.length = stream->frame.frame[idx].num_planes;
 
+  CDBG("%s Ref : PREVIEW=%d VIDEO=%d SNAPSHOT=%d THUMB=%d ", __func__,
+    MM_CAMERA_STREAM_PREVIEW, MM_CAMERA_STREAM_VIDEO,
+    MM_CAMERA_STREAM_SNAPSHOT, MM_CAMERA_STREAM_THUMBNAIL);
   CDBG("%s:fd=%d,type=%d,frame idx=%d,num planes %d\n", __func__,
     stream->fd, stream->stream_type, idx, buffer.length);
-  for(i= 0; i<buffer.length; i++ ) {
-      CDBG("%s: buffer.m.planes[%d]: bytesused=%d, length=%d, data_offset=%d, userptr=%lud\n", __func__, i,
-                 buffer.m.planes[i].bytesused, buffer.m.planes[i].length, buffer.m.planes[i].data_offset ,
-                 buffer.m.planes[i].m.userptr );
-  }
 
   rc = ioctl(stream->fd, VIDIOC_QBUF, &buffer);
   if (rc < 0) {
@@ -442,11 +424,11 @@ static int mm_camera_stream_util_request_buf(mm_camera_obj_t * my_obj,
     bufreq.memory = V4L2_MEMORY_USERPTR;
     rc = ioctl(stream->fd, VIDIOC_REQBUFS, &bufreq);
     if (rc < 0) {
-      CDBG_ERROR("%s: fd=%d, ioctl VIDIOC_REQBUFS failed: rc=%d\n",
+      CDBG("%s: fd=%d, ioctl VIDIOC_REQBUFS failed: rc=%d\n",
         __func__, stream->fd, rc);
       goto end;
     }
-    CDBG("%s: stream fd=%d, ioctl VIDIOC_REQBUFS: memtype = %d, num_frames = %d, rc=%d\n",
+    ALOGE("%s: stream fd=%d, ioctl VIDIOC_REQBUFS: memtype = %d, num_frames = %d, rc=%d\n",
         __func__, stream->fd, bufreq.memory, bufreq.count, rc);
 
 end:
@@ -469,9 +451,9 @@ static int mm_camera_stream_util_enqueue_buf(mm_camera_obj_t * my_obj,
 
     for(i = 0; i < vbuf->num; i++){
         int idx = vbuf->buf.mp[i].idx;
-        CDBG("%s: enqueue buf index = %d\n",__func__, idx);
+        ALOGE("%s: enqueue buf index = %d\n",__func__, idx);
         if(idx < MM_CAMERA_MAX_NUM_FRAMES) {
-            CDBG("%s: stream_fd = %d, frame_fd = %d, frame ID = %d, offset = %d\n",
+            ALOGE("%s: stream_fd = %d, frame_fd = %d, frame ID = %d, offset = %d\n",
                      __func__, stream->fd, stream->frame.frame[i].frame.fd,
                      idx, stream->frame.frame_offset[idx]);
             rc = mm_camera_stream_qbuf(my_obj, stream, stream->frame.frame[idx].idx);
@@ -508,9 +490,6 @@ static int mm_camera_stream_util_reg_buf(mm_camera_obj_t * my_obj,
     case MM_CAMERA_STREAM_PREVIEW:
       image_type = OUTPUT_TYPE_P;
       break;
-    case MM_CAMERA_STREAM_RDI0:
-      image_type = OUTPUT_TYPE_R;
-      break;
     case MM_CAMERA_STREAM_SNAPSHOT:
     case MM_CAMERA_STREAM_RAW:
       image_type = OUTPUT_TYPE_S;
@@ -533,8 +512,6 @@ static int mm_camera_stream_util_reg_buf(mm_camera_obj_t * my_obj,
         rc = -1;
         goto end;
     }
-    CDBG("%s frame_len =%d, mum_planes=%d", __func__, stream->frame.frame_len, num_planes);
-
     stream->frame.num_frame = vbuf->num;
     bufreq.count = stream->frame.num_frame;
     bufreq.type  = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
@@ -567,15 +544,12 @@ static int mm_camera_stream_util_reg_buf(mm_camera_obj_t * my_obj,
             stream->frame.frame_offset[i] = 0;
         }
 
-        CDBG("%s: vbuf_mp[%d]num_planes =%d", __func__, i, stream->frame.frame[i].num_planes);
-
         rc = mm_camera_stream_qbuf(my_obj, stream, stream->frame.frame[i].idx);
         if (rc < 0) {
             CDBG_ERROR("%s: VIDIOC_QBUF rc = %d\n", __func__, rc);
             goto end;
         }
         stream->frame.ref_count[i] = 0;
-
         CDBG("%s: stream_fd = %d, frame_fd = %d, frame ID = %d, offset = %d\n",
           __func__, stream->fd, stream->frame.frame[i].frame.fd,
           i, stream->frame.frame_offset[i]);
@@ -837,14 +811,8 @@ static int32_t mm_camera_stream_fsm_reg(mm_camera_obj_t * my_obj,
             if (rc < 0) {
                     CDBG_ERROR("%s: ioctl VIDIOC_STREAMON failed: rc=%d\n",
                         __func__, rc);
-	      if((stream->stream_type == MM_CAMERA_STREAM_SNAPSHOT) || (stream->stream_type == MM_CAMERA_STREAM_THUMBNAIL))
-              {
-                ioctl(my_obj->ch[MM_CAMERA_CH_SNAPSHOT].snapshot.main.fd, VIDIOC_STREAMOFF, &buf_type);
-                mm_camera_stream_util_set_state(&my_obj->ch[MM_CAMERA_CH_SNAPSHOT].snapshot.main,MM_CAMERA_STREAM_STATE_REG);
-                ioctl(stream->fd, VIDIOC_STREAMOFF, &buf_type);
-              }
-           }
-           else
+            }
+            else
                 mm_camera_stream_util_set_state(stream, MM_CAMERA_STREAM_STATE_ACTIVE);
         }
         break;

@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2011 The Linux Foundation. All rights reserved.
+** Copyright (c) 2011 Code Aurora Forum. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 #define ALOG_NDEBUG 0
 #define ALOG_NIDEBUG 0
-#define LOG_TAG "QCameraHWI_Display"
+#define ALOG_TAG "QCameraHWI_Display"
 #include <utils/Log.h>
 #include <utils/threads.h>
 #include <fcntl.h>

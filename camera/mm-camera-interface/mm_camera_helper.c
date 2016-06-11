@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2011, The Linux Foundation. All rights reserved.
+Copyright (c) 2011, Code Aurora Forum. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -10,7 +10,7 @@ met:
       copyright notice, this list of conditions and the following
       disclaimer in the documentation and/or other materials provided
       with the distribution.
-    * Neither the name of The Linux Foundation nor the names of its
+    * Neither the name of Code Aurora Forum, Inc. nor the names of its
       contributors may be used to endorse or promote products derived
       from this software without specific prior written permission.
 
@@ -38,8 +38,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mm_camera_dbg.h"
 #include <time.h>
 #include "mm_camera_interface2.h"
-#include <linux/msm_ion.h>
-#include "QCamera_Intf.h"
+#include <linux/ion.h>
+#include "camera.h"
 
 #define MM_CAMERA_PROFILE 1
 
@@ -191,7 +191,6 @@ uint32_t mm_camera_get_msm_frame_len(cam_format_t fmt_type,
     *num_planes = 0;
     int local_height;
 
-
     switch (fmt_type) {
     case CAMERA_YUV_420_NV12:
     case CAMERA_YUV_420_NV21:
@@ -213,24 +212,7 @@ uint32_t mm_camera_get_msm_frame_len(cam_format_t fmt_type,
             size = plane[0] + plane[1];
         }
         break;
-
-    case CAMERA_YUV_420_YV12:
-
-      if(CAMERA_MODE_3D == mode) {
-
-        *num_planes = 1;
-          size = (uint32_t)(PAD_TO_2K(width*height)*3/2);
-          plane[0] = PAD_TO_WORD(width*height);
-      } else {
-          *num_planes = 3;
-          plane[0] = PAD_TO_2K(CEILING16(width) * height);
-          plane[1] = PAD_TO_2K(CEILING16(width/2) * height/2);
-          plane[2] = PAD_TO_2K(CEILING16(width/2) * height/2);
-          size = plane[0] + plane[1] + plane[2];
-      }
-      break;
     case CAMERA_BAYER_SBGGR10:
-    case CAMERA_RDI:
         *num_planes = 1;
         plane[0] = PAD_TO_WORD(width * height);
         size = plane[0];
@@ -248,7 +230,7 @@ uint32_t mm_camera_get_msm_frame_len(cam_format_t fmt_type,
         size = plane[0] + plane[1];
         break;
     default:
-        CDBG_ERROR("%s: format %d not supported.\n",
+        CDBG("%s: format %d not supported.\n",
             __func__, fmt_type);
         size = 0;
     }

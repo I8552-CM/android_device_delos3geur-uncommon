@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
+Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -10,7 +10,7 @@ met:
       copyright notice, this list of conditions and the following
       disclaimer in the documentation and/or other materials provided
       with the distribution.
-    * Neither the name of The Linux Foundation nor the names of its
+    * Neither the name of Code Aurora Forum, Inc. nor the names of its
       contributors may be used to endorse or promote products derived
       from this software without specific prior written permission.
 
@@ -35,7 +35,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <poll.h>
-#include <stdlib.h>
 #include <linux/media.h>
 
 #include "mm_camera_interface2.h"
@@ -57,8 +56,6 @@ static int mm_camera_util_opcode_2_ch_type(mm_camera_obj_t *my_obj,
     switch(opcode) {
     case MM_CAMERA_OPS_PREVIEW:
         return MM_CAMERA_CH_PREVIEW;
-    case MM_CAMERA_OPS_RDI:
-        return MM_CAMERA_CH_RDI;
     case MM_CAMERA_OPS_ZSL:
     case MM_CAMERA_OPS_SNAPSHOT:
         return MM_CAMERA_CH_SNAPSHOT;
@@ -80,7 +77,7 @@ const char *mm_camera_util_get_dev_name(mm_camera_obj_t * my_obj)
 }
 
 /* used for querying the camera_info of the given camera_id */
-static const qcamera_info_t * mm_camera_cfg_query_camera_info (int8_t camera_id)
+static const camera_info_t * mm_camera_cfg_query_camera_info (int8_t camera_id)
 {
     if(camera_id >= MSM_MAX_CAMERA_SENSORS)
         return NULL;
@@ -115,7 +112,6 @@ static uint8_t mm_camera_cfg_is_ch_supported (mm_camera_t * camera,
     case MM_CAMERA_CH_VIDEO:
     case MM_CAMERA_CH_SNAPSHOT:
     case MM_CAMERA_CH_RAW:
-    case MM_CAMERA_CH_RDI:
         return TRUE;
     case MM_CAMERA_CH_MAX:
     default:
@@ -387,7 +383,7 @@ static void mm_camera_ops_close (mm_camera_t * camera)
       if(my_obj->ref_count > 0) {
         CDBG("%s: ref_count=%d\n", __func__, my_obj->ref_count);
       } else {
-        // mm_camera_poll_thread_release(my_obj, MM_CAMERA_CH_MAX);
+        mm_camera_poll_thread_release(my_obj, MM_CAMERA_CH_MAX);
         (void)mm_camera_close(g_cam_ctrl.cam_obj[camera_id]);
         pthread_mutex_destroy(&my_obj->mutex);
         free(my_obj);
@@ -396,25 +392,6 @@ static void mm_camera_ops_close (mm_camera_t * camera)
     }
     pthread_mutex_unlock(&g_mutex);
 }
-
-static void mm_camera_ops_stop (mm_camera_t * camera)
-{
-    mm_camera_obj_t * my_obj;
-    int i;
-    int8_t camera_id = camera->camera_info.camera_id;
-
-    pthread_mutex_lock(&g_mutex);
-    my_obj = g_cam_ctrl.cam_obj[camera_id];
-    if(my_obj) {
-        CDBG("%s : Close Threads in mm_camera_ops_stop",__func__);
-        for(i = 0; i <= MM_CAMERA_CH_MAX; i++) {
-            mm_camera_poll_thread_release(my_obj,(mm_camera_channel_type_t)i);
-        }
-        mm_camera_poll_threads_deinit(my_obj);
-    }
-    pthread_mutex_unlock(&g_mutex);
-}
-
 
 static int32_t mm_camera_ops_ch_acquire(mm_camera_t * camera,
                                         mm_camera_channel_type_t ch_type)
@@ -486,7 +463,6 @@ static mm_camera_ops_t mm_camera_ops = {
     .action = mm_camera_ops_action,
     .open = mm_camera_ops_open,
     .close = mm_camera_ops_close,
-    .stop = mm_camera_ops_stop,
     .ch_acquire = mm_camera_ops_ch_acquire,
     .ch_release = mm_camera_ops_ch_release,
     .ch_set_attr = mm_camera_ops_ch_attr,
@@ -873,14 +849,6 @@ void cam_ops_close(int cam_id)
   }
 }
 
-void cam_ops_stop(int cam_id)
-{
-  mm_camera_t * mm_cam = get_camera_by_id(cam_id);
-  if (mm_cam) {
-    mm_cam->ops->stop(mm_cam);
-  }
-}
-
 int32_t cam_ops_ch_acquire(int cam_id, mm_camera_channel_type_t ch_type)
 {
   int32_t rc = -1;
@@ -1024,5 +992,4 @@ int32_t cam_jpeg_encode(int cam_id, uint8_t start,
   }
   return rc;
 }
-
 

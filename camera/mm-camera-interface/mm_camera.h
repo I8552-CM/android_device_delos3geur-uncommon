@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
+Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -10,7 +10,7 @@ met:
       copyright notice, this list of conditions and the following
       disclaimer in the documentation and/or other materials provided
       with the distribution.
-    * Neither the name of The Linux Foundation nor the names of its
+    * Neither the name of Code Aurora Forum, Inc. nor the names of its
       contributors may be used to endorse or promote products derived
       from this software without specific prior written permission.
 
@@ -85,7 +85,6 @@ typedef enum {
     MM_CAMERA_STREAM_THUMBNAIL,
     MM_CAMERA_STREAM_RAW,
     MM_CAMERA_STREAM_VIDEO_MAIN,
-    MM_CAMERA_STREAM_RDI0,
     MM_CAMERA_STREAM_MAX
 } mm_camera_stream_type_t;
 
@@ -98,7 +97,6 @@ struct mm_camera_frame_t{
     int match;
     int valid_entry;
     mm_camera_frame_t *next;
-    cam_exif_tags_t *mobicat_info;
 };
 
 typedef struct {
@@ -141,10 +139,6 @@ typedef struct {
 } mm_camera_ch_preview_t;
 
 typedef struct {
-    mm_camera_stream_t stream;
-} mm_camera_ch_rdi_t;
-
-typedef struct {
     mm_camera_stream_t thumbnail;
     mm_camera_stream_t main;
     int    delivered_cnt;
@@ -178,7 +172,6 @@ typedef struct {
         mm_camera_ch_preview_t preview;
         mm_camera_ch_snapshot_t snapshot;
         mm_camera_ch_video_t video;
-        mm_camera_ch_rdi_t rdi;
     };
 } mm_camera_ch_t;
 
@@ -261,8 +254,6 @@ typedef struct {
     mm_camera_mem_map_t hist_mem_map;
     int full_liveshot;
     int snap_burst_num_by_user;
-    uint32_t channel_interface_mask;
-    int mobicat_enable;
 } mm_camera_obj_t;
 
 #define MM_CAMERA_DEV_NAME_LEN 32
@@ -287,6 +278,8 @@ extern int32_t mm_camera_stream_fsm_fn_vtbl (mm_camera_obj_t * my_obj,
 extern const char *mm_camera_util_get_dev_name(mm_camera_obj_t * my_obj);
 extern int32_t mm_camera_util_s_ctrl( int32_t fd,
                                             uint32_t id, int32_t value);
+extern int32_t mm_camera_util_private_s_ctrl( int32_t fd,
+                                            uint32_t id, void __user *value);
 extern int32_t mm_camera_util_g_ctrl( int32_t fd,
                                             uint32_t id, int32_t *value);
 extern int32_t mm_camera_ch_fn(mm_camera_obj_t * my_obj,

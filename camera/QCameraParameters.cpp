@@ -15,11 +15,11 @@
 ** limitations under the License.
 */
 
-#define LOG_TAG "QCameraParams"
+#define ALOG_TAG "QCameraParams"
 #include <utils/Log.h>
 #include <string.h>
 #include <stdlib.h>
-#include "QCameraParameters.h"
+#include <camera/QCameraParameters.h>
 
 namespace android {
 // Parameter keys to communicate between camera application and driver.
@@ -60,9 +60,6 @@ const char QCameraParameters::KEY_QC_SUPPORTED_ZSL_MODES[] = "zsl-values";
 const char QCameraParameters::KEY_QC_CAMERA_MODE[] = "camera-mode";
 const char QCameraParameters::KEY_QC_AE_BRACKET_HDR[] = "ae-bracket-hdr";
 const char QCameraParameters::KEY_QC_POWER_MODE[] = "power-mode";
-const char QCameraParameters::KEY_QC_HDR_SUPPORTED[] = "hdr-supported";
-const char QCameraParameters::KEY_QC_VISION_MODE[] = "intelligent-mode";
-const char QCameraParameters::KEY_QC_VISION_AE[] = "smart-screen-exposure";
 /*only effective when KEY_QC_AE_BRACKET_HDR set to ae_bracketing*/
 //const char QCameraParameters::KEY_QC_AE_BRACKET_SETTING_KEY[] = "ae-bracket-setting";
 
@@ -139,8 +136,6 @@ const char QCameraParameters::KEY_QC_SATURATION[] = "saturation";
 const char QCameraParameters::KEY_QC_MAX_SATURATION[] = "max-saturation";
 
 const char QCameraParameters::KEY_QC_SINGLE_ISP_OUTPUT_ENABLED[] = "single-isp-output-enabled";
-const char QCameraParameters::KEY_QC_SUPPORTED_CAMERA_FEATURES[] = "qc-camera-features";
-const char QCameraParameters::KEY_QC_MAX_NUM_REQUESTED_FACES[] = "qc-max-num-requested-faces";
 
 //Values for DENOISE
 const char QCameraParameters::DENOISE_OFF[] = "denoise-off";

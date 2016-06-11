@@ -1,4 +1,4 @@
-/* Copyright (c) 2011, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -9,7 +9,7 @@
  *       copyright notice, this list of conditions and the following
  *       disclaimer in the documentation and/or other materials provided
  *       with the distribution.
- *     * Neither the name of The Linux Foundation nor the names of its
+ *     * Neither the name of Code Aurora Forum, Inc. nor the names of its
  *       contributors may be used to endorse or promote products derived
  *       from this software without specific prior written permission.
  *
@@ -30,7 +30,7 @@
 
 //#define ALOG_NDEBUG 0
 #define ALOG_NIDEBUG 0
-#define LOG_TAG "QualcommCamera"
+#define ALOG_TAG "QualcommCamera"
 #include <utils/Log.h>
 #include <utils/threads.h>
 #include <fcntl.h>
@@ -68,7 +68,7 @@ static hw_module_t camera_common  = {
   author:"Qcom",
   methods: &camera_module_methods,
   dso: NULL,
-  //reserved[0]:  0,
+  reserved:  {0},
 };
 camera_module_t HAL_MODULE_INFO_SYM = {
   common: camera_common,
@@ -153,14 +153,14 @@ extern "C" int get_number_of_cameras()
 {
     /* try to query every time we get the call!*/
 
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     return android::HAL_getNumberOfCameras( );
 }
 
 extern "C" int get_camera_info(int camera_id, struct camera_info *info)
 {
     int rc = -1;
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     if(info) {
         struct CameraInfo camInfo;
         memset(&camInfo, -1, sizeof (struct CameraInfo));
@@ -171,7 +171,7 @@ extern "C" int get_camera_info(int camera_id, struct camera_info *info)
             info->orientation = camInfo.orientation;
         }
     }
-    ALOGD("Q%s: X", __func__);
+    ALOGV("Q%s: X", __func__);
     return rc;
 }
 
@@ -217,13 +217,13 @@ extern "C" int  camera_device_open(
     }
 	/* pass actual hw_device ptr to framework. This amkes that we actally be use memberof() macro */
     *hw_device = (hw_device_t*)&device->common;
-    ALOGI("%s:  end rc %d", __func__, rc);
+    ALOGE("%s:  end rc %d", __func__, rc);
     return rc;
 }
 
 extern "C"  int close_camera_device( hw_device_t *hw_dev)
 {
-    ALOGI("Q%s: device =%p E", __func__, hw_dev);
+    ALOGE("Q%s: device =%p E", __func__, hw_dev);
     int rc =  -1;
     camera_device_t *device = (camera_device_t *)hw_dev;
 
@@ -265,7 +265,7 @@ void set_CallBacks(struct camera_device * device,
         camera_request_memory get_memory,
         void *user)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
         hardware->setCallbacks(notify_cb,data_cb, data_cb_timestamp, get_memory, user);
@@ -283,7 +283,7 @@ void enable_msg_type(struct camera_device * device, int32_t msg_type)
 void disable_msg_type(struct camera_device * device, int32_t msg_type)
 {
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     if(hardware != NULL){
         hardware->disableMsgType(msg_type);
     }
@@ -291,7 +291,7 @@ void disable_msg_type(struct camera_device * device, int32_t msg_type)
 
 int msg_type_enabled(struct camera_device * device, int32_t msg_type)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
@@ -302,19 +302,19 @@ int msg_type_enabled(struct camera_device * device, int32_t msg_type)
 
 int start_preview(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
         rc = hardware->startPreview( );
     }
-    ALOGD("Q%s: X", __func__);
+    ALOGE("Q%s: X", __func__);
     return rc;
 }
 
 void stop_preview(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
         hardware->stopPreview( );
@@ -323,7 +323,7 @@ void stop_preview(struct camera_device * device)
 
 int preview_enabled(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
@@ -334,7 +334,7 @@ int preview_enabled(struct camera_device * device)
 
 int store_meta_data_in_buffers(struct camera_device * device, int enable)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
@@ -345,7 +345,7 @@ int store_meta_data_in_buffers(struct camera_device * device, int enable)
 
 int start_recording(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
@@ -356,7 +356,7 @@ int start_recording(struct camera_device * device)
 
 void stop_recording(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
         hardware->stopRecording( );
@@ -365,7 +365,7 @@ void stop_recording(struct camera_device * device)
 
 int recording_enabled(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
@@ -386,7 +386,7 @@ void release_recording_frame(struct camera_device * device,
 
 int auto_focus(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
@@ -397,7 +397,7 @@ int auto_focus(struct camera_device * device)
 
 int cancel_auto_focus(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
@@ -408,7 +408,7 @@ int cancel_auto_focus(struct camera_device * device)
 
 int take_picture(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
@@ -420,7 +420,7 @@ int take_picture(struct camera_device * device)
 int cancel_picture(struct camera_device * device)
 
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
@@ -432,7 +432,7 @@ int cancel_picture(struct camera_device * device)
 int set_parameters(struct camera_device * device, const char *parms)
 
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL && parms){
@@ -448,7 +448,7 @@ int set_parameters(struct camera_device * device, const char *parms)
 
 char* get_parameters(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
 		char *parms = NULL;
@@ -461,7 +461,7 @@ char* get_parameters(struct camera_device * device)
 void put_parameters(struct camera_device * device, char *parm)
 
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
       hardware->putParameters(parm);
@@ -471,7 +471,7 @@ void put_parameters(struct camera_device * device, char *parm)
 int send_command(struct camera_device * device,
             int32_t cmd, int32_t arg1, int32_t arg2)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
@@ -482,7 +482,7 @@ int send_command(struct camera_device * device,
 
 void release(struct camera_device * device)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
         camera_hardware_t *camHal = (camera_hardware_t *)device->priv;
@@ -493,7 +493,7 @@ void release(struct camera_device * device)
 
 int dump(struct camera_device * device, int fd)
 {
-    ALOGD("Q%s: E", __func__);
+    ALOGE("Q%s: E", __func__);
     int rc = -1;
     QCameraHardwareInterface *hardware = util_get_Hal_obj(device);
     if(hardware != NULL){
