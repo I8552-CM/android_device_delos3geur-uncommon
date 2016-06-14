@@ -171,6 +171,9 @@ on boot
     # Enable the setgid bit on the directory
     chmod 2770 /data/audio
 
+    # Display color calibration (KCAL)
+    chown system system /sys/devices/platform/mdp.524801/kcal
+
     #Camera daemon
     start qcamerasvr
     start gpu_dcvsd
