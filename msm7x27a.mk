@@ -45,7 +45,6 @@ PRODUCT_PACKAGES += \
 
 ## Camera
 PRODUCT_PACKAGES += \
-    libimage-jpeg-enc-omx-comp \
     camera.msm7x27a
 
 ## Misc.
