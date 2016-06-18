@@ -58,7 +58,7 @@ public class DisplayColorCalibration {
      */
 
     public static int getMinValue() {
-        return 0;
+        return 1;
     }
 
     /*
