@@ -10,13 +10,8 @@ LOCAL_SRC_FILES := \
     audio_hw_hal.cpp \
     HardwarePinSwitching.c
 
-ifeq ($(strip $(TARGET_HAS_QACT)),true)
-LOCAL_SRC_FILES += \
-    AudioHardware_cad.cpp
-else
 LOCAL_SRC_FILES += \
     AudioHardware.cpp
-endif
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
   LOCAL_CFLAGS += -DWITH_A2DP
