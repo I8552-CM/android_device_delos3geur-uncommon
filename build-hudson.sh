@@ -1,4 +1,5 @@
 #!/bin/bash
+export TARGET_BUILD_DEVICE=$1
 export PATH="/opt/android-build:/opt/android-sdk/tools:/opt/android-sdk/platform-tools:~/android/system:$PATH"
 
 export LC_ALL=en_US.UTF-8
@@ -31,4 +32,4 @@ if ! [ $? -eq 0 ]; then
     exit
 fi
 
-brunch cm_royss-userdebug
+brunch cm_$TARGET_BUILD_DEVICE-userdebug
