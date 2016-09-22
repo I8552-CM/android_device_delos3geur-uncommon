@@ -6,13 +6,13 @@ TARGET_SCREEN_WIDTH := 480
 TARGET_SCREEN_HEIGHT := 800
 
 # Release name
-PRODUCT_RELEASE_NAME := delos3geur
-PRODUCT_NAME := cm_delos3geur
+PRODUCT_RELEASE_NAME := I8552
+PRODUCT_NAME := cm_i8552
 
-$(call inherit-product, device/samsung/delos3geur/full_delos3geur.mk)
+$(call inherit-product, device/samsung/i8552/full_samsung.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRODUCT_BRAND=SAMSUNG \
-    PRODUCT_NAME=delos3geur \
-    BUILD_PRODUCT=delos3geur
+    PRODUCT_NAME=msm8625 \
+    BUILD_PRODUCT=msm8625
 
