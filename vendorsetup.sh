@@ -1,5 +1,5 @@
-add_lunch_combo cm_i8552-userdebug
-sh device/samsung/i8552/patches/apply.sh
+add_lunch_combo cm_delos3geur-userdebug
+sh device/samsung/delos3geur/patches/apply.sh
 
-sh device/samsung/i8552/update-icu.sh
+sh device/samsung/delos3geur/update-icu.sh
 croot
