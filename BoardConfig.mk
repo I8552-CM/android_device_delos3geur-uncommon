@@ -142,6 +142,7 @@ BOARD_USE_MHEAP_SCREENSHOT := true
 USE_OPENGL_RENDERER := true
 TARGET_DOESNT_USE_FENCE_SYNC := true
 BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
+TARGET_NO_COMPAT_GRALLOC_PERFORM := true
 
 # Add QC Video Enhancements flag
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
@@ -234,4 +235,5 @@ BOARD_UMS_LUNFILE := /sys/class/android_usb/android0/f_mass_storage/lun%d/file
 BOARD_HAS_NO_SELECT_BUTTON := true
 #TARGET_RECOVERY_INITRC := device/samsung/delos3geur/recovery/init.rc
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/samsung/delos3geur/recovery/recovery-keys.c
-
+STRICT_ALIASING := false
+SUPPRESS_UNUSED_WARNING := true

@@ -16,12 +16,12 @@
 
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
 $(call inherit-product, vendor/samsung/delos3geur/delos3geur-vendor.mk)
+$(call inherit-product, vendor/samsung/delos3geur/common-vendor.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_small.mk)
 LOCAL_PATH := device/samsung/delos3geur
 
 DEVICE_PACKAGE_OVERLAYS := device/samsung/delos3geur/overlay
 
-PRODUCT_LOCALES := ru_RU
 PRODUCT_LOCALES += hdpi
 PRODUCT_AAPT_CONFIG := normal hdpi
 PRODUCT_AAPT_PREF_CONFIG := hdpi
@@ -285,10 +285,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
 $(shell mkdir -p $(pwd)out/target/product/delos3geur/obj/KERNEL_OBJ/usr)
 
 ## Misc files
-PRODUCT_COPY_FILES += \
-    vendor/samsung/delos3geur/proprietary/lib/liboncrpc.so:obj/lib/liboncrpc.so \
-    vendor/samsung/delos3geur/proprietary/lib/libnv.so:obj/lib/libnv.so \
-    vendor/samsung/delos3geur/proprietary/lib/libaudcal.so:obj/lib/libaudcal.so
+PRODUCT_PACKAGES += \
+liboncrpc \
+libnv \
+libaudcal
+#PRODUCT_COPY_FILES += \
+#    vendor/samsung/delos3geur/proprietary/lib/liboncrpc.so:obj/lib/liboncrpc.so \
+#    vendor/samsung/delos3geur/proprietary/lib/libnv.so:obj/lib/libnv.so \
+#    vendor/samsung/delos3geur/proprietary/lib/libaudcal.so:obj/lib/libaudcal.so
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_MANUFACTURER := Samsung
