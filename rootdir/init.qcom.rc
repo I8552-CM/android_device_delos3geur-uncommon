@@ -26,92 +26,76 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-import init.qcom.bt.rc
-import init.device.rc
+import init.target.rc
 import init.qcom.usb.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
-   on init
-    # See storage config details at http://source.android.com/tech/storage/
-    mkdir /mnt/shell/emulated 0700 shell shell
-    mkdir /storage/emulated 0555 root root
+    chmod 644 /proc/cmdline
+    write /sys/block/mmcblk0/queue/scheduler noop
 
-    # External storage directories
-    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+on init
+    mkdir /persist 0771 system system
 
-    mkdir /mnt/media_rw/usbdisk 0700 media_rw media_rw
-    mkdir /storage/sdcard1 0700 root root
-    mkdir /storage/usbdisk 0700 root root
+    # Use SDCard as primary storage
+    setprop ro.vold.primary_physical 1
 
-    export EXTERNAL_STORAGE /storage/emulated/legacy
-    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
-    export EMULATED_STORAGE_TARGET /storage/emulated
-    export SECONDARY_STORAGE /storage/sdcard1
+    #mkdir /storage 0775 system sdcard_r
+    #mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
+    #mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+    #mkdir /storage/sdcard1 0000 system system
+    #mkdir /storage/sdcard0 0000 system system
 
+    #export SECONDARY_STORAGE /storage/sdcard1
+    #export EXTERNAL_STORAGE /storage/sdcard0
+
+    #symlink /storage/sdcard1 /mnt/sdcard
+    #symlink /storage/sdcard1 /sdcard
+    #symlink /storage/sdcard0 /mnt/internal_sd
+    #symlink /storage/sdcard0 /internal_sd
+    
     # Support legacy paths
-    symlink /storage/emulated/legacy /sdcard
-    symlink /storage/emulated/legacy /mnt/sdcard
-    symlink /storage/emulated/legacy /storage/sdcard0
-    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
-    symlink /storage/sdcard1 /external_sd
-    symlink /storage/sdcard1 /mnt/external_sd
-    symlink /storage/usbdisk /usbdisk
-    symlink /storage/usbdisk /mnt/usbdisk
+    symlink /sdcard /mnt/sdcard
+    symlink /sdcard /storage/sdcard
 
-    mount ext4 /dev/block/mmcblk0p16 /efs nosuid nodev barrier=1
-    mount ext4 /dev/block/mmcblk0p12 /persist nosuid nodev barrier=1
-
-    mkdir /efs
-    mkdir /persist
-
-    # Bluetooth
-    #exec system/bin/btnvtool -O
-    #setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
-    #setprop bluetooth.status off
-    #chown bluetooth bluetooth ro.bt.bdaddr_path
-    #chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
-    #chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
-    #chown bluetooth bluetooth /proc/bluetooth/sleep/proto
-    #chmod 0660 /sys/class/rfkill/rfkill0/state
-    #chmod 0660 /sys/class/rfkill/rfkill0/type
-    #chmod 0660 /proc/bluetooth/sleep/proto
-    #chown bluetooth bluetooth /dev/ttyHS0
-    #chmod 0660 /dev/ttyHS0
-    #chown bluetooth bluetooth /sys/devices/platform/msm_serial_hs.0/clock
-    #chmod 0660 /sys/devices/platform/msm_serial_hs.0/clock
-
-    exec system/bin/btnvtool -O
-    setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
-    chown bluetooth bluetooth ro.bt.bdaddr_path
-    chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
+on boot
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
     chown bluetooth bluetooth /proc/bluetooth/sleep/proto
-    chown system system /sys/module/sco/parameters/disable_esco
-    chown bluetooth bluetooth /sys/module/hci_smd/parameters/hcismd_set
-    chmod 0660 /sys/module/bluetooth_power/parameters/power
-    chmod 0660 /sys/module/hci_smd/parameters/hcismd_set
     chmod 0660 /sys/class/rfkill/rfkill0/state
+    chmod 0660 /sys/class/rfkill/rfkill0/type
     chmod 0660 /proc/bluetooth/sleep/proto
     chown bluetooth bluetooth /dev/ttyHS0
     chmod 0660 /dev/ttyHS0
     chown bluetooth bluetooth /sys/devices/platform/msm_serial_hs.0/clock
     chmod 0660 /sys/devices/platform/msm_serial_hs.0/clock
 
-    chmod 0660 /dev/ttyHS2
-    chown bluetooth bluetooth /dev/ttyHS2
-
-    ## EFS and persist
-    chown system radio /efs
-    chmod 0771 /efs
-    chown 755 /persist
-
-    #port-bridge
+    # port-bridge
     chmod 0660 /dev/smd0
     chown system system /dev/smd0
 
+    # BT DUN port-bridge
+    chmod 0660 /dev/smd7
+    chown bluetooth bluetooth /dev/smd7
+
     chmod 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
+
+    # create symlink for fb1 as HDMI
+    symlink /dev/graphics/fb1 /dev/graphics/hdmi
+
+    # setup permissions for fb1 related nodes
+    chown system graphics /sys/class/graphics/fb1/hpd
+    chmod 0664 /sys/devices/virtual/graphics/fb1/hpd
+    chmod 0664 /sys/devices/virtual/graphics/fb1/video_mode
+    chmod 0664 /sys/devices/virtual/graphics/fb1/format_3d
+    chmod 0664 /sys/devices/virtual/graphics/fb0
+
+    #Set SUID bit for usbhub
+    chmod 0755 /system/bin/usbhub
+    chmod 755 /system/bin/usbhub_init
+
+    # Change owner and group for media server and surface flinger
+    chown system system /sys/devices/virtual/graphics/fb1/format_3d
 
     # For bridgemgr daemon to inform the USB driver of the correct transport
     chown radio radio /sys/class/android_usb/f_rmnet_smd_sdio/transport
@@ -134,6 +118,12 @@ on early-init
     write /proc/sys/net/ipv6/conf/rmnet_sdio6/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet_sdio7/accept_ra 2
 
+    chmod 0664 /dev/light
+    chmod 0664 /dev/proximity
+    chmod 0664 /dev/accel
+    chmod 0664 /dev/compass_aot
+    chmod 0664 /dev/akm8975_dev
+
     # Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
@@ -151,206 +141,17 @@ on early-init
     chown system system /sys/kernel/logger/log_events/priority
     chown system system /sys/kernel/logger/log_radio/priority
 
+    chown system system /sys/devices/platform/mmi_key_dev/keytest
+
     chmod 664 /dev/input/event1
     chmod 664 /dev/input/event2
 
     chown system system /sys/devices/platform/msm_hsusb/gadget/fixusb
 
-    # Lights
-    chown system system /sys/class/sec/led/led_blink
-    chown system system /sys/class/sec/led/led_pattern
-    chown system system /sys/class/sec/sec_touchkey/brightness
-    chown system system /sys/class/leds/battery-led/brightness
-    chown system system /sys/class/misc/backlightnotification/enabled
-    chown system system /sys/class/leds/lcd-backlight/brightness
-    chown system system /sys/class/leds/keyboard-backlight/brightness
-    chown system camera /sys/class/leds/flashlight/brightness
-    chmod 0777 /sys/class/misc/backlightnotification/enabled
-    chmod 0777 /sys/class/leds/lcd-backlight/brightness
-    chmod 0777 /sys/class/leds/keyboard-backlight/brightness
-    chmod 0777 /sys/class/leds/flashlight/brightness
-    chmod 0777 /sys/class/sec/led/led_blink
-    chmod 0777 /sys/class/sec/led/led_pattern
-    chmod 0777 /sys/class/leds/battery-led/brightness
-    chmod 0664 /sys/devices/virtual/sec/ts/brightness
-    chmod 0777 /sys/class/sec/sec_touchkey/brightness
-    chown system system /sys/devices/virtual/sec/ts/brightness
-    write /data/misc/wifi/fwpath ""
-    chmod 0666 /data/misc/wifi/fwpath
-    chown system camera /sys/class/camera/rear/rear_flash
-    chmod 0777 /sys/class/camera/rear/rear_flash
-
-   # Sensors
-#geomagnetic sensor
-    chown system system /sys/class/input/input4/chip_id
-    chown system system /sys/class/input/input4/raw_data
-    chown system system /sys/class/input/input4/op_mode
-    chown system system /sys/class/input/input4/selftest
-    chown system system /sys/class/input/input4/value
-    chown system system /sys/class/input/input4/enable
-    chown system system /sys/class/input/input4/delay
-    chown system system /sys/class/input/input4/rept_xy
-    chown system system /sys/class/input/input4/rept_z  
-    chown system system /sys/class/input/input4/odr
-    chown system system /sys/class/input/input4/layout
-    chown system system /sys/class/input/input4/value_raw
-    
-    chmod 0664 /sys/class/input/input4/layout
-    chmod 0664 /sys/class/input/input4/chip_id
-    chmod 0664 /sys/class/input/input4/raw_data
-    chmod 0664 /sys/class/input/input4/op_mode
-    chmod 0664 /sys/class/input/input4/selftest
-    chmod 0664 /sys/class/input/input4/value
-    chmod 0664 /sys/class/input/input4/value_raw
-        
-    chown system system /sys/class/sensors/magnetic_sensor/chip_id
-    chown system system /sys/class/sensors/magnetic_sensor/raw_data
-    chown system system /sys/class/sensors/magnetic_sensor/op_mode
-    chown system system /sys/class/sensors/magnetic_sensor/selftest
-    chown system system /sys/class/sensors/magnetic_sensor/value
-    chown system system /sys/class/sensors/magnetic_sensor/enable
-    chown system system /sys/class/sensors/magnetic_sensor/delay
-    chown system system /sys/class/sensors/magnetic_sensor/rept_xy
-    chown system system /sys/class/sensors/magnetic_sensor/rept_z  
-    chown system system /sys/class/sensors/magnetic_sensor/odr
-    chown system system /sys/class/sensors/magnetic_sensor/layout
-    chown system system /sys/class/sensors/magnetic_sensor/value_raw
-    
-    chmod 0664 /sys/class/sensors/magnetic_sensor/layout
-    chmod 0664 /sys/class/sensors/magnetic_sensor/chip_id
-    chmod 0664 /sys/class/sensors/magnetic_sensor/raw_data
-    chmod 0664 /sys/class/sensors/magnetic_sensor/op_mode
-    chmod 0664 /sys/class/sensors/magnetic_sensor/selftest
-    chmod 0664 /sys/class/sensors/magnetic_sensor/value
-    chmod 0664 /sys/class/sensors/magnetic_sensor/value_raw
-    
-#acc sensor
-    chown system system /sys/class/input/input3/raw_data
-    chown system system /sys/class/input/input3/value
-    chown system system /sys/class/input/input3/fast_calibration_x
-    chown system system /sys/class/input/input3/fast_calibration_y
-    chown system system /sys/class/input/input3/fast_calibration_z
-    chown system system /sys/class/input/input3/eeprom_writing
-    chown system system /sys/class/input/input3/mode
-    chown system system /sys/class/input/input3/enable
-    chown system system /sys/class/input/input3/offset_filt_x
-    chown system system /sys/class/input/input3/offset_filt_y
-    chown system system /sys/class/input/input3/offset_filt_z
-    chown system system /sys/class/input/input3/selftest
-    chown system system /sys/class/input/input3/delay
-    chown system system /sys/class/input/input3/update
-    chown system system /sys/class/input/input3/range
-    chown system system /sys/class/input/input3/bandwidth
-    chown system system /sys/class/input/input3/layout
-
-    chmod 0664 /sys/class/input/input3/layout
-    chmod 0664 /sys/class/input/input3/raw_data
-    chmod 0664 /sys/class/input/input3/value
-    chmod 0664 /sys/class/input/input3/fast_calibration_x
-    chmod 0664 /sys/class/input/input3/fast_calibration_y
-    chmod 0664 /sys/class/input/input3/fast_calibration_z
-    chmod 0664 /sys/class/input/input3/eeprom_writing
-    chmod 0664 /sys/class/input/input3/enable
-
-    chmod 0664 /sys/devices/virtual/input/input3/calibration
-    chmod 0664 /sys/devices/virtual/input/input3/enable_int 
-    chmod 0664 /sys/devices/virtual/input/input3/fifo_framecount 
-    chmod 0664 /sys/devices/virtual/input/input3/fifo_mode
-    chmod 0664 /sys/devices/virtual/input/input3/fifo_trig_src
-    chmod 0664 /sys/devices/virtual/input/input3/flat_hold_time
-    chmod 0664 /sys/devices/virtual/input/input3/flat_theta 
-    chmod 0664 /sys/devices/virtual/input/input3/high_g_duration 
-    chmod 0664 /sys/devices/virtual/input/input3/high_g_threshold
-    chmod 0664 /sys/devices/virtual/input/input3/low_g_duration
-    chmod 0664 /sys/devices/virtual/input/input3/low_g_threshold 
-    chmod 0664 /sys/devices/virtual/input/input3/offset_x 
-    chmod 0664 /sys/devices/virtual/input/input3/offset_y
-    chmod 0664 /sys/devices/virtual/input/input3/offset_z 
-    chmod 0664 /sys/devices/virtual/input/input3/range
-    chmod 0664 /sys/devices/virtual/input/input3/reactive_alert
-    chmod 0664 /sys/devices/virtual/input/input3/selftest 
-    chmod 0664 /sys/devices/virtual/input/input3/slope_duration
-    chmod 0664 /sys/devices/virtual/input/input3/slope_no_mot_threshold 
-    chmod 0664 /sys/devices/virtual/input/input3/slope_threshold
-    chmod 0664 /sys/devices/virtual/input/input3/softreset 
-    chmod 0664 /sys/devices/virtual/input/input3/tap_quiet
-    chmod 0664 /sys/devices/virtual/input/input3/tap_samp 
-    chmod 0664 /sys/devices/virtual/input/input3/tap_shock
-#acc sensor
-    chown system system /sys/class/sensors/accelerometer_sensor/raw_data
-    chown system system /sys/class/sensors/accelerometer_sensor/value
-    chown system system /sys/class/sensors/accelerometer_sensor/fast_calibration_x
-    chown system system /sys/class/sensors/accelerometer_sensor/fast_calibration_y
-    chown system system /sys/class/sensors/accelerometer_sensor/fast_calibration_z
-    chown system system /sys/class/sensors/accelerometer_sensor/eeprom_writing
-    chown system system /sys/class/sensors/accelerometer_sensor/mode
-    chown system system /sys/class/sensors/accelerometer_sensor/enable
-    chown system system /sys/class/sensors/accelerometer_sensor/offset_filt_x
-    chown system system /sys/class/sensors/accelerometer_sensor/offset_filt_y
-    chown system system /sys/class/sensors/accelerometer_sensor/offset_filt_z
-    chown system system /sys/class/sensors/accelerometer_sensor/selftest
-    chown system system /sys/class/sensors/accelerometer_sensor/delay
-    chown system system /sys/class/sensors/accelerometer_sensor/update
-    chown system system /sys/class/sensors/accelerometer_sensor/range
-    chown system system /sys/class/sensors/accelerometer_sensor/bandwidth
-    chown system system /sys/class/sensors/accelerometer_sensor/reactive_alert
-    chown system system /sys/class/sensors/accelerometer_sensor/calibration
-    chown system system /sys/class/sensors/accelerometer_sensor/layout
-    
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/layout    
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/raw_data
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/value
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/fast_calibration_x
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/fast_calibration_y
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/fast_calibration_z
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/eeprom_writing
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/enable
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/selftest
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/calibration
-    chmod 0664 /sys/class/sensors/accelerometer_sensor/reactive_alert
-    
-    chown system system /efs/calibration_data    
-    chmod 0666 /efs/calibration_data
-
-#proximity sensor
-    chown system system /sys/class/input/input2/enable
-    chmod 0664 /sys/class/input/input2/enable
-
-    chown system system /sys/class/sensors/proximity_sensor/enable
-    chown system system /sys/class/sensors/proximity_sensor/state
-    chown system system /sys/class/sensors/proximity_sensor/name
-    chown system system /sys/class/sensors/proximity_sensor/vendor
-    chown system system /sys/class/sensors/proximity_sensor/prox_cal
-
-    chmod 0664 /sys/class/sensors/proximity_sensor/enable
-    chmod 0664 /sys/class/sensors/proximity_sensor/state
-    chmod 0664 /sys/class/sensors/proximity_sensor/name
-    chmod 0664 /sys/class/sensors/proximity_sensor/vendor
-    chmod 0664 /sys/class/sensors/proximity_sensor/prox_cal
-
-    chown system system /efs/prox_cal    
-    chmod 0666 /efs/prox_cal
-
-service sensord /system/bin/sensord
-	class main
-	user system
-	group system
-#    oneshot
-#    start sensord
-
-# BMC050 compass/accelerometer daemon
-service sensord /system/bin/sensord
-    class main
-    oneshot
-
-    # Camera
-    chown system radio /sys/class/camera/rear/rear_camfw
-    chown system radio /sys/class/camera/rear/rear_camtype
-    chown system radio /sys/class/camera/front/front_camfw
-    chown system radio /sys/class/camera/front/front_camtype
-
-    # TelephonyManager.java requires this
-    chmod 0644 /proc/cmdline
+    chown radio system /sys/power/touch_event
+    chown radio system /sys/power/touch_event_timer
+    chmod 0660 /sys/power/touch_event
+    chmod 0660 /sys/power/touch_event_timer
 
     write /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate 25000
     write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 80
@@ -358,7 +159,8 @@ service sensord /system/bin/sensord
 
     write /sys/devices/platform/msm_sdcc.1/idle_timeout 10
     write /sys/module/lowmemorykiller/parameters/adj 0,1,2,4,9,12
-    write /proc/sys/vm/min_free_kbytes 5120
+    write /proc/sys/vm/min_free_kbytes 4096
+    write /proc/sys/vm/extra_free_kbytes 4096
     write /proc/sys/vm/page-cluster 0
 
     write /sys/module/pm2/modes/cpu0/standalone_power_collapse/idle_enabled 1
@@ -368,42 +170,96 @@ service sensord /system/bin/sensord
     write /sys/module/pm2/modes/cpu0/power_collapse/suspend_enabled 1
     write /sys/module/pm2/modes/cpu0/power_collapse/idle_enabled 1
 
-on emmc-fs
+    # Adaptive LMK
+    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
+    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 53059
+
+    # Flash storage isn't a good entropy source, and only causes locking
+    # overhead in the kernel. Turn it off.
+    write /sys/block/mmcblk0/queue/add_random 0
+    write /sys/block/mmcblk1/queue/add_random 0
+
+    # Enable KSM
+    write /sys/kernel/mm/ksm/run 1
+    write /sys/kernel/mm/ksm/deferred_timer 1
+    write /sys/kernel/mm/ksm/sleep_millisecs 1500
+    write /sys/kernel/mm/ksm/pages_to_scan 256
+
+    # Enable sysrq
+    write /proc/sys/kernel/sysrq 1
+
+    # Run sysinit
+    start sysinit
+
+    # this order is very important for sensors
+    # input3 4 5 6 correspond to acc mag mag_raw ori
+    chmod 755 /system/bin/geomagneticd
+    chown system input /sys/class/input/input3/enable
+    chown system input /sys/class/input/input3/delay
+    chown system input /sys/class/input/input3/wake
+    chown system input /sys/class/input/input4/enable
+    chown system input /sys/class/input/input4/delay
+    chown system input /sys/class/input/input4/wake
+    chown compass input /sys/class/input/input5/offsets
+    chown compass input /sys/class/input/input5/dynamic_matrix
+    chown system input /sys/class/input/input6/enable
+    chown system input /sys/class/input/input6/delay
+    chown system input /sys/class/input/input6/wake
+
+    chown system system /sys/class/compass/akm8975/delay_acc
+    chown system system /sys/class/compass/akm8975/delay_mag
+    chown system system /sys/class/compass/akm8975/delay_ori
+    chown system system /sys/class/compass/akm8975/enable_acc
+    chown system system /sys/class/compass/akm8975/enable_mag
+    chown system system /sys/class/compass/akm8975/enable_ori
+    chown system system /sys/class/compass/akm8975/accel
+
+    chown input system /sys/bus/i2c/devices/1-0039/enable_als_sensor
+    chown input system /sys/bus/i2c/devices/1-0039/enable_ps_sensor
+    chown input system /sys/bus/i2c/devices/1-0039/ps_sensor_thld
+    chown input system /sys/bus/i2c/devices/1-0039/als_poll_delay
+    chmod 0664 /sys/bus/i2c/devices/1-0039/enable_als_sensor
+    chmod 0664 /sys/bus/i2c/devices/1-0039/enable_ps_sensor
+    chmod 0664 /sys/bus/i2c/devices/1-0039/ps_sensor_thld
+    chmod 0664 /sys/bus/i2c/devices/1-0039/als_poll_delay
+
+    chown input system /sys/devices/i2c-1/1-000f/enable
+    chmod 0664 /sys/devices/i2c-1/1-000f/enable
+    
+    # Enable writing to brightness node under flashlight from userspace
+    chown system system /sys/class/leds/flashlight/brightness
+    chmod 0777 /sys/class/leds/flashlight/brightness
+
+    # Enable writing to brightness node under flashlight-trigger from userspace
+    chown system system /sys/class/leds/flashlight/trigger
+    chmod 0666 /sys/class/leds/flashlight/trigger
+
+on fs
     # mount mmc partitions
     mount_all /fstab.qcom
+    swapon_all /fstab.qcom
 
 # msm specific files that need to be created on /data
 on post-fs-data
-    # Create log system
-    mkdir /data/log 0775 system log
-
-    mkdir /data/misc/radio 0775 radio system
-    mkdir /data/radio 0770 radio radio
-
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
-    mkdir /data/misc/bluetoothd 0770 bluetooth bluetooth
 
-    # Create directory used by audio subsystem
-    mkdir /data/misc/audio 0770 audio audio
+    chmod 0666 /sys/class/rfkill/rfkill0/state
 
-    # we will remap this as /storage/sdcard with the sdcard fuse tool
-    mkdir /data/media 0770 media_rw media_rw
-    chown media_rw media_rw /data/media
-
-    setprop vold.post_fs_data_done 1
-
-    # Create the directories used by the Wireless subsystem
-    mkdir /efs/bluetooth 0775 radio system
     # Create the directories used by the Wireless subsystem
     mkdir /data/misc/wifi 0770 wifi wifi
+    mkdir /data/misc/wifi/load 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
-    mkdir /data/misc/wifi/wpa_supplicant 0775 wifi wifi
+    mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
     mkdir /data/misc/dhcp 0770 dhcp dhcp
-    chown dhcp dhcp /data/misc/dhcp
+    #chown dhcp dhcp /data/misc/dhcp
 
     # Create directory used by audio subsystem
     mkdir /data/misc/audio 0770 audio audio
 
+    # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
+    # We chown/chmod /persist again so because mount is run as root + defaults
+    chown system system /persist
+    chmod 0771 /persist
     chmod 0664 /sys/devices/platform/msm_sdcc.1/polling
     chmod 0664 /sys/devices/platform/msm_sdcc.2/polling
     chmod 0664 /sys/devices/platform/msm_sdcc.3/polling
@@ -426,54 +282,89 @@ on post-fs-data
 
     setprop vold.post_fs_data_done 1
 
-on property:wlan.driver.status=unloaded
-    start hwmac
-
-service rmt_oeminfo /system/bin/rmt_oeminfo
-    class core
-
-# create virtual SD card at /storage/sdcard, based on the /data/media directory
-# daemon will drop to user/group system/media_rw after initializing
-# underlying files in /data/media will be created with user and group media_rw (1023)
-service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
-    class late_start
-
-# fusewrapped external sdcard daemon running as media_rw (1023)
-service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
-    class late_start
-    disabled
-
-service netmgrd /system/bin/netmgrd
-    class main
-
-service oem_rpc_svc /system/bin/oem_rpc_svc
-    class main
-
-service qmuxd /system/bin/qmuxd
-    class main
-    user radio
-    group radio audio bluetooth gps qcom_diag
-
-service ril-daemon1 /system/bin/rild -c 1
-    class main
-    socket rild1 stream 660 root radio
-    socket rild-debug1 stream 660 radio system
-    user root
-    disabled
-    group radio cache inet misc audio sdcard_rw qcom_oncrpc diag
-
-on property:ro.multi.rild=true
-    start ril-daemon1
-
-#service post_boot /system/bin/sh /init.qcom.ril.sh
+# Export GPIO56 for fusion targets to enable/disable hub
+#service usbhub_init /system/bin/usbhub_init
 #   class late_start
 #   user root
 #   disabled
 #   oneshot
 
-service qcom-c_main-sh /system/bin/sh /init.qcom.class_main.sh
+service_redefine ril-daemon /system/bin/rild
+     class main
+     socket rild stream 660 root radio
+     socket rild-debug stream 660 radio system
+     user root
+     group radio cache inet misc audio log qcom_diag qcom_oncrpc
+ 
+service ril-daemon2 /system/bin/rild -c 1
+     class main
+     socket rild2 stream 660 root radio
+     socket rild-debug2 stream 660 radio system
+     user root
+     group radio cache inet misc audio sdcard_r sdcard_rw qcom_diag log qcom_oncrpc
+
+on property:init.svc.wpa_supplicant=stopped
+    stop dhcpcd
+
+#on property:ro.board.platform=msm7630_fusion
+#    start usbhub_init
+
+#on property:wlan.driver.status=ok
+#    chown root system /sys/android_wlan/wlan_power/sleep_policy
+#    setprop wifi.wpa_supp.ssi 30
+#    write /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy 1
+
+on property:wlan.driver.status=unloaded
+    start hwmac
+
+service hwmac /system/bin/hwmac
     class main
-    user root
+    oneshot
+
+service rmt_oeminfo /system/bin/rmt_oeminfo
+    class core
+
+service netmgrd /system/bin/netmgrd
+    class main
+    group radio
+
+service oem_rpc_svc /system/bin/oem_rpc_svc
+    class main
+
+# QMUX must be in multiple groups to support external process connections
+service qmuxd /system/bin/qmuxd
+    class main
+    user radio
+    group radio audio bluetooth gps qcom_diag
+
+service dhcpcd_bt-pan /system/bin/dhcpcd -BKLG
+    class late_start
+    disabled
+    oneshot
+
+service iprenew_bt-pan /system/bin/dhcpcd -n
+    class late_start
+    disabled
+    oneshot
+
+service dhcpcd_eth0 /system/bin/dhcpcd -BKLG
+    class main
+    disabled
+    oneshot
+
+service iprenew_eth0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_p2p /system/bin/dhcpcd -BKLG
+    class main
+    disabled
+    oneshot
+
+service iprenew_p2p /system/bin/dhcpcd -n p2p
+    class main
+    disabled
     oneshot
 
 service qcamerasvr /system/bin/mm-qcamera-daemon
@@ -481,12 +372,51 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
     user camera
     group camera system inet input
 
-service charger /charger
-    class charger
-    user root
-    group root
+#AKM8975 sensor daemon
+service akmd /system/bin/akmdfs -m2
+    class main
+    user compass
+    group compass misc input
+    disabled
+
+on property:ro.hw_platform=msm8x25q_skud
+    start akmd
+
+# BMC050 compass/accelerometer daemon
+service sensord /system/bin/sensord
+    class main
     oneshot
 
-on property:sys.boot_completed=1
-    write /sys/block/mmcblk0/queue/scheduler sioplus
+service orientationd /system/bin/orientationd
+    class main
+    user compass
+    group input
 
+service geomagneticd /system/bin/geomagneticd
+    class main
+    user compass
+    group system input
+
+#service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
+#    class late_start
+#    user system
+#    group system
+
+#service post_boot /system/bin/sh /init.qcom.ril.sh
+#   class late_start
+#   user root
+#   disabled
+#   oneshot
+
+#service qcom-c_core-sh /system/bin/sh /init.qcom.class_core.sh
+#    class core
+#    user root
+#    oneshot
+
+#service qcom-c_main-sh /system/bin/sh /init.qcom.class_main.sh
+#    class main
+#    user root
+#    oneshot
+
+on property:sys.boot_completed=1
+    write /sys/block/mmcblk0/queue/scheduler deadline

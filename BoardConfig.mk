@@ -224,7 +224,7 @@ WIFI_DRIVER_MODULE_ARG := "suspend_mode=3 wow_mode=2 ath6kl_p2p=1 recovery_enabl
 WIFI_DRIVER_FW_PATH_PARAM := "/data/misc/wifi/fwpath"
 
 # Recovery # CWM
-BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/delos3geur/recovery/graphics.c
+#BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/delos3geur/recovery/graphics.c
 TARGET_RECOVERY_FSTAB := device/samsung/delos3geur/rootdir/fstab.qcom
 DEVICE_RESOLUTION := 4800x800 \
 BOARD_USE_CUSTOM_RECOVERY_FONT := "<font_15x40.h>"
@@ -232,6 +232,6 @@ TARGET_BOOTLOADER_BOARD_NAME := msm7x27
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 BOARD_UMS_LUNFILE := /sys/class/android_usb/android0/f_mass_storage/lun%d/file
 BOARD_HAS_NO_SELECT_BUTTON := true
-TARGET_RECOVERY_INITRC := device/samsung/delos3geur/recovery/init.rc
+#TARGET_RECOVERY_INITRC := device/samsung/delos3geur/recovery/init.rc
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/samsung/delos3geur/recovery/recovery-keys.c
 

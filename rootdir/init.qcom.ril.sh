@@ -1,4 +1,3 @@
-
 #!/system/bin/sh
 # Copyright (c) 2012 Code Aurora Forum. All rights reserved.
 #
@@ -45,3 +44,4 @@ dsds=`getprop persist.multisim.config`
         stop ril-daemon
         start ril-daemon
     fi
+
