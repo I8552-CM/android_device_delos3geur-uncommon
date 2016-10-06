@@ -1,0 +1,52 @@
+From 0fec26f0dc0c70584efce131154eb752314b6bbc Mon Sep 17 00:00:00 2001
+From: Grace5921 <androidlover5842@gmail.com>
+Date: Fri, 7 Oct 2016 02:07:52 +0530
+Subject: [PATCH] remove has text relocations
+
+Change-Id: Ib0303fc6fb96548dcd5ad9f57384738dadc44912
+---
+ linker/linker.cpp | 28 ----------------------------
+ 1 file changed, 28 deletions(-)
+
+diff --git a/linker/linker.cpp b/linker/linker.cpp
+index 99c02d8..c0002ce 100644
+--- a/linker/linker.cpp
++++ b/linker/linker.cpp
+@@ -3009,34 +3009,6 @@ bool soinfo::link_image(const soinfo_list_t& global_group, const soinfo_list_t&
+     return false;
+   }
+ 
+-#if !defined(__LP64__)
+-  if (has_text_relocations) {
+-    // Fail if app is targeting sdk version > 22
+-    // TODO (dimitry): remove != __ANDROID_API__ check once http://b/20020312 is fixed
+-#if !defined(__i386__) // ffmpeg says that they require text relocations on x86
+-    if (get_application_target_sdk_version() != __ANDROID_API__
+-        && get_application_target_sdk_version() > 22) {
+-      PRINT("%s: has text relocations", get_realpath());
+-      DL_ERR("%s: has text relocations", get_realpath());
+-      return false;
+-    }
+-#endif
+-    // Make segments writable to allow text relocations to work properly. We will later call
+-    // phdr_table_protect_segments() after all of them are applied and all constructors are run.
+-#if defined(USE_LEGACY_BLOBS)
+-    DEBUG("%s has text relocations. This is wasting memory and prevents "
+-#else
+-    DL_WARN("%s has text relocations. This is wasting memory and prevents "
+-#endif
+-            "security hardening. Please fix.", get_realpath());
+-    if (phdr_table_unprotect_segments(phdr, phnum, load_bias) < 0) {
+-      DL_ERR("can't unprotect loadable segments for \"%s\": %s",
+-             get_realpath(), strerror(errno));
+-      return false;
+-    }
+-  }
+-#endif
+-
+   if (android_relocs_ != nullptr) {
+     // check signature
+     if (android_relocs_size_ > 3 &&
+-- 
+2.9.3
+
