@@ -1,25 +1,14 @@
 #!/bin/bash
 
-export VENDOR=nokia
-export DEVICE=normandy
+VENDOR=samsung
+DEVICE=delos3geur
 
-if [ $# -eq 1 ]; then
-    COPY_FROM=$1
-    test ! -d "$COPY_FROM" && echo error reading dir "$COPY_FROM" && exit 1
-fi
-
-test -z "$DEVICE" && echo device not set && exit 2
-test -z "$VENDOR" && echo vendor not set && exit 2
-test -z "$VENDORDEVICEDIR" && VENDORDEVICEDIR=$DEVICE
-export VENDORDEVICEDIR
-
-BASE=../../../vendor/$VENDOR/$VENDORDEVICEDIR/proprietary
+BASE=../../../vendor/$VENDOR/$DEVICE/proprietary
 rm -rf $BASE/*
 
-for FILE in `egrep -v '(^#|^$)' ../$DEVICE/proprietary-files.txt`; do
-    echo "Extracting /system/$FILE ..."
+for FILE in `egrep -v '(^#|^$)' proprietary-files.txt`; do
     OLDIFS=$IFS IFS=":" PARSING_ARRAY=($FILE) IFS=$OLDIFS
-    FILE=`echo ${PARSING_ARRAY[0]} | sed -e "s/^-//g"`
+    FILE=${PARSING_ARRAY[0]}
     DEST=${PARSING_ARRAY[1]}
     if [ -z $DEST ]
     then
@@ -29,22 +18,18 @@ for FILE in `egrep -v '(^#|^$)' ../$DEVICE/proprietary-files.txt`; do
     if [ ! -d $BASE/$DIR ]; then
         mkdir -p $BASE/$DIR
     fi
-    if [ "$COPY_FROM" = "" ]; then
+
+    if [ -z "$STOCK_ROM_DIR" ]; then
         adb pull /system/$FILE $BASE/$DEST
-        # if file dot not exist try destination
-        if [ "$?" != "0" ]
-          then
-          adb pull /system/$DEST $BASE/$DEST
-        fi
     else
-        cp $COPY_FROM/$FILE $BASE/$DEST
-        # if file does not exist try destination
-        if [ "$?" != "0" ]
-            then
-            cp $COPY_FROM/$DEST $BASE/$DEST
-        fi
+        cp $STOCK_ROM_DIR/$FILE $BASE/$DEST
+    fi
+
+    # if file does not exist try destination
+    if [ "$?" != "0" ]
+    then
+        adb pull /system/$DEST $BASE/$DEST
     fi
 done
 
-echo "This is designed to extract files from an official cm-11.0 build"
 ./setup-makefiles.sh
