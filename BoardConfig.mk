@@ -61,7 +61,7 @@ BOARD_USES_ADRENO_200 := true
 DISABLE_DEXPREOPT := true
 
 # Kernel
-TARGET_KERNEL_SOURCE := kernel/samsung/delos3geur
+TARGET_KERNEL_SOURCE := kernel/samsung/msm7x27a
 TARGET_KERNEL_CONFIG := delos_defconfig
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00200000
@@ -129,6 +129,7 @@ TARGET_QCOM_MEDIA_VARIANT := legacy
 COMMON_GLOBAL_CFLAGS += -DQCOM_LEGACY_MMPARSE
 TARGET_QCOM_AUDIO_VARIANT := caf
 BOARD_USES_LEGACY_ALSA_AUDIO := true
+USE_CUSTOM_AUDIO_POLICY := 1
 COMMON_GLOBAL_CFLAGS += -DNO_TUNNEL_RECORDING
 BOARD_USES_QCOM_HARDWARE := true
 TARGET_USES_QCOM_BSP := true
@@ -149,11 +150,6 @@ TARGET_ENABLE_AV_ENHANCEMENTS := false
 # SEPOLICY
 BOARD_SEPOLICY_DIRS := \
        device/samsung/delos3geur/sepolicy
-
-BOARD_SEPOLICY_UNION := \
-       device.te \
-       app.te \
-       file_contexts
 
 # EGL
 BOARD_EGL_WORKAROUND_BUG_10194508 := true
@@ -229,7 +225,7 @@ WIFI_DRIVER_FW_PATH_PARAM := "/data/misc/wifi/fwpath"
 
 # Recovery # CWM
 BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/delos3geur/recovery/graphics.c
-TARGET_RECOVERY_FSTAB := device/samsung/delos3geur/recovery/recovery.fstab
+TARGET_RECOVERY_FSTAB := device/samsung/delos3geur/rootdir/fstab.qcom
 DEVICE_RESOLUTION := 4800x800 \
 BOARD_USE_CUSTOM_RECOVERY_FONT := "<font_15x40.h>"
 TARGET_BOOTLOADER_BOARD_NAME := msm7x27
