@@ -287,8 +287,8 @@ $(shell mkdir -p $(pwd)out/target/product/arubaslim/obj/KERNEL_OBJ/usr)
 
 ## Misc files
 PRODUCT_COPY_FILES += \
-    device/samsung/delos3geur/system/lib/liboncrpc.so:obj/lib/liboncrpc.so \
-    device/samsung/delos3geur/system/lib/libnv.so:obj/lib/libnv.so
+    vendor/samsung/delos3geur/proprietary/lib/liboncrpc.so:obj/lib/liboncrpc.so \
+    vendor/samsung/delos3geur/proprietary/lib/libnv.so:obj/lib/libnv.so
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_MANUFACTURER := Samsung

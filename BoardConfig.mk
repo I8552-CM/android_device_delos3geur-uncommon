@@ -61,7 +61,7 @@ BOARD_USES_ADRENO_200 := true
 DISABLE_DEXPREOPT := true
 
 # Kernel
-TARGET_KERNEL_SOURCE := kernel/samsung/delos3geur
+
 TARGET_KERNEL_CONFIG := delos_defconfig
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00200000
