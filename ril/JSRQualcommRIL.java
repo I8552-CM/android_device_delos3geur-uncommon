@@ -86,7 +86,7 @@ public class JSRQualcommRIL extends RIL implements CommandsInterface {
     }
 
     public JSRQualcommRIL(Context context, int networkMode, int cdmaSubscription, Integer instanceId) {
-        super(context, networkMode, cdmaSubscription, instanceId);
+        super(context, networkMode, cdmaSubscription);
         mSetPreferredNetworkType = -1;
         mQANElements = 5;
         Rlog.w(RILJ_LOG_TAG, "[JSR] Create JSRQualcommRIL [" + instanceId + "]");
@@ -292,7 +292,6 @@ public class JSRQualcommRIL extends RIL implements CommandsInterface {
         if (needsOldRilFeature("datacall")) {
             switch(response) {
                  case RIL_UNSOL_CDMA_SUBSCRIPTION_SOURCE_CHANGED:
-                 case RIL_UNSOl_CDMA_PRL_CHANGED:
                  case RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE:
                  case RIL_UNSOL_RIL_CONNECTED:
                      if (RILJ_LOGD) riljLog("[JSR] processUnsolicited: SKIP req = " + responseToString(response) + " (" + response + ")");

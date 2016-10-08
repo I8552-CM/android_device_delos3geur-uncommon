@@ -30,7 +30,7 @@ LOCAL_PATH := device/samsung/delos3geur
 TARGET_SPECIFIC_HEADER_PATH := device/samsung/delos3geur/include
 
 # cflags
-COMMON_GLOBAL_CFLAGS += -DQCOM_BSP -DQCOM_HARDWARE
+#COMMON_GLOBAL_CFLAGS += -DQCOM_BSP -DQCOM_HARDWARE
 COMMON_GLOBAL_CFLAGS += -DLPA_DEFAULT_BUFFER_SIZE=480
 TARGET_GLOBAL_CFLAGS += -mtune=cortex-a5 -mfpu=neon-vfpv4 -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a5 -mfpu=neon-vfpv4 -mfloat-abi=softfp
@@ -67,6 +67,7 @@ BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01300000
 BOARD_KERNEL_PAGESIZE := 4096
+TARGET_PROVIDES_INIT_RC := true
 #KERNEL_TOOLCHAIN_PREFIX := $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-linux-gnueabi-linaro_4.7.4-2014.06/bin/arm-eabi-
 #KERNEL_TOOLCHAIN_PREFIX := $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-eabi-4.9/bin/arm-eabi-
 
@@ -230,7 +231,7 @@ WIFI_DRIVER_FW_PATH_PARAM := "/data/misc/wifi/fwpath"
 # Recovery # CWM
 #BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/delos3geur/recovery/graphics.c
 TARGET_RECOVERY_FSTAB := device/samsung/delos3geur/rootdir/fstab.qcom
-DEVICE_RESOLUTION := 4800x800 \
+DEVICE_RESOLUTION := 480x800 \
 BOARD_USE_CUSTOM_RECOVERY_FONT := "<font_15x40.h>"
 TARGET_BOOTLOADER_BOARD_NAME := msm7x27
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
