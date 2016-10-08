@@ -24,8 +24,8 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-key 226   HEADSETHOOK       WAKE
-key 116   POWER             WAKE
-key 107   POWER             WAKE
-key 115   VOLUME_UP         WAKE_DROPPED
-key 114   VOLUME_DOWN       WAKE_DROPPED
+key 226   HEADSETHOOK       
+key 116   POWER             
+key 107   POWER             
+key 115   VOLUME_UP         
+key 114   VOLUME_DOWN       
