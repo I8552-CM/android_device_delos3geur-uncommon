@@ -23,19 +23,18 @@
 USE_CAMERA_STUB := false
 
 # Inherit from the proprietary version
--include vendor/jsr/BoardConfigVendor.mk
+-include vendor/delos3geur/BoardConfigVendor.mk
 
-TARGET_SPECIFIC_HEADER_PATH := device/samsung/i8552/include
+TARGET_SPECIFIC_HEADER_PATH := device/samsung/delos3geur/include
 
-BOARD_VENDOR := jsr-qcom
+BOARD_VENDOR := delos3geur
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := s4503
+TARGET_OTA_ASSERT_DEVICE := delos3geur,GT-I8552,I8552
 
 # Compile sys
 #TARGET_GCC_VERSION_EXP := 4.8
 DISABLE_DEXPREOPT := true
-#TARGET_SPECIFIC_HEADER_PATH := device/jsr/d9/include
 
 # Compiler flags
 TARGET_GLOBAL_CFLAGS += -mtune=cortex-a5 -mfpu=neon-vfpv4 -mfloat-abi=softfp
@@ -75,7 +74,7 @@ BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01300000
 BOARD_KERNEL_PAGESIZE := 4096
-KERNEL_TOOLCHAIN_PREFIX := $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-linux-gnueabi-linaro_4.7.4-2014.06/bin/arm-eabi-
+#KERNEL_TOOLCHAIN_PREFIX := $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-linux-gnueabi-linaro_4.7.4-2014.06/bin/arm-eabi-
 #KERNEL_TOOLCHAIN_PREFIX := $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-eabi-4.9/bin/arm-eabi-
 
 # Partitions
@@ -123,7 +122,7 @@ AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := false
 AUDIO_FEATURE_ENABLED_PROXY_DEVICE := false
 USE_CUSTOM_AUDIO_POLICY := 1
 # Charger
-BOARD_CHARGER_RES := device/samsung/i8552/charger
+BOARD_CHARGER_RES := device/samsung/delos3geur/charger
 BOARD_BATTERY_DEVICE_NAME := "battery"
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_LPM_BOOT_ARGUMENT_NAME := androidboot.bootchg
@@ -168,10 +167,10 @@ BOARD_WANTS_EMMC_BOOT := true
 TARGET_RIL_VARIANT := legacy
 COMMON_GLOBAL_CFLAGS += -DRIL_SUPPORTS_SEEK
 COMMON_GLOBAL_CFLAGS += -DRIL_VARIANT_LEGACY
-BOARD_RIL_CLASS := ../../../device/samsung/i8552/ril/
+BOARD_RIL_CLASS := ../../../device/samsung/delos3geur/ril/
 
 # Hardware
-#BOARD_HARDWARE_CLASS := device/samsung/i8552/cmhw
+#BOARD_HARDWARE_CLASS := device/samsung/delos3geur/cmhw
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
@@ -183,7 +182,7 @@ COMMON_GLOBAL_CFLAGS += -DQCOM_NO_SECURE_PLAYBACK
 COMMON_GLOBAL_CFLAGS += -DLPA_DEFAULT_BUFFER_SIZE=480
 
 # SELinux
-BOARD_SEPOLICY_DIRS += device/samsung/i8552/sepolicy
+BOARD_SEPOLICY_DIRS += device/samsung/delos3geur/sepolicy
 
 ## Vold
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
@@ -199,8 +198,8 @@ BOARD_RECOVERY_SWIPE := true
 BOARD_SUPPRESS_EMMC_WIPE := true
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
 DEVICE_RESOLUTION := 480x800
-BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/i8552/recovery/graphics.c
-TARGET_RECOVERY_FSTAB := device/samsung/i8552/recovery/recovery.fstab
+#BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/delos3geur/recovery/graphics.c
+TARGET_RECOVERY_FSTAB := device/samsung/delos3geur/recovery/recovery.fstab
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 
 # Wi-Fi CAF
@@ -241,11 +240,11 @@ ifeq ($(HOST_OS),linux)
     endif
   endif
 endif
-WITH_DEXPREOPT_PIC := true
-DONT_DEXPREOPT_PREBUILTS := true
+#WITH_DEXPREOPT_PIC := true
+#DONT_DEXPREOPT_PREBUILTS := true
 
 # Final ZIP type
-BLOCK_BASED_OTA := false
+#BLOCK_BASED_OTA := false
  
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true

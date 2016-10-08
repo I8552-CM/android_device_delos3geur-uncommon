@@ -15,5 +15,5 @@
 #
 
 # Inherit device configuration
-$(call inherit-product, device/samsung/i8552/cm_i8552.mk)
+$(call inherit-product, device/samsung/delos3geur/cm_delos3geur.mk)
 

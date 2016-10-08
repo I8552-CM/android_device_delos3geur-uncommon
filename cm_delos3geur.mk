@@ -15,7 +15,7 @@
 #
 
 # Release name
-PRODUCT_RELEASE_NAME := i8552
+PRODUCT_RELEASE_NAME := delos3geur
 
 # Correct boot animation size for the screen
 TARGET_SCREEN_HEIGHT := 480
@@ -31,13 +31,13 @@ $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit from d9 device
-$(call inherit-product, device/samsung/i8552/i8552.mk)
+$(call inherit-product, device/samsung/delos3geur/delos3geur.mk)
 
 # Set those variables here to overwrite the inherited values.
-PRODUCT_NAME := cm_i8552
-PRODUCT_DEVICE := i8552
+PRODUCT_NAME := cm_delos3geur
+PRODUCT_DEVICE := delos3geur
 PRODUCT_BRAND := samsung
 PRODUCT_MANUFACTURER := SAMSUNG
-PRODUCT_MODEL := I8552
+PRODUCT_MODEL := GT-I8552
 
 PRODUCT_GMS_CLIENTID_BASE := android-google

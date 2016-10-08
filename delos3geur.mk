@@ -19,7 +19,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 # The GPS configuration appropriate for this device.
 #$(call inherit-product, device/common/gps/gps_eu_supl.mk)
 
-DEVICE_PACKAGE_OVERLAYS += device/samsung/i8552/overlay
+DEVICE_PACKAGE_OVERLAYS += device/samsung/delos3geur/overlay
 
 PRODUCT_AAPT_CONFIG := normal hdpi
 PRODUCT_AAPT_PREF_CONFIG := hdpi
@@ -38,15 +38,15 @@ PRODUCT_PACKAGES += ueventd.qcom.rc
 PRODUCT_PACKAGES += init.qcom.ril.sh
 
 # Rootdir
-PRODUCT_COPY_FILES += device/samsung/i8552/rootdir/fstab.qcom:root/fstab.qcom
-PRODUCT_COPY_FILES += device/samsung/i8552/rootdir/init.device.rc:root/init.device.rc
-PRODUCT_COPY_FILES += device/samsung/i8552/rootdir/init.qcom.bt.rc:root/init.qcom.bt.rc
-PRODUCT_COPY_FILES += device/samsung/i8552/rootdir/init.qcom.rc:root/init.qcom.rc
-PRODUCT_COPY_FILES += device/samsung/i8552/rootdir/init.qcom.ril.sh:root/init.qcom.ril.sh
-PRODUCT_COPY_FILES += device/samsung/i8552/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc
-PRODUCT_COPY_FILES += device/samsung/i8552/rootdir/lpm.rc:root/lpm.rc
-PRODUCT_COPY_FILES += device/samsung/i8552/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
-PRODUCT_COPY_FILES += device/samsung/i8552/system/lib/libaudioalsa.so:obj/lib/libaudioalsa.so
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/fstab.qcom:root/fstab.qcom
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.device.rc:root/init.device.rc
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.bt.rc:root/init.qcom.bt.rc
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.rc:root/init.qcom.rc
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.ril.sh:root/init.qcom.ril.sh
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/lpm.rc:root/lpm.rc
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
+PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudioalsa.so:obj/lib/libaudioalsa.so
 
 # Torch
 PRODUCT_PACKAGES += Torch
@@ -123,9 +123,9 @@ PRODUCT_COPY_FILES += frameworks/av/media/libstagefright/data/media_codecs_googl
 PRODUCT_COPY_FILES += frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:system/etc/media_codecs_google_video_le.xml
 
 # Config Files
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,device/samsung/i8552/system,system)
+PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,device/samsung/delos3geur/system,system)
 
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,device/samsung/i8552/rootdir,rootdir)
+PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,device/samsung/delos3geur/rootdir,rootdir)
 
 # Permissions
 PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml
@@ -146,7 +146,7 @@ PRODUCT_PACKAGES += frameworks/native/data/etc/android.hardware.telephony.gsm.xm
 PRODUCT_PACKAGES += frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
 
 # Override bootanimation
-PRODUCT_COPY_FILES += device/samsung/i8552/bootanimation/cm10.zip:system/media/bootanimation.zip
+PRODUCT_COPY_FILES += device/samsung/delos3geur/bootanimation/cm10.zip:system/media/bootanimation.zip
 
 #$(call inherit-product, $(SRC_TARGET_DIR)/product/full.mk)
 
