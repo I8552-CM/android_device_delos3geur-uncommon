@@ -1,0 +1,22 @@
+From ce287a7b3e5291e69ce53ebac443770bad0e3af9 Mon Sep 17 00:00:00 2001
+From: Jakub Tyszkowski <jakub.tyszkowski@tieto.com>
+Date: Tue, 16 Dec 2014 11:03:06 +0100
+Subject: [PATCH 08/11] Add mising rule for PAN socket
+
+Change-Id: Icd887c5e2c34c12fb4ec1996a84a09bbadbe3737
+---
+ bluetoothd.te | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/bluetoothd.te b/bluetoothd.te
+index 4f229fa..72c79fc 100644
+--- a/bluetoothd.te
++++ b/bluetoothd.te
+@@ -49,3 +49,4 @@ allow bluetoothd uhid_device:chr_file rw_file_perms;
+ 
+ # tethering
+ allow bluetoothd self:udp_socket create_socket_perms;
++allow bluetoothd self:tcp_socket { create ioctl };
+-- 
+2.9.3
+

@@ -1,0 +1,45 @@
+From 009d9f0abf2a594cb86dd467048c3fff4348b1c3 Mon Sep 17 00:00:00 2001
+From: Jakub Tyszkowski <jakub.tyszkowski@tieto.com>
+Date: Tue, 16 Dec 2014 11:05:12 +0100
+Subject: [PATCH 09/11] Revert "selinux: Add logwrapper security domain"
+
+We are not using logwrapper anymore.
+
+This reverts commit cc034e541fe7f1a9361487e62a0c9a6f1d71bbf3.
+
+Change-Id: Ib6a6528e94a5e8fdc77d339faec569321213ef6e
+---
+ file_contexts | 2 +-
+ logwrapper.te | 7 -------
+ 2 files changed, 1 insertion(+), 8 deletions(-)
+ delete mode 100644 logwrapper.te
+
+diff --git a/file_contexts b/file_contexts
+index d044470..89bfa7f 100644
+--- a/file_contexts
++++ b/file_contexts
+@@ -173,7 +173,7 @@
+ /system/bin/inputflinger u:object_r:inputflinger_exec:s0
+ /system/bin/logd        u:object_r:logd_exec:s0
+ /system/bin/uncrypt     u:object_r:uncrypt_exec:s0
+-/system/bin/logwrapper  u:object_r:logwrapper_exec:s0
++/system/bin/logwrapper  u:object_r:system_file:s0
+ /system/bin/vdc         u:object_r:vdc_exec:s0
+ /system/bin/install-recovery.sh u:object_r:install_recovery_exec:s0
+ /system/bin/dex2oat     u:object_r:dex2oat_exec:s0
+diff --git a/logwrapper.te b/logwrapper.te
+deleted file mode 100644
+index 7895786..0000000
+--- a/logwrapper.te
++++ /dev/null
+@@ -1,7 +0,0 @@
+-type logwrapper, domain;
+-type logwrapper_exec, exec_type, file_type;
+-
+-# needs /system/bin/log access
+-allow logwrapper devpts:chr_file rw_file_perms;
+-
+-init_daemon_domain(logwrapper)
+-- 
+2.9.3
+

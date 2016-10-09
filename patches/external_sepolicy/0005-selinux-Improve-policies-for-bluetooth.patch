@@ -1,0 +1,112 @@
+From 54cb546bd3f13093da444fdeb83e751995ab444b Mon Sep 17 00:00:00 2001
+From: Jakub Tyszkowski <jakub.tyszkowski@tieto.com>
+Date: Mon, 1 Dec 2014 15:14:35 +0100
+Subject: [PATCH 05/11] selinux: Improve policies for bluetooth
+
+This splits the policies so that snooping daemon could run with less
+privileges than the main daemon has. It also fixes some policy issues
+for PAN profile.
+
+Change-Id: I943c314d17143584c37f7cb2aa43d428d75ed957
+---
+ bluetoothd.te       | 24 ++++++++++--------------
+ bluetoothd_snoop.te | 20 ++++++++++++++++++++
+ file_contexts       |  4 ++--
+ 3 files changed, 32 insertions(+), 16 deletions(-)
+ create mode 100644 bluetoothd_snoop.te
+
+diff --git a/bluetoothd.te b/bluetoothd.te
+index d693061..757dbda 100644
+--- a/bluetoothd.te
++++ b/bluetoothd.te
+@@ -1,32 +1,25 @@
+ type bluetoothd, domain;
+ type bluetoothd_exec, exec_type, file_type;
++type bluetoothd_main_exec, exec_type, file_type;
+ 
+-# FIXME: disabling this is the final goal
++# FIXME: this is still here because of logwrapper
+ permissive bluetoothd;
+ 
+ # Start bluetoothd from init
+-# allow init:bluetoothd_exec:file execute_no_trans;
+-# its resolved to: allow init bluetoothd_exec:file { getattr open read execute };
+ init_daemon_domain(bluetoothd)
+ 
+-# FIXME: this does not seams to work for logwrapper
+-domain_auto_trans(init, bluetoothd_exec, bluetoothd)
+-# this is reported but neverallowed:
+-# allow bluetoothd system_file:file entrypoint;
+-
+ # Data file accesses
+ allow bluetoothd bluetooth_data_file:dir w_dir_perms;
+-allow bluetoothd bluetooth_data_file:notdevfile_class_set { create_file_perms link_file_perms };
++allow bluetoothd bluetooth_data_file:notdevfile_class_set create_file_perms;
+ 
+-# TODO: Verify if this can be narrowed
+-allow bluetoothd self:capability { setuid net_admin net_bind_service };
++allow bluetoothd self:capability { setuid net_admin net_bind_service net_raw };
+ allow bluetoothd kernel:system module_request;
+ 
+ # TODO: this may be romoved for userbuild where we don't use bluetoothd_wrapper
+-allow bluetoothd bluetoothd_exec:file execute_no_trans;
++allow bluetoothd bluetoothd_main_exec:file { execute execute_no_trans read open };
+ 
+-# TODO: minimize this set
+-allow bluetoothd self:socket { create_socket_perms accept listen recv_msg send_msg lock recvfrom sendto name_bind relabelfrom relabelto };
++# IPC socket communication
++allow bluetoothd self:socket { create_socket_perms accept listen setopt getopt };
+ 
+ # Allow clients to use a socket provided by the bluetooth app.
+ allow bluetoothd { bluetooth mediaserver }:unix_stream_socket connectto;
+@@ -51,3 +44,6 @@ allow bluetoothd devpts:chr_file rw_file_perms;
+ 
+ # access to uhid device
+ allow bluetoothd uhid_device:chr_file rw_file_perms;
++
++# tethering
++allow bluetoothd self:udp_socket create_socket_perms;
+diff --git a/bluetoothd_snoop.te b/bluetoothd_snoop.te
+new file mode 100644
+index 0000000..626b583
+--- /dev/null
++++ b/bluetoothd_snoop.te
+@@ -0,0 +1,20 @@
++type bluetoothd_snoop, domain;
++type bluetoothd_snoop_exec, exec_type, file_type;
++
++# FIXME: this is still here because of logwrapper
++permissive bluetoothd;
++
++# Start bluetoothd_snoop from init
++init_daemon_domain(bluetoothd_snoop)
++
++# directory search and read caps
++allow bluetoothd_snoop self:capability dac_read_search;
++# use raw and packet sockets caps
++allow bluetoothd_snoop self:capability net_raw;
++
++# monitor socket access
++allow bluetoothd_snoop self:socket { create bind setopt read };
++
++# sdcard access
++allow bluetoothd_snoop fuse:dir w_dir_perms;
++allow bluetoothd_snoop fuse:file create_file_perms;
+diff --git a/file_contexts b/file_contexts
+index 131ce99..89bfa7f 100644
+--- a/file_contexts
++++ b/file_contexts
+@@ -313,8 +313,8 @@
+ #############################
+ # Bluetooth daemon
+ /system/bin/bluetoothd             u:object_r:bluetoothd_exec:s0
+-/system/bin/bluetoothd-main        u:object_r:bluetoothd_exec:s0
+-/system/bin/bluetoothd-snoop       u:object_r:bluetoothd_exec:s0
++/system/bin/bluetoothd-main        u:object_r:bluetoothd_main_exec:s0
++/system/bin/bluetoothd-snoop       u:object_r:bluetoothd_snoop_exec:s0
+ 
+ #############################
+ # external storage
+-- 
+2.9.3
+

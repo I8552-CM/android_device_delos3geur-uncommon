@@ -1,0 +1,44 @@
+From 0f240c4efbededc87e3772ee7e7b22bde631c1d0 Mon Sep 17 00:00:00 2001
+From: Jakub Tyszkowski <jakub.tyszkowski@tieto.com>
+Date: Tue, 16 Dec 2014 11:06:21 +0100
+Subject: [PATCH 11/11] Switch to enforcing mode
+
+As logwrapper issue has been solved we can switch permissive mode off.
+
+Change-Id: I00ea910b4dcf075256d7d918c4146420fc5f1afc
+---
+ bluetoothd.te       | 3 ---
+ bluetoothd_snoop.te | 3 ---
+ 2 files changed, 6 deletions(-)
+
+diff --git a/bluetoothd.te b/bluetoothd.te
+index a572e37..532bfbb 100644
+--- a/bluetoothd.te
++++ b/bluetoothd.te
+@@ -2,9 +2,6 @@ type bluetoothd, domain;
+ type bluetoothd_exec, exec_type, file_type;
+ type bluetoothd_main_exec, exec_type, file_type;
+ 
+-# FIXME: this is still here because of logwrapper
+-permissive bluetoothd;
+-
+ # Start bluetoothd from init
+ init_daemon_domain(bluetoothd)
+ 
+diff --git a/bluetoothd_snoop.te b/bluetoothd_snoop.te
+index 626b583..ef817b5 100644
+--- a/bluetoothd_snoop.te
++++ b/bluetoothd_snoop.te
+@@ -1,9 +1,6 @@
+ type bluetoothd_snoop, domain;
+ type bluetoothd_snoop_exec, exec_type, file_type;
+ 
+-# FIXME: this is still here because of logwrapper
+-permissive bluetoothd;
+-
+ # Start bluetoothd_snoop from init
+ init_daemon_domain(bluetoothd_snoop)
+ 
+-- 
+2.9.3
+

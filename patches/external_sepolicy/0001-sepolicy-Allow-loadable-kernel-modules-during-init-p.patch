@@ -1,0 +1,29 @@
+From 89457303d948a4a2dfa9f5136815f7c6956c1dc4 Mon Sep 17 00:00:00 2001
+From: Jakub Tyszkowski <jakub.tyszkowski@tieto.com>
+Date: Thu, 13 Nov 2014 12:36:20 +0100
+Subject: [PATCH 01/11] sepolicy: Allow loadable kernel modules during init
+ phase
+
+This is needed for bluetooth subsystem.
+
+Change-Id: I33bf7425874f39d46edb94fd1933e1fa4a9abdeb
+---
+ init.te | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/init.te b/init.te
+index 779a0f0..30cdebf 100644
+--- a/init.te
++++ b/init.te
+@@ -73,7 +73,7 @@ allow init self:capability dac_override;
+ # Set system clock.
+ allow init self:capability sys_time;
+ 
+-allow init self:capability { sys_rawio mknod };
++allow init self:capability { sys_rawio mknod sys_module };
+ 
+ # Mounting filesystems from block devices.
+ allow init dev_type:blk_file r_file_perms;
+-- 
+2.9.3
+
