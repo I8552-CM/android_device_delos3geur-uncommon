@@ -47,6 +47,7 @@ PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.usb.rc:root/in
 PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/lpm.rc:root/lpm.rc
 PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudioalsa.so:obj/lib/libaudioalsa.so
+PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudcal.so:obj/lib/libaudcal.so
 
 # Torch
 PRODUCT_PACKAGES += Torch
