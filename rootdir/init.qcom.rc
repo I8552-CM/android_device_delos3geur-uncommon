@@ -347,10 +347,6 @@ service sensord /system/bin/sensord
     # Create directory used by audio subsystem
     mkdir /data/misc/audio 0770 audio audio
 
-    # we will remap this as /storage/sdcard with the sdcard fuse tool
-    mkdir /data/media 0770 media_rw media_rw
-    chown media_rw media_rw /data/media
-
     setprop vold.post_fs_data_done 1
 
     # Create the directories used by the Wireless subsystem
