@@ -38,9 +38,6 @@ on early-init
     symlink /sdcard /mnt/sdcard1
     symlink /sdcard /storage/sdcard1
 
-    mount ext4 /dev/block/mmcblk0p16 /efs nosuid nodev barrier=1
-    mount ext4 /dev/block/mmcblk0p12 /persist nosuid nodev barrier=1
-
     mkdir /efs
     mkdir /persist
 
