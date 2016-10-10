@@ -347,7 +347,7 @@ service sensord /system/bin/sensord
     write /sys/module/pm2/modes/cpu0/power_collapse/suspend_enabled 1
     write /sys/module/pm2/modes/cpu0/power_collapse/idle_enabled 1
 
-on emmc-fs
+on fs
     # mount mmc partitions
     mount_all /fstab.qcom
 
