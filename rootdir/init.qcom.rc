@@ -32,11 +32,11 @@ import init.qcom.usb.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
-   on init
+on init
 
     # Support legacy paths
-    symlink /sdcard /mnt/sdcard1
-    symlink /sdcard /storage/sdcard1
+    symlink /sdcard /mnt/sdcard
+    symlink /sdcard /storage/sdcard0
 
     mkdir /efs
     mkdir /persist
@@ -44,6 +44,7 @@ on early-init
 on fs
     # mount mmc partitions
     mount_all /fstab.qcom
+    setprop ro.crypto.fuse_sdcard true
 
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -391,17 +392,6 @@ on property:wlan.driver.status=unloaded
 
 service rmt_oeminfo /system/bin/rmt_oeminfo
     class core
-
-# create virtual SD card at /storage/sdcard, based on the /data/media directory
-# daemon will drop to user/group system/media_rw after initializing
-# underlying files in /data/media will be created with user and group media_rw (1023)
-service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
-    class late_start
-
-# fusewrapped external sdcard daemon running as media_rw (1023)
-service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
-    class late_start
-    disabled
 
 service netmgrd /system/bin/netmgrd
     class main
