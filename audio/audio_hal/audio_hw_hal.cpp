@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
- * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -267,6 +267,14 @@ static int out_get_next_write_timestamp(const struct audio_stream_out *stream,
     return out->qcom_out->getNextWriteTimestamp(timestamp);
 }
 
+static int out_get_presentation_position(const struct audio_stream_out *stream,
+                                         uint64_t *frames, struct timespec *timestamp)
+{
+    const struct qcom_stream_out *out =
+        reinterpret_cast<const struct qcom_stream_out *>(stream);
+    return out->qcom_out->getPresentationPosition(frames, timestamp);
+}
+
 /** audio_stream_in implementation **/
 static uint32_t in_get_sample_rate(const struct audio_stream *stream)
 {
@@ -478,13 +486,14 @@ static size_t adev_get_input_buffer_size(const struct audio_hw_device *dev,
     return qadev->hwif->getInputBufferSize(config->sample_rate,config->format,channelCount);
 }
 
+
 static int adev_open_output_stream(struct audio_hw_device *dev,
                                    audio_io_handle_t handle,
                                    audio_devices_t devices,
                                    audio_output_flags_t flags,
                                    struct audio_config *config,
                                    struct audio_stream_out **stream_out,
-                                   const char * address __unused)
+                                   const char *address __unused)
 {
     struct qcom_audio_device *qadev = to_ladev(dev);
     status_t status;
@@ -524,6 +533,8 @@ static int adev_open_output_stream(struct audio_hw_device *dev,
     out->stream.write = out_write;
     out->stream.get_render_position = out_get_render_position;
     out->stream.get_next_write_timestamp = out_get_next_write_timestamp;
+    out->stream.get_presentation_position = out_get_presentation_position;
+
     *stream_out = &out->stream;
     return 0;
 
@@ -547,9 +558,10 @@ static void adev_close_output_stream(struct audio_hw_device *dev,
 static int adev_open_input_stream(struct audio_hw_device *dev,
                                   audio_io_handle_t handle,
                                   audio_devices_t devices,
-                                  audio_config *config,
-                                  audio_stream_in **stream_in, audio_input_flags_t flags,
-                                  const char * address __unused,
+                                  struct audio_config *config,
+                                  struct audio_stream_in **stream_in,
+                                  audio_input_flags_t flags __unused,
+                                  const char *address __unused,
                                   audio_source_t source __unused)
 {
     struct qcom_audio_device *qadev = to_ladev(dev);
@@ -693,7 +705,7 @@ struct qcom_audio_module HAL_MODULE_INFO_SYM = {
             hal_api_version: HARDWARE_HAL_API_VERSION,
             id: AUDIO_HARDWARE_MODULE_ID,
             name: "QCOM Audio HW HAL",
-            author: "Code Aurora Forum",
+            author: "The Linux Foundation",
             methods: &qcom_audio_module_methods,
             dso : NULL,
             reserved : {0},
