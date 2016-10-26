@@ -41,9 +41,9 @@ PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/charger:root/charger
 PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc
 
 #errors
-PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudioalsa.so:obj/lib/libaudioalsa.so
-PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudcal.so:obj/lib/libaudcal.so
-PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudcal.so:obj/lib/libaudcal.so
+PRODUCT_COPY_FILES += device/samsung/delos3geur/proprietary/lib/libaudioalsa.so:obj/lib/libaudioalsa.so
+PRODUCT_COPY_FILES += device/samsung/delos3geur/proprietary/lib/libaudcal.so:obj/lib/libaudcal.so
+PRODUCT_COPY_FILES += device/samsung/delos3geur/proprietary/lib/libaudcal.so:obj/lib/libaudcal.so
 # Torch
 PRODUCT_PACKAGES += Torch
 
@@ -113,11 +113,14 @@ PRODUCT_PACKAGES += hostapd
 PRODUCT_PACKAGES += dhcpcd.conf
 PRODUCT_PACKAGES += wpa_supplicant
 PRODUCT_PACKAGES += wpa_supplicant.conf
-
+#audio
 PRODUCT_COPY_FILES += frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml
 PRODUCT_COPY_FILES += frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml
 PRODUCT_COPY_FILES += frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:system/etc/media_codecs_google_video_le.xml
-
+PRODUCT_COPY_FILES += device/samsung/delos3geur/configs/media_codecs.xml:system/etc/media_codecs.xml
+PRODUCT_COPY_FILES += device/samsung/delos3geur/configs/AudioFilter.csv:system/etc/AudioFilter.csv
+PRODUCT_COPY_FILES += device/samsung/delos3geur/configs/audio_policy.conf:system/etc/audio_policy.conf
+PRODUCT_COPY_FILES += device/samsung/delos3geur/configs/media_profiles.xml:system/etc/media_profiles.xml
 # Permissions
 PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml
 PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml
