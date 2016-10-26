@@ -40,13 +40,10 @@ PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/ueventd.qcom.rc:root/uev
 PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/charger:root/charger
 PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc
 
-PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudcal.so:obj/lib/libaudcal.so
-
-
 #errors
 PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudioalsa.so:obj/lib/libaudioalsa.so
 PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudcal.so:obj/lib/libaudcal.so
-
+PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudcal.so:obj/lib/libaudcal.so
 # Torch
 PRODUCT_PACKAGES += Torch
 
@@ -120,9 +117,6 @@ PRODUCT_PACKAGES += wpa_supplicant.conf
 PRODUCT_COPY_FILES += frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml
 PRODUCT_COPY_FILES += frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml
 PRODUCT_COPY_FILES += frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:system/etc/media_codecs_google_video_le.xml
-
-# Config Files
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,device/samsung/delos3geur/system,system)
 
 # Permissions
 PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml
