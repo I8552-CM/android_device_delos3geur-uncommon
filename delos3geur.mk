@@ -15,7 +15,7 @@
 #
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-
+$(call inherit-product, device/samsung/delos3geur/delos3geur-vendor-blobs.mk)
 # The GPS configuration appropriate for this device.
 #$(call inherit-product, device/common/gps/gps_eu_supl.mk)
 
@@ -29,23 +29,21 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 # ViewMem 
 PRODUCT_PACKAGES += viewmem
 
-# Ramdisk
-PRODUCT_PACKAGES += fstab.qcom
-PRODUCT_PACKAGES += init.qcom.rc
-PRODUCT_PACKAGES += init.qcom.usb.rc
-PRODUCT_PACKAGES += init.target.rc
-PRODUCT_PACKAGES += ueventd.qcom.rc
-PRODUCT_PACKAGES += init.qcom.ril.sh
-
 # Rootdir
-PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/fstab.qcom:root/fstab.qcom
-PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.device.rc:root/init.device.rc
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/lpm.rc:root/lpm.rc
 PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.bt.rc:root/init.qcom.bt.rc
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.device.rc:root/init.device.rc
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/fstab.qcom:root/fstab.qcom
 PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.rc:root/init.qcom.rc
 PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.ril.sh:root/init.qcom.ril.sh
-PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc
-PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/lpm.rc:root/lpm.rc
 PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/charger:root/charger
+PRODUCT_COPY_FILES += device/samsung/delos3geur/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc
+
+PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudcal.so:obj/lib/libaudcal.so
+
+
+#errors
 PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudioalsa.so:obj/lib/libaudioalsa.so
 PRODUCT_COPY_FILES += device/samsung/delos3geur/system/lib/libaudcal.so:obj/lib/libaudcal.so
 
@@ -125,8 +123,6 @@ PRODUCT_COPY_FILES += frameworks/av/media/libstagefright/data/media_codecs_googl
 
 # Config Files
 PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,device/samsung/delos3geur/system,system)
-
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,device/samsung/delos3geur/rootdir,rootdir)
 
 # Permissions
 PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml
