@@ -69,7 +69,7 @@ static int ap_set_device_connection_state(struct audio_policy *pol,
 {
     struct qcom_audio_policy *qap = to_qap(pol);
     return qap->apm->setDeviceConnectionState(
-                    device,
+                    (AudioSystem::audio_devices)device,
                     (AudioSystem::device_connection_state)state,
                     device_address);
 }
@@ -81,14 +81,14 @@ static audio_policy_dev_state_t ap_get_device_connection_state(
 {
     const struct qcom_audio_policy *qap = to_cqap(pol);
     return (audio_policy_dev_state_t)qap->apm->getDeviceConnectionState(
-                    device,
+                    (AudioSystem::audio_devices)device,
                     device_address);
 }
 
 static void ap_set_phone_state(struct audio_policy *pol, audio_mode_t state)
 {
     struct qcom_audio_policy *qap = to_qap(pol);
-    qap->apm->setPhoneState((int) state);
+    qap->apm->setPhoneState(state);
 }
 
     /* indicate a change in ringer mode */
@@ -173,14 +173,15 @@ static audio_io_handle_t ap_get_output(struct audio_policy *pol,
                                        audio_format_t format,
                                        audio_channel_mask_t channelMask,
                                        audio_output_flags_t flags,
-                                       const audio_offload_info_t *info)
+                                       const audio_offload_info_t *offloadInfo)
 {
     struct qcom_audio_policy *qap = to_qap(pol);
 
     ALOGV("%s: tid %d", __func__, gettid());
     return qap->apm->getOutput((AudioSystem::stream_type)stream,
-                               sampling_rate, format, channelMask,
-                               (AudioSystem::output_flags)flags, info);
+                               sampling_rate,(int)  format, channelMask,
+                               (AudioSystem::output_flags)flags,
+                               offloadInfo);
 }
 
 static int ap_start_output(struct audio_policy *pol, audio_io_handle_t output,
@@ -213,7 +214,7 @@ static audio_io_handle_t ap_get_input(struct audio_policy *pol, audio_source_t i
                                       audio_in_acoustics_t acoustics)
 {
     struct qcom_audio_policy *qap = to_qap(pol);
-    return qap->apm->getInput((int) inputSource, sampling_rate, format, channelMask,
+    return qap->apm->getInput((int) inputSource, sampling_rate,(int) format, channelMask,
                               (AudioSystem::audio_in_acoustics)acoustics);
 }
 
@@ -290,7 +291,7 @@ static int ap_get_stream_volume_index_for_device(const struct audio_policy *pol,
    const struct qcom_audio_policy *qap = to_cqap(pol);
    return qap->apm->getStreamVolumeIndex((AudioSystem::stream_type)stream,
                                           index,
-                                          AUDIO_DEVICE_OUT_DEFAULT);
+                                          device);
 }
 
 static audio_devices_t ap_get_devices_for_stream(const struct audio_policy *pol,
@@ -363,6 +364,7 @@ static bool ap_is_offload_supported(const struct audio_policy *pol,
     const struct qcom_audio_policy *qap = to_cqap(pol);
     return qap->apm->isOffloadSupported(*info);
 }
+
 
 static int create_qcom_ap(const struct audio_policy_device *device,
                             struct audio_policy_service_ops *aps_ops,
