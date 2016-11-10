@@ -1,0 +1,37 @@
+From 6b1c74139896a8abdda3fd6f9a26f7224df72f2a Mon Sep 17 00:00:00 2001
+From: Grace5921 <androidlover5842@gmail.com>
+Date: Thu, 10 Nov 2016 12:10:36 +0530
+Subject: [PATCH 2/2] build: Fix cortex-a5 cpu variant
+
+Change-Id: I21c2c59376214e59115904625d3115c08c047b27
+---
+ core/combo/arch/arm/armv7-a-neon.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/core/combo/arch/arm/armv7-a-neon.mk b/core/combo/arch/arm/armv7-a-neon.mk
+index a49b7f0..094437f 100644
+--- a/core/combo/arch/arm/armv7-a-neon.mk
++++ b/core/combo/arch/arm/armv7-a-neon.mk
+@@ -31,6 +31,11 @@ ifeq ($(strip $(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)),cortex-a7)
+ 		-Wl,--no-fix-cortex-a8
+ else
+ ifeq ($(strip $(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)),cortex-a5)
++	arch_variant_cflags := -mcpu=cortex-a5
++	arch_variant_ldflags := \
++		-Wl,--no-fix-cortex-a8
++else
++ifeq ($(strip $(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)),cortex-a5)
+ 	arch_variant_cflags := -mcpu=cortex-a7
+ 	arch_variant_ldflags := \
+ 		-Wl,--no-fix-cortex-a8
+@@ -44,6 +49,7 @@ endif
+ endif
+ endif
+ endif
++endif
+ 
+ arch_variant_cflags += \
+     -mfloat-abi=softfp \
+-- 
+2.10.1
+
