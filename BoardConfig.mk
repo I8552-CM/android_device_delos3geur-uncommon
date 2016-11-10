@@ -48,8 +48,8 @@ TARGET_OTA_ASSERT_DEVICE := delos3geur,msm7x27a,I8552,GT-I8552
 
 # Kernel
 
-#TARGET_KERNEL_SOURCE := kernel/samsung/delos3geur
-#TARGET_KERNEL_CONFIG := delos_defconfig
+TARGET_KERNEL_SOURCE := kernel/samsung/delos3geur
+TARGET_KERNEL_CONFIG := delos_defconfig
 
 ## Qualcomm optimizations
 TARGET_CORTEX_CACHE_LINE_32 := true
