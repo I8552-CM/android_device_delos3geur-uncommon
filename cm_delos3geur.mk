@@ -29,9 +29,9 @@ $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-$(call inherit-product, device/samsung/kernel/kernel.mk)
+#$(call inherit-product, device/samsung/kernel/kernel.mk)
 # Inherit from d9 device
-#$(call inherit-product, device/samsung/delos3geur/delos3geur.mk)
+$(call inherit-product, device/samsung/delos3geur/delos3geur.mk)
 
 # Set those variables here to overwrite the inherited values.
 PRODUCT_NAME := cm_delos3geur
