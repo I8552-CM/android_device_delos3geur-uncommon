@@ -191,11 +191,9 @@ PRODUCT_COPY_FILES += \
     device/samsung/delos3geur/proprietary/lib/liboem_rapi.so:system/lib/liboem_rapi.so \
     device/samsung/delos3geur/proprietary/lib/libcm.so:system/lib/libcm.so \
     device/samsung/delos3geur/proprietary/lib/libOmxEvrcDec.so:system/lib/libOmxEvrcDec.so \
-    device/samsung/delos3geur/proprietary/lib/hw/camera.msm7x27a.so:system/lib/hw/camera.msm7x27a.so \
     device/samsung/delos3geur/proprietary/lib/hw/sensors.default.so:system/lib/hw/sensors.default.so \
     device/samsung/delos3geur/proprietary/lib/hw/lights.msm7x27a.so:system/lib/hw/lights.msm7x27a.so \
     device/samsung/delos3geur/proprietary/lib/libchromatix_s5k3l1yx_video_hd.so:system/lib/libchromatix_s5k3l1yx_video_hd.so \
-    device/samsung/delos3geur/proprietary/lib/libmmcamera_interface2.so:system/lib/libmmcamera_interface2.so \
     device/samsung/delos3geur/proprietary/lib/libaudcal.so:system/lib/libaudcal.so \
     device/samsung/delos3geur/proprietary/lib/libdsutils.so:system/lib/libdsutils.so \
     device/samsung/delos3geur/proprietary/lib/libidl.so:system/lib/libidl.so \

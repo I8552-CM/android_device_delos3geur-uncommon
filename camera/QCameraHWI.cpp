@@ -366,9 +366,9 @@ QCameraHardwareInterface::~QCameraHardwareInterface()
       mStatHeap = NULL;
     }
 
-    /*First stop the polling threads*/
+    /*First stop the polling threads
     ALOGI("%s First stop the polling threads before deleting instances", __func__);
-    cam_ops_stop(mCameraId);
+    cam_ops_stop(mCameraId);*/
 
     /* Join the threads, complete operations and then delete
        the instances. */

@@ -872,14 +872,13 @@ void cam_ops_close(int cam_id)
     mm_cam->ops->close(mm_cam);
   }
 }
-
-void cam_ops_stop(int cam_id)
+/*void cam_ops_stop(int cam_id)
 {
   mm_camera_t * mm_cam = get_camera_by_id(cam_id);
   if (mm_cam) {
     mm_cam->ops->stop(mm_cam);
   }
-}
+}*/
 
 int32_t cam_ops_ch_acquire(int cam_id, mm_camera_channel_type_t ch_type)
 {
