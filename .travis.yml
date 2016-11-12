@@ -10,3 +10,5 @@ before_script:
 - repo sync
 
 script:
+
+-  . build/envsetup.sh
