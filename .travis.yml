@@ -16,3 +16,10 @@ before_script:
 script:
 
 -  . build/envsetup.sh
+group :
+- "stable"
+dist":
+- "trusty"
+os:
+- "linux"
+
