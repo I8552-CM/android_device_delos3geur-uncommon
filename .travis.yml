@@ -6,9 +6,10 @@ before_script:
   lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache 
   libgl1-mesa-dev libxml2-utils xsltproc unzip maven schedtool
 - mkdir ~/bin && PATH=~/bin:$PATH && echo 'PATH=~/bin:$PATH' >> ~/.bashrc && curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo && chmod a+x ~/bin/repo
-- mkdir ~/cm13/
-- cd ~/cm13/ && repo init -u https://github.com/CyanogenMod/android.git -b cm-13.0
-- repo sync
+- wget https://ca1.androidfilehost.com/dl/909DQTNEfOOnbpwQhUMUjw/1479189067/24591000424950449/CM-cm-13.0-repo-20160727.tar.xz
+- tar -xvf CM-cm-13.0-repo-20160727.tar.xz
+- ls
+- pwd
 
 script:
 
