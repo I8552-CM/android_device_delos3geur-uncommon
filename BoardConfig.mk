@@ -68,13 +68,13 @@ ARCH_ARM_HIGH_OPTIMIZATION := true
 ARCH_ARM_HAVE_32_BYTE_CACHE_LINES := true
 
 # Kernel
-TARGET_KERNEL_SOURCE := kernel/samsung/delos3geur
-TARGET_KERNEL_CONFIG := delos_defconfig
+#TARGET_KERNEL_SOURCE := kernel/samsung/delos3geur
+#TARGET_KERNEL_CONFIG := delos_defconfig
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.selinux=permissive hack_lcd=1 chg_hack_lcd=0
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01300000
 BOARD_KERNEL_PAGESIZE := 4096
-TARGET_KERNEL_CUSTOM_TOOLCHAIN := arm-eabi-4.7
+#TARGET_KERNEL_CUSTOM_TOOLCHAIN := arm-eabi-4.7
 
 # Hardware rendering
 BOARD_EGL_WORKAROUND_BUG_10194508 := true
