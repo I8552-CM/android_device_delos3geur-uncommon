@@ -1,5 +1,4 @@
-language: java
-
+language: c , java
 before_script:
 - sudo apt-get install -y git-core gnupg flex bison gperf build-essential 
   zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 
