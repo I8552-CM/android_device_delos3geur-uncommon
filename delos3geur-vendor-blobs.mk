@@ -221,6 +221,7 @@ PRODUCT_COPY_FILES += \
     device/samsung/delos3geur/proprietary/lib/libimage-jpeg-enc-omx-comp.so:system/lib/libimage-jpeg-enc-omx-comp.so \
     device/samsung/delos3geur/proprietary/lib/libchromatix_ov2720_default_video.so:system/lib/libchromatix_ov2720_default_video.so \
     device/samsung/delos3geur/proprietary/lib/libqmi.so:system/lib/libqmi.so \
+    device/samsung/delos3geur/proprietary/lib/liboeminfo.so:system/lib/liboeminfo.so \
     device/samsung/delos3geur/proprietary/lib/libqmi_csvt_srvc.so:system/lib/libqmi_csvt_srvc.so \
     device/samsung/delos3geur/proprietary/usr/keychars/7x27a_kp.kcm:system/usr/keychars/7x27a_kp.kcm \
     device/samsung/delos3geur/proprietary/usr/keylayout/atmel_mxt_ts.kl:system/usr/keylayout/atmel_mxt_ts.kl \
