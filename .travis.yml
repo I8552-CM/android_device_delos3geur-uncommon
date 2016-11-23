@@ -1,5 +1,4 @@
 language: java
-install: travis_wait 60 mvn install
 
 before_script:
 - sudo apt-get install -y git-core gnupg flex bison gperf build-essential 
@@ -26,5 +25,4 @@ script:
 -  . build/envsetup.sh
 - lunch cm_delos3geur-userdebug
 - make -j4 bacon
-
 
