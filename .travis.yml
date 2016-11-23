@@ -10,19 +10,17 @@ before_script:
 - git config --global user.email "androidlover5842@gmail.com" > /dev/null
 - git config --global user.name "grace5921" > /dev/null
 - cd ~/cm13/ && repo init -u https://github.com/CyanogenMod/android.git -b cm-13.0 >> y ; echo
-- repo sync > /dev/null
+- repo sync
 - pwd
 
 script:
 - cd cm13
-- git clone https://github.com/I8552-CM/android_device_delos3geur.git device/samsung/delos3geur > /dev/null
-- git clone https://github.com/I8552-CM/android_kernel_arubaslim.git -b mm6.0 kernel/samsung/delos > /dev/null
-- git https://github.com/CM13-Y300/android_hardware_atheros_wlan.git hardware/atheros/wlan > /dev/null
-- rm -rf hardware/qcom/gps 
-- git https://github.com/CM13-Y300/android_hardware_qcom_gps.git hardware/qcom/gps > /dev/null
-- git https://github.com/CM13-Y300/android_hardware_qcom_display-caf.git hardware/qcom/display-caf > /dev/null
-- git https://github.com/SlimLP-Y300/hardware_qcom_media.git hardware/qcom/media-caf > /dev/null
+- git clone https://github.com/I8552-CM/android_device_delos3geur.git device/samsung/delos3geur 
+- git clone https://github.com/I8552-CM/android_kernel_arubaslim.git -b mm6.0 kernel/samsung/delos
+- git https://github.com/CM13-Y300/android_hardware_atheros_wlan.git hardware/atheros/wlan
+- rm -rf hardware/qcom/gps
+- git https://github.com/CM13-Y300/android_hardware_qcom_gps.git hardware/qcom/gps
+- git https://github.com/CM13-Y300/android_hardware_qcom_display-caf.git hardware/qcom/display-caf
+- git https://github.com/SlimLP-Y300/hardware_qcom_media.git hardware/qcom/media-caf
 -  . build/envsetup.sh
-- lunch cm_delos3geur-userdebug
-- make -j4 bacon
 
