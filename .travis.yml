@@ -14,13 +14,12 @@ before_script:
 - pwd
 
 script:
-- cd cm13
-- git clone https://github.com/I8552-CM/android_device_delos3geur.git device/samsung/delos3geur 
-- git clone https://github.com/I8552-CM/android_kernel_arubaslim.git -b mm6.0 kernel/samsung/delos
-- git https://github.com/CM13-Y300/android_hardware_atheros_wlan.git hardware/atheros/wlan
-- rm -rf hardware/qcom/gps
-- git https://github.com/CM13-Y300/android_hardware_qcom_gps.git hardware/qcom/gps
-- git https://github.com/CM13-Y300/android_hardware_qcom_display-caf.git hardware/qcom/display-caf
-- git https://github.com/SlimLP-Y300/hardware_qcom_media.git hardware/qcom/media-caf
+
 -  . build/envsetup.sh
+group :
+- "stable"
+dist":
+- "trusty"
+os:
+- "linux"
 
