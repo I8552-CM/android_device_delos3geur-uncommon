@@ -9,7 +9,7 @@ before_script:
 - mkdir ~/cm13/
 - git config --global user.email "androidlover5842@gmail.com" > /dev/null
 - git config --global user.name "grace5921" > /dev/null
-- cd ~/cm13/ && repo init -u https://github.com/CyanogenMod/android.git -b cm-13.0 >> y ; echo
+- cd ~/cm13/ && repo init -u https://github.com/CyanogenMod/android.git -b cm-13.0 | type Y
 - repo sync
 - pwd
 
