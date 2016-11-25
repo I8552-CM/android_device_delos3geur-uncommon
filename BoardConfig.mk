@@ -17,12 +17,12 @@
 
 ## Build
 BUILD_EMULATOR := false
-PRODUCT_PREBUILT_WEBVIEWCHROMIUM := yes
 
 ## Kernel, bootloader etc.
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
-TARGET_KERNEL_SOURCE := kernel/samsung/msm7x27a
+#TARGET_KERNEL_SOURCE := kernel/samsung/delos3geur
+#TARGET_KERNEL_CONFIG := delos_defconfig
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01300000
@@ -38,7 +38,7 @@ TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := cortex-a5
 
-TARGET_SPECIFIC_HEADER_PATH := device/samsung/msm7x27a-common/include
+TARGET_SPECIFIC_HEADER_PATH := device/samsung/delos3geur/include
 
 ARCH_ARM_HAVE_TLS_REGISTER := true
 
@@ -103,7 +103,7 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := msm7x27a
 BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
 
 # Charger
-BOARD_CHARGER_RES := device/samsung/msm7x27a-common/charger
+BOARD_CHARGER_RES := device/samsung/delos3geur/charger
 BOARD_BATTERY_DEVICE_NAME := "battery"
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_LPM_BOOT_ARGUMENT_NAME := androidboot.bootchg
@@ -130,10 +130,11 @@ WIFI_DRIVER_MODULE_ARG := "suspend_mode=3 wow_mode=2 ath6kl_p2p=1 recovery_enabl
 ## RIL
 BOARD_USES_LEGACY_RIL := true
 BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
-BOARD_RIL_CLASS := ../../../device/samsung/msm7x27a-common/ril/
+BOARD_RIL_CLASS := ../../../device/samsung/delos3geur/ril/
+COMMON_GLOBAL_CFLAGS += -DRIL_VARIANT_LEGACY
 
 # CMHW
-BOARD_HARDWARE_CLASS := device/samsung/msm7x27a-common/cmhw/
+BOARD_HARDWARE_CLASS := device/samsung/delos3geur/cmhw/
 
 ## Vold
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
@@ -150,7 +151,7 @@ TARGET_NO_INITLOGO := true
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.msm7x27a
 
 ## Recovery
-TARGET_RECOVERY_FSTAB := device/samsung/msm7x27a-common/ramdisk/fstab.qcom
+TARGET_RECOVERY_FSTAB := device/samsung/delos3geur/ramdisk/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 RECOVERY_FSTAB_VERSION := 2
 
@@ -165,9 +166,10 @@ BOARD_CACHE_DEVICE := /dev/block/mmcblk0p22
 BOARD_CACHE_FILESYSTEM := ext4
 BOARD_CACHE_FILESYSTEM_OPTIONS := rw
 
+WITH_DEXPREOPT := true
 ## Partition sizes
-BOARD_BOOTIMAGE_PARTITION_SIZE := 12582912
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 12582912
+BOARD_BOOTIMAGE_PARTITION_SIZE := 13471744
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 13471744
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1258291200
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 5573804032
 
