@@ -20,4 +20,3 @@ allow init media_rw_data_file:file { execute execmod };
 allow init self:netlink_route_socket read;
 allow init self:netlink_route_socket { write getattr nlmsg_read setopt nlmsg_write };
 allow init self:packet_socket { write bind create read };
-
