@@ -22,7 +22,7 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 
 PRODUCT_AAPT_CONFIG := normal hdpi
 PRODUCT_AAPT_PREF_CONFIG := hdpi
-PRODUCT_LOCALES := en_US
+PRODUCT_LOCALES := hdpi
 
 ## CMAccount
 PRODUCT_PACKAGES += \
@@ -148,18 +148,28 @@ PRODUCT_COPY_FILES += \
 
 ## Init files
 PRODUCT_COPY_FILES += \
-device/samsung/delos3geur/ramdisk/lpm.rc:root/lpm.rc \
-device/samsung/delos3geur/ramdisk/init.qcom.bt.rc:root/init.qcom.bt.rc \
-device/samsung/delos3geur/ramdisk/init.device.rc:root/init.device.rc \
-device/samsung/delos3geur/ramdisk/fstab.qcom:root/fstab.qcom \
-device/samsung/delos3geur/ramdisk/init.qcom.rc:root/init.qcom.rc \
-device/samsung/delos3geur/ramdisk/init.qcom.ril.sh:root/init.qcom.ril.sh \
-device/samsung/delos3geur/ramdisk/init.bluetooth.rc:root/init.bluetooth.rc \
-device/samsung/delos3geur/ramdisk/initlogo.rle:root/initlogo.rle \
-device/samsung/delos3geur/ramdisk/ueventd.qcom.rc:root/ueventd.qcom.rc \
-device/samsung/delos3geur/ramdisk/initlogo_swa.rle:root/initlogo_swa.rle \
-device/samsung/delos3geur/ramdisk/init.qcom.usb.rc:root/init.qcom.usb.rc \
-device/samsung/delos3geur/ramdisk/init.qcom.class_main.sh:root/init.qcom.class_main.sh
+    device/samsung/delos3geur/ramdisk/charger:root/charger \
+    device/samsung/delos3geur/ramdisk/fstab.qcom:root/fstab.qcom \
+    device/samsung/delos3geur/ramdisk/init.qcom.rc:root/init.qcom.rc \
+    device/samsung/delos3geur/ramdisk/init.qcom.bt.rc:root/init.qcom.bt.rc \
+    device/samsung/delos3geur/ramdisk/init.qcom.class_main.sh:root/init.qcom.class_main.sh \
+    device/samsung/delos3geur/ramdisk/init.qcom.ril.path.sh:root/init.qcom.ril.path.sh \
+    device/samsung/delos3geur/ramdisk/init.qcom.usb.rc:root/init.qcom.usb.rc \
+    device/samsung/delos3geur/ramdisk/lpm.rc:root/lpm.rc \
+    device/samsung/delos3geur/ramdisk/ueventd.qcom.rc:root/ueventd.qcom.rc
+#PRODUCT_COPY_FILES += \
+#device/samsung/delos3geur/ramdisk/lpm.rc:root/lpm.rc \
+#device/samsung/delos3geur/ramdisk/init.qcom.bt.rc:root/init.qcom.bt.rc \
+#device/samsung/delos3geur/ramdisk/init.device.rc:root/init.device.rc \
+#device/samsung/delos3geur/ramdisk/fstab.qcom:root/fstab.qcom \
+#device/samsung/delos3geur/ramdisk/init.qcom.rc:root/init.qcom.rc \
+#device/samsung/delos3geur/ramdisk/init.qcom.ril.sh:root/init.qcom.ril.sh \
+#device/samsung/delos3geur/ramdisk/init.bluetooth.rc:root/init.bluetooth.rc \
+#device/samsung/delos3geur/ramdisk/initlogo.rle:root/initlogo.rle \
+#device/samsung/delos3geur/ramdisk/ueventd.qcom.rc:root/ueventd.qcom.rc \
+#device/samsung/delos3geur/ramdisk/initlogo_swa.rle:root/initlogo_swa.rle \
+#device/samsung/delos3geur/ramdisk/init.qcom.usb.rc:root/init.qcom.usb.rc \
+#device/samsung/delos3geur/ramdisk/init.qcom.class_main.sh:root/init.qcom.class_main.sh
 
 ## Bluetooth files
 PRODUCT_COPY_FILES += \
@@ -168,7 +178,8 @@ PRODUCT_COPY_FILES += \
 ## Misc files
 PRODUCT_COPY_FILES += \
     vendor/samsung/delos3geur/proprietary/lib/liboncrpc.so:obj/lib/liboncrpc.so \
-    vendor/samsung/delos3geur/proprietary/lib/libnv.so:obj/lib/libnv.so
+    vendor/samsung/delos3geur/proprietary/lib/libnv.so:obj/lib/libnv.so \
+    vendor/samsung/delos3geur/proprietary/lib/libaudcal.so:obj/lib/libaudcal.so \
 
 ## Keychars
 PRODUCT_COPY_FILES += \
@@ -243,7 +254,9 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=60
-
+## Display
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.sf.lcd_density=240
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.adb.secure=0
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.secure=0
 

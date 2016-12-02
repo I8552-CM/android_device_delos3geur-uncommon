@@ -93,12 +93,16 @@ on boot
     chown system system /sys/class/leds/lcd-backlight/brightness
     chown system system /sys/class/leds/button-backlight/brightness
     chown system camera /sys/class/leds/flashlight/brightness
+    chown system system /sys/class/sec/sec_touchkey/brightness
+    chown system system /sys/devices/virtual/sec/ts/brightness
+    chown system camera /sys/class/camera/rear/rear_flash
     chmod 0666 /sys/class/misc/backlightnotification/enabled
     chmod 0660 /sys/class/leds/lcd-backlight/brightness
     chmod 0660 /sys/class/leds/button-backlight/brightness
+    chmod 0777 /sys/class/sec/sec_touchkey/brightness
     chmod 0660 /sys/class/leds/flashlight/brightness
     chmod 0664 /sys/devices/virtual/sec/ts/brightness
-    chown system system /sys/devices/virtual/sec/ts/brightness
+    chmod 0777 /sys/class/camera/rear/rear_flash
 
     # Sensors
     chown system system /system/etc/sensors.dat

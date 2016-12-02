@@ -38,7 +38,7 @@ PRODUCT_NAME := cm_delos3geur
 PRODUCT_DEVICE := delos3geur
 PRODUCT_BRAND := Samsung
 PRODUCT_MANUFACTURER := Samsung
-PRODUCT_MODEL := delos3geur
+PRODUCT_MODEL := GT-I8552
 
 UTC_DATE := $(shell date +%s)
 DATE := $(shell date +%Y%m%d)
