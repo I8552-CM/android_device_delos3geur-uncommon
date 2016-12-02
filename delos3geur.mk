@@ -181,24 +181,6 @@ PRODUCT_COPY_FILES += \
     vendor/samsung/delos3geur/proprietary/lib/libnv.so:obj/lib/libnv.so \
     vendor/samsung/delos3geur/proprietary/lib/libaudcal.so:obj/lib/libaudcal.so \
 
-## Keychars
-PRODUCT_COPY_FILES += \
-    device/samsung/delos3geur/prebuilt/usr/keychars/7x27a_kp.kcm:system/usr/keychars/7x27a_kp.kcm 
-
-## Keylayout
-PRODUCT_COPY_FILES += \
-    device/samsung/delos3geur/prebuilt/usr/keylayout/7x27a_kp.kl:system/usr/keylayout/7x27a_kp.kl \
-    device/samsung/delos3geur/prebuilt/usr/keylayout/7k_handset.kl:system/usr/keylayout/7k_handset.kl \
-    device/samsung/delos3geur/prebuilt/usr/keylayout/atmel_mxt_ts.kl:system/usr/keylayout/atmel_mxt_ts.kl \
-    device/samsung/delos3geur/prebuilt/usr/keylayout/ft5x06_ts.kl:system/usr/keylayout/ft5x06_ts.kl \
-    device/samsung/delos3geur/prebuilt/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    device/samsung/delos3geur/prebuilt/usr/keylayout/surf_keypad.kl:system/usr/keylayout/surf_keypad.kl \
-    device/samsung/delos3geur/prebuilt/usr/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl 
-
-## Touchscreen
-PRODUCT_COPY_FILES += \
-    device/samsung/delos3geur/prebuilt/usr/idc/sec_touchscreen.idc:system/usr/idc/sec_touchscreen.idc
-
 ## Network
 PRODUCT_COPY_FILES += \
     device/samsung/delos3geur/prebuilt/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
